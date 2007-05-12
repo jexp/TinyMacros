@@ -1,4 +1,7 @@
 ; $Log: status_tanjian.tf,v $
+; Revision 1.21  2004/05/06 15:27:03  thufhnik
+; Neues Meditationsflag wird benutzt, jetzt wird das Abklingen auch angezeigt.
+;
 ; Revision 1.20  2002/09/11 18:14:58  thufhnik
 ; Tanjinreport forcieren beim laden
 ;
@@ -61,7 +64,7 @@
 ; Scratch
 ;
 
-/set status_tanjian_tf_version $Id: status_tanjian.tf,v 1.20 2002/09/11 18:14:58 thufhnik Exp $
+/set status_tanjian_tf_version $Id: status_tanjian.tf,v 1.21 2004/05/06 15:27:03 thufhnik Exp $
 /set status_tanjian_tf_author=Thufhir@mg.mud.de
 /set status_tanjian_tf_requires=status.tf(1.24) util.vfunc(1.18)
 /set status_tanjian_tf_desc=Statuszeile und Report fuer die Tanjiangilde
@@ -72,11 +75,13 @@
 
 ; Statusmodule
 
-/set_var CFG_STATUS_COLOR_TANJIAN_MUSTMEDI_1=Cbgred,Cwhite
-/set_var CFG_STATUS_TEXT_TANJIAN_MUSTMEDI_1 M
+/set_var CFG_STATUS_COLOR_TANJIAN_MUSTMEDI_2=Cbgred,Cwhite
+/set_var CFG_STATUS_TEXT_TANJIAN_MUSTMEDI_2 M
+/set_var CFG_STATUS_COLOR_TANJIAN_MUSTMEDI_1=Cbgmagenta,Cwhite
+/set_var CFG_STATUS_TEXT_TANJIAN_MUSTMEDI_1 m
 
-/set sl_tanjian_mustmedi_doc=wenn meditiert werden muss: $[status_doc_attr("TANJIAN_MUSTMEDI_1")]
-/set_status_var_flag tanjian_mustmedi tanjian_mustmedi 1
+/set sl_tanjian_mustmedi_doc=Medi klingt ab: $[status_doc_attr("TANJIAN_MUSTMEDI_1")] wenn meditiert werden muss: $[status_doc_attr("TANJIAN_MUSTMEDI_2")]
+/set_status_var_count tanjian_mustmedi tanjian_mustmedi 1 2
 
 /set_var CFG_STATUS_COLOR_TANJIAN_KOKORO_1 Cyellow
 /set_var CFG_STATUS_TEXT_TANJIAN_KOKORO_1 k
@@ -147,7 +152,7 @@
 	/send !\\tanjianreport LP: \%la (\%lm) MP: \%ka (\%km) GI: \%GI \
 		VS: \%vo FR: \%fl\%lf\
 		KO: \%ko HA: \%ha TO: \%Te AK: \%ak CA: \%CA BL: \%bl \
-		TA: \%ta FRO: \%fr ME: \%me.\%lf%;\
+		TA: \%ta FRO: \%fr ME: \%ME.\%lf%;\
 	/send !\\tanjianreport ein%;\
 	/send !\\tanjianreport
 
@@ -173,7 +178,7 @@
 
 /def -p1 -w -q -agCgreen -mregexp -t'^KO\\: (ja|nein) HA\\: (ja|nein) \
 	TO\\: (TE|OM|  ) AK\\: (ja|nein|busy) CA\\: (.+) \
-	BL\\: (J|N) TA\\: (J|N) FRO\\: (J|N) ME\\: (J|N)\\.$' \
+	BL\\: (J|N) TA\\: (J|N) FRO\\: (J|N) ME\\: ([mM ])\\.$' \
 	tanjian_reptrigger2 = \
 	/if ({P1} =~ 'ja') \
 		/set_flag tanjian_kokoro%;\
@@ -215,10 +220,12 @@
 	/else \
 		/set p_frog 0%;\
 	/endif%;\
-	/if ({P9} =~ 'N') \
+	/if ({P9} =~ 'm') \
 		/set tanjian_mustmedi 1%;\
-	/else \
+	/elseif ({P9} =~ 'M') \
 		/set tanjian_mustmedi 0%;\
+	/else \
+		/set tanjian_mustmedi 2%;\
 	/endif
 
 ; Fehler
