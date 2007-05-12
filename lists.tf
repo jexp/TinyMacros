@@ -206,13 +206,13 @@ Warning: /paramparse uses regmatch(), so %P1, %PL etc. change!
 /addh see substitution, regexp
 /addh paramparse func
 
-/defh paramparse =\
+/def paramparse =\
     /let sep=%1%;\
     /let pre=%;\
     /if (substr({-1},0,1)=~"-") \
         /let pre=-%;\
     /endif%;\
-    /if (regmatch(strcat("([0-9]+) ([^",sep,"]*)(",sep,".*|$)"),{-1})==1) \
+    /if (regmatch(strcat("([0-9]+) ([^",sep,"]*)(",sep,".*|$)"),{-1})) \
 	/if ({P1}==1) \
 	    /if (pre!~"-") \
 	        /result {P2}%;\
@@ -508,7 +508,6 @@ Appends a key-value-pair to a hashlist. The key may not contain blanks.
 /def haddtolist = \
     /let varname=$[strcat({1},"___",hash({2}))]%;\
     /test value:=%varname%;\
-;    /set value=$(/listvar -g -s %varname)%;\
      /if (value=~"") \
         /set %varname=%;\
 	/test %varname:=strcat("<I>",{2},">I<",{-2},"<I>")%;\
@@ -762,6 +761,8 @@ Deletes the first entry with the given key in a hash list.
 
 /def hdeletekeyandvalue = \
     /let varname=$[strcat({1},"___",hash({-1}))]%;\
+;/echo %*%;\
+;/let varname%;\
     /set hvalue=%;\
     /test hvalue:=strcat(\{%varname\})%;\
     /if (hvalue=~"") \
