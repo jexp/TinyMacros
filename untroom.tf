@@ -1,4 +1,7 @@
 ; $Log: untroom.tf,v $
+; Revision 1.21  2004/04/17 15:24:58  chbr
+; diverse Listen werden jetzt (hoffentlich) an der richtigen Stelle erzeugt
+;
 ; Revision 1.20  2002/09/17 09:03:51  mh14
 ; mkdir_all bei saveroom
 ;
@@ -66,7 +69,7 @@
 ;  Log eingefuegt
 ;
 
-/set untroom_tf_version $Id: untroom.tf,v 1.20 2002/09/17 09:03:51 mh14 Exp $
+/set untroom_tf_version $Id: untroom.tf,v 1.21 2004/04/17 15:24:58 chbr Exp $
 /set untroom_tf_author=Mesirii@mg.mud.de
 /set untroom_tf_requires=!lists.tf
 /set untroom_tf_desc Hilfsprogramm zum manuellen Untersuchen von Raeumen, Ausfragen von Npcs usw.
@@ -183,16 +186,16 @@ Mit diesem Befehl wird das Untersuchen eines Raumes (neu) gestartet. Die vorhand
     /set last=p_long%;\
     /set unt_command=%mud_examine_in_room_command%;\
     /createlist detlist%;\
+    /createlist akt_detlist%;\
+    /createlist keep_detlist%;\
+    /createlist done_detlist%;\
+    /createlist origin%;\
     /forEach default_details k /do_add_default_detail%;\
     /createnewlist ignore_details%;\
     /forEach ignore_details k /do_add_ignore_detail%;\
     /if (do_highlight_untroom_actions) \
 	/build_highlight_string%;\
     /endif%;\
-    /createlist akt_detlist%;\
-    /createlist keep_detlist%;\
-    /createlist done_detlist%;\
-    /createlist origin%;\
     /set first_done=1%;\
     /set det_not_found=0%;\
     /del_schaue
@@ -379,6 +382,8 @@ Trigger fuer Grabben des Mud-Outputs.
     /def  -F -p100 $[(untroom_hide_mud_output)?"-ag":""] -t"*" save_trig = \
 	/add_to_detail %%*
 
+/ifdef (!isMacro("untroom_check_ignored")) untroom_check_ignored = /return 0
+
 /def def_save3_trig = \
     /def -1 -F -p100 -mregexp -q -h"PROMPT" save3 = \
 	/undef save_trig%%;\
@@ -421,8 +426,9 @@ Sucht die Substantive aus dem String und speichert sie in den Listen. Wenn sie s
     /deletekeyandvalue detlist %last%;\
 ; Falls es doch noch in der Liste zu untersuchender Details vorhanden ist,
 ; wird es rausgeloescht
+    /if (untroom_check_ignored()) /return%;/endif%;\
     /createlist prepended%;\
-    /while (regmatch(noun_regexp, detail)==1) \
+    /while (regmatch(noun_regexp, detail)) \
 	/let akt=%P2%;\
 	/let tmp=$[getvalueof("deklinations", tolower(akt))]%;\
 	/if (tmp =~ error) \
