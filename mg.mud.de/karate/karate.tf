@@ -1,4 +1,10 @@
 ; $Log: karate.tf,v $
+; Revision 1.7  2003/06/22 08:36:22  rumburuk
+; Stufenabschaetzungen
+;
+; Revision 1.6  2003/05/07 21:02:55  olm
+; Hook set_skillability ausgefuehrt pro Wert von Funa. Ich brauchte das :)
+;
 ; Revision 1.5  2002/10/17 15:45:35  thufhnik
 ; Einschaetzungen von Funa korrigiert
 ;
@@ -15,7 +21,7 @@
 ; Scratch
 ;
  
-/set karate_tf_version $Id: karate.tf,v 1.5 2002/10/17 15:45:35 thufhnik Exp $
+/set karate_tf_version $Id: karate.tf,v 1.7 2003/06/22 08:36:22 rumburuk Exp $
 /set karate_tf_author=Thufhir@mg.mud.de
 /set karate_tf_requires=status_ext.tf hydra.tf
 /set karate_tf_desc=Loader der Karategilde
@@ -24,8 +30,50 @@
 
 /config_status {ext_segen}{ext_schutzhand}{ext_kiri}_L:{lp}_K:{mp}_{arzt}{hydra_present}_FL:{vorsicht}:{flucht}_W:{weapon}_{modes}_{dim_node}_{clock}
 
+;;; Konfiguration
+/set_var CFG_MG_STUFENKOSTEN 1
+/set_var CFG_MG_STUFENKOSTEN_ECHO_ATTR Cyellow
+/set_var CFG_MG_STUFENKOSTEN_ECHO_TEXT Du hast #1% der naechsten Stufe erreicht.
+
 
 /set t_karate=0
+
+;;; stufenkosten
+
+/ifdef CFG_MG_STUFENKOSTEN karate_kosten = \
+	/echo -a%CFG_MG_STUFENKOSTEN_ECHO_ATTR -- \
+		$[sprintf(CFG_MG_STUFENKOSTEN_ECHO_TEXT,{1})]
+
+/ifdef CFG_MG_STUFENKOSTEN -w -q -agCblue -msimple -p0 -t'Ruh Deine Knochen erstmal \
+		ein bisschen aus. Bis zur naechsten Stufe werden sie' \
+	karate_kosten1 = \
+	/def -agCblue -msimple -p0 -1 -t'noch genug leiden muessen!' \
+		karate_kosten1a = /karate_kosten 0-19
+
+/ifdef CFG_MG_STUFENKOSTEN -w -q -agCblue -msimple -p0 -t'Ganz schoen anstrengend \
+		immer nur mit Hand und Fuss zu metzeln, oder? Aber es' \
+	karate_kosten2 = \
+	/def -agCblue -msimple -p0 -1 -t'hat Dich schon etwas naeher an die \
+		naechste Stufe rangebracht!' \
+		karate_kosten2a = /karate_kosten 20-39
+
+/ifdef CFG_MG_STUFENKOSTEN -w -q -agCblue -msimple -p0 -t'Du scheinst eingesehen \
+		zu haben, dass hirnloses Draufhauen nix nutzt. Die' \
+	karate_kosten3 = \
+	/def -agCblue -msimple -p0 -1 -t'Haelfte haste ungefaehr schon geschafft!' \
+		karate_kosten3a = \ /karate_kosten 40-59
+
+/ifdef CFG_MG_STUFENKOSTEN -w -q -agCblue -msimple -p0 -t'Die Handkanten geschaerft, \
+		den Gi fest zugebunden. Bald hast Du es geschafft!' \
+	karate_kosten4 = /karate_kosten 60-79
+
+/ifdef CFG_MG_STUFENKOSTEN  -w -q -agCblue -msimple -p0 -t'So viele blaue Flecken \
+		wie Du an Armen und Beinen hast, kann die naechste' karate_kosten5 = \
+	/def -agCblue -msimple -p0 -1 -t'Stufe nicht mehr weit sein!' \
+		karate_kosten5a = /karate_kosten 80-99
+
+
+
 
 /def -p3 -F -t"``Du kannst*" -ag -mglob t_karete_ein = \
      /set t_karate=1%;\
@@ -42,6 +90,7 @@
 	    /let verbessert=@{x}>@{$[state_color(last_guete)]}%last_guete\%%;\
 	/endif%;\
 	/uaddtolist karate %P2 %guete%;\
+	/eval_hook set_skillability $[tolower({P2})] %guete%;\
 	/let karate_prozent=(%guete\%%verbessert)%;\
 	/let guete_color=@{$[state_color(guete)]}%;\
 	/echo -p $[pad({P2},-32,':',1,guete_color,0,{P3},-33,karate_prozent,-10)]
