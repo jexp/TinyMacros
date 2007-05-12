@@ -54,7 +54,7 @@
 /def sp = /xc %1 SetProp(P_%2,%-2)
 /def qp = /xc %1 QueryProp(P_%2)
 
-/def -b^i b_completion = \
+/def b_completion = \
      /if (moresize()>0) /dokey PAGE%; /return%; /endif%;\
      /if (more_prompt) /toggle more_prompt%;/send f%; /return%; /endif%;\
      /let kb_point=$[kbpoint()]%;\
@@ -188,4 +188,8 @@
      /if (ls_base=~"-1") \
 	/let ls_base=%1%;\
      /endif%;\
-     /input %ls_base%;\
+     /input %ls_base%;
+
+
+/eval /def $[substr(ver(),0,1)!="5" ? "-b^i" :""] key_tab = /b_completion%;
+
