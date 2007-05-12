@@ -1,6 +1,9 @@
 ;; KOMponenten-Anzeige
 ;;
 ;; $Log: koma.tf,v $
+;; Revision 1.17  2004/10/16 09:47:25  thufhnik
+;; /koma funktioniert jetzt auch ohne ewige Kompos im Guertel
+;;
 ;; Revision 1.16  2003/01/04 02:11:11  olm
 ;; Gesellen- und Magisterguertelunterstuetzung (dran denken:
 ;; CFG_ZAUBERER_KOMA_USE_GINHALT abschalten! *g*)
@@ -62,7 +65,7 @@
 ;; Halbkaraeter zaehlen auch nur halb
 ;; --------------------------------------------------------------------
 
-/set koma_tf_version=$Id: koma.tf,v 1.16 2003/01/04 02:11:11 olm Exp $
+/set koma_tf_version=$Id: koma.tf,v 1.17 2004/10/16 09:47:25 thufhnik Exp $
 /set koma_tf_author=Olli@mg.mud.de
 /set koma_tf_requires=lists.tf
 /set koma_tf_desc=Komponenten-Anzeige der Zauberer
@@ -92,7 +95,7 @@ ewigen Komponente zu der numerischen ID der jeweiligen normalen Komponente.
 
 /addh info \
 INTERN. Erzeugt die notwendigen Komponentenlisten und wird bei Bedarf \
-automatisch beim Laden es Pakets ausgefuehrt.
+automatisch beim Laden des Pakets ausgefuehrt.
 /addh list koma_zkompo_long, koma_zkompo_short, koma_zkompo_ewig
 /addh syn /koma_createlists
 /addh koma_createlists mak
@@ -384,14 +387,10 @@ igen IDs die Anzahlen zu.
 	    /purge t_koma_02*%%;\
 	    /koma_display%;
 
-/def -ag -msimple -p9998 \
+/def -E(CFG_ZAUBERER_KOMA_TRIGGER_GINHALT) -agCblue -msimple -p9998 \
 	-t'--- Guertelinhalt: -----------------------------------------------------------' \
 	t_koma_ginhalt = \
-	/if (CFG_ZAUBERER_KOMA_TRIGGER_GINHALT==1) \
-		/koma_getlines_ginhalt%;\
-	/else \
-		/echo - --- Guertelinhalt: -----------------------------------------------------------%;\
-	/endif%;
+		/koma_getlines_ginhalt%;
 
 /addh info \
 INTERN. Definiert den Trigger fuer den Guertelinhalt per ginhalt, und weist den jeweil\
@@ -442,7 +441,13 @@ igen IDs die Anzahlen zu.
         /endif%;\
 	/def -1 -msimple -ag -p9999 -t'--- ewig: --------------------------------------------------------------------' t_koma_03 = \
 		/undef t_koma_02%%;\
-		/koma_getlines_ginhalt_ewig%;
+		/koma_getlines_ginhalt_ewig%;\
+; Sollte auf funktionieren wenn keine ewigen kompos im guertel sind (z.B. kein Hammer)
+	/def -1 -msimple -ag -p9999 -t'------------------------------------------------------------------------------' t_koma_04 = \
+		/undef t_koma_02%%;\
+		/purge t_koma_03%%;\
+		/koma_display%;
+
 
 /def koma_getlines_ginhalt_ewig = \
 	/def -mglob -t'*' -ag -p9998 t_koma_03 = \
