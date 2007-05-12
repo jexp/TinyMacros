@@ -1,4 +1,7 @@
 ; $Log: tanjian.tf,v $
+; Revision 1.7  2004/03/14 09:22:15  thufhnik
+; Stufenkosten
+;
 ; Revision 1.6  2002/10/07 05:44:18  thufhnik
 ; loeschen unnoetiger files
 ;
@@ -18,10 +21,18 @@
 ; Scratch
 ;
  
-/set tanjian_tf_version $Id: tanjian.tf,v 1.6 2002/10/07 05:44:18 thufhnik Exp $
+/set tanjian_tf_version $Id: tanjian.tf,v 1.7 2004/03/14 09:22:15 thufhnik Exp $
 /set tanjian_tf_author=Thufhir@mg.mud.de
 /set tanjian_tf_requires=
 /set tanjian_tf_desc=Loader der Tanjiangilde
+
+; Konfigurierbares
+
+/set_var CFG_MG_STUFENKOSTEN 1
+/set_var CFG_MG_STUFENKOSTEN_ECHO_ATTR Cyellow
+/set_var CFG_MG_STUFENKOSTEN_ECHO_TEXT Du hast #1% der naechsten Stufe erreicht.
+
+; Laden der Files
 
 /mload -c -dtanjian status_tanjian.tf
 
@@ -32,6 +43,45 @@
 /elseif (p_sub_guild =~ 'nekekami') \
 	/mload -c -dtanjian tanjian_nekekami.tf%;\
 /endif
+
+; Stufenkosten
+
+/ifdef CFG_MG_STUFENKOSTEN tanjian_kosten = \
+        /echo -a%CFG_MG_STUFENKOSTEN_ECHO_ATTR -- \
+                $[sprintf(CFG_MG_STUFENKOSTEN_ECHO_TEXT,{1})]
+
+/ifdef CFG_MG_STUFENKOSTEN -agCblue -msimple -Fp99 -t'Jetzt schrei nicht \
+	gleich nach Siamil. Du musst noch eine Menge leisten bis' \
+	tanjian_kosten1 = \
+	/def -agCblue -msimple -Fp99 -1 -t'zur naechsten Stufe!' \
+		tanjian_kosten1a = /tanjian_kosten 0-19
+
+/ifdef CFG_MG_STUFENKOSTEN -agCblue -msimple -Fp99 -t'Du hast noch ne Menge \
+	zu tun bis zur naechsten Stufe. Sterb nicht so oft, aber' \
+	tanjian_kosten2 = \
+	/def -agCblue -msimple -Fp99 -1 -t'sowas tun Tanjian ja eh nicht!' \
+		tanjian_kosten2a = /tanjian_kosten 20-39
+
+/ifdef CFG_MG_STUFENKOSTEN -agCblue -msimple -Fp99 -t'Man kann den Wert \
+	zwischen den beiden Stufen durchaus als ausgewogen' \
+	tanjian_kosten3 = \
+	/def -agCblue -msimple -Fp99 -1 -t'bezeichnen. Trotzdem hast Du noch \
+		ein Stueck des Weges vor Dir!' tanjian_kosten3a = \
+		/tanjian_kosten 40-59
+
+/ifdef CFG_MG_STUFENKOSTEN -agCblue -msimple -Fp99 -t'Eine Quest hier, ein \
+	paar Monster da. Aber immer schoen ausgeglichen bleiben,' \
+	tanjian_kosten4 = \
+	/def -agCblue -msimple -Fp99 -1 -t'dann klappts auch weiterhin!' \
+		tanjian_kosten4a = /tanjian_kosten 60-79
+
+/ifdef CFG_MG_STUFENKOSTEN -agCblue -msimple -Fp99 -t'Siamil wird stolz auf \
+	Dich sein. Du hast Dich gegen Gut und Boese' \
+	tanjian_kosten5 = \
+	/def -agCblue -msimple -Fp99 -1 -t'durchgesetzt und das Ziel fast \
+		erreicht!' tanjian_kosten5a = /tanjian_kosten 80-99 
+
+; gehoert eigentlich ins cfg, ist aber wohl schon tradition:
 
 /remove_from_hook points /echo_hit_points
 
