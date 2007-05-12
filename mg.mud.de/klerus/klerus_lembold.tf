@@ -1,4 +1,4 @@
-/set klerus_lembold_tf_version $Id: klerus_lembold.tf,v 1.2 2002/11/05 14:38:11 thufhnik Exp $
+/set klerus_lembold_tf_version $Id: klerus_lembold.tf,v 1.3 2004/12/29 14:14:42 thufhnik Exp $
 /set klerus_lembold_tf_author=Deepblue@mg.mud.de
 /set klerus_lembold_tf_requires=util.repeat.tf config.tf
 /set klerus_lembold_tf_desc=Statuserweiterung der Lembold-Erleuchteten
@@ -97,7 +97,7 @@
 /def -E(klerus_engel>1) -Fp1 -agCblue -mglob -t'* Schutzengel fliegt wieder \
 	davon.' klerus_bs_schutzengel_out = \
 	/let KLERUS_BS_OWNER $[tolower({1})]%;\
-	/if (KLERUS_BS_OWNER=/"*s") \
+	/if (KLERUS_BS_OWNER=/"*s" | KLERUS_BS_OWNER=/"*'") \
 		/let KLERUS_BS_OWNER=$[substr(KLERUS_BS_OWNER,0,-1)]%;\
 	/endif%;\
 	/if (KLERUS_BS_OWNER=~tolower(p_name)) \
