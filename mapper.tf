@@ -63,7 +63,7 @@ Praefix der Eingaben markiert, die auch an den Mapper geschickt werden sollen
 Liste von NPC-Namen, die nicht an den Mapper geschickt werden sollen, wenn sie sich im Raum befinden
 /addh CFG_MAP_IGNORE_NPCS cfg
 
-/set CFG_MAP_IGNORE_NPCS=Kruftur Intarbir Dschinn
+/set_var CFG_MAP_IGNORE_NPCS Kruftur Intarbir Dschinn
 
 /add_to_hook first_connect /def_mapper_send
 
@@ -262,13 +262,15 @@ das Makro parst die NPCS, die als Ergebnis von /mapinfo erhalten wird
 	/let map_npc=%;\
 	/while (++count<=T0) \
 	   /test map_npc:=artikel_entfernen(\{T%count\})%;\
-	   /if (CFG_MAP_IGNORE_NPCS!/ strcat("*{",map_npc,"}*")) \
+	   /if (CFG_MAP_IGNORE_NPCS!/ strcat("*",map_npc,"*")) \
 	     /if (strstr(res,map_npc)==-1) \
 		/let res=%res %map_npc%;\
 	     /endif%;\
 	   /endif%;\
 	/done%;\
-     	/input /send -wmapper ai npc %res%;\
+	/if (res!~"") \
+	    /input /send -wmapper ai npc %res%;\
+	/endif%;\
      /endif%;
 
 
