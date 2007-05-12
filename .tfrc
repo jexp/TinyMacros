@@ -1,0 +1,24 @@
+; $Log: .tfrc,v $
+; Revision 1.7  2002/01/31 22:12:44  mh14
+; besseres beispiel
+;
+; Revision 1.6  2001/09/24 20:45:52  mh14
+; bug beim starten behoben
+;
+; Revision 1.5  2001/09/22 13:36:53  mh14
+; einfache einbindung der Pakete
+;
+; Revision 1.4  2001/09/06 21:19:08  mh14
+;  aktuelles Verzeichnis als Makroverz.
+;
+; Revision 1.3  2001/09/06 21:11:44  mh14
+;  Log eingefuegt
+;
+
+; z.B: 
+/set TERM=xterm
+/require ~/TinyMacros/base_init.tf
+;/require base_init.tf
+
+
+
