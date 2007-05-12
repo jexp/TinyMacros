@@ -1,4 +1,47 @@
 ; $Log: gag.tf,v $
+; Revision 1.30  2004/03/15 08:36:55  thufhnik
+; - Einige Trigger beschleunigt und bereinigt
+; - Haustiertrigger werden nur noch geladen wenn CFG_GAG_ANIMALS 1 ist und
+;   zwar vor dem Laden (zb. in gag.cfg: /set CFG_GAG_ANIMALS 1)
+;
+; Revision 1.29  2004/02/29 10:34:14  olm
+; Wenn Amanda kitzelt, auch das eigene Lachen rausgaggen, kann sonst ziemlich
+; verwirren.
+;
+; Revision 1.28  2004/02/23 21:23:52  olm
+; Wenn der funkelnde Spitzhut Feuerschaden nimmt, kommt jetzt auch eine
+; Meldung.
+;
+; Revision 1.27  2004/02/17 16:35:59  olm
+; rabenschwarzer Ring (Vesray Sit)
+;
+; Revision 1.26  2004/02/15 12:14:06  olm
+; Funkelnder Spitzhut (von Vesray Sit, Nibel-NPC)
+;
+; Revision 1.25  2003/08/31 12:50:54  rumburuk
+; Jetzt hoffentlich ohne Bug
+;
+; Revision 1.24  2003/08/31 11:09:09  rumburuk
+; Die Viecher machen ganz schoen viele Meldungen
+;
+; Revision 1.23  2003/07/13 18:35:11  rumburuk
+; Minor fixes
+;
+; Revision 1.22  2003/07/08 19:26:52  rumburuk
+; Minor fixes
+;
+; Revision 1.21  2003/07/01 20:12:52  rumburuk
+; Tiermeldungen
+;
+; Revision 1.20  2003/07/01 19:57:46  rumburuk
+; Tiere erweitert
+;
+; Revision 1.19  2003/06/28 20:12:43  rumburuk
+; Haustiere angefangen
+;
+; Revision 1.18  2003/06/23 20:10:58  rumburuk
+; Schuettelhelm hinzugefuegt (Danke Kaeptn)
+;
 ; Revision 1.17  2003/01/02 03:44:19  olm
 ; Noch eine Meldung vergessen
 ;
@@ -51,14 +94,18 @@
 ; scratch
 ;
 
-/set gag_tf_version $Id: gag.tf,v 1.17 2003/01/02 03:44:19 olm Exp $
-/set gag_tf_author=Deepblue@mg.mud.de
-/set gag_tf_desc=Gager gegen nervende Ausgaben
-/set gag_tf_requires=
-
 ;;;
 ;;; Basis: Ringors gag.tf 
 ;;;
+
+/set gag_tf_version $Id: gag.tf,v 1.30 2004/03/15 08:36:55 thufhnik Exp $
+/set gag_tf_author=Deepblue@mg.mud.de
+/set gag_tf_desc=Gager gegen nervende Ausgaben
+/set gag_tf_requires=util.vfunc.tf util.tf
+
+;;; Konfigurierbares
+
+/set_var CFG_GAG_ANIMALS 0
 
 ;;; Eventuell noch vorhandene Versionen der Trigger aus dem Speicher loeschen:
 /purge -mglob gag_tf_*
@@ -127,7 +174,11 @@
 /def -p8 -agCblue -mglob -q -t'\\[Bierschuettler:Bruno\\] *' gag_tf_npc4
 /def -p6 -agCblue -mglob -q -t'Eusebius *' gag_tf_npc5
 /def -p6 -agCblue -mglob -q -t'Hippe *' gag_tf_npc6
-/def -p6 -agCblue -mglob -q -t'Amanda *' gag_tf_npc7
+/def -p6 -agCblue -mglob -q -t'Amanda *' gag_tf_npc7 = \
+	/if ({-1}=~'kitzelt Dich an Deinem Kinn.') \
+		/def -1 -p7 -agCblue -msimple -q -t'Du versuchst, Dich zu beherrschen, \
+			musst aber doch lachen.' gag_tf_npc7a%;\
+	/endif
 /def -p6 -agCblue -mglob -q -t'Andy *' gag_tf_npc8
 /def -p6 -agCblue -msimple -q -t'Mordillar kommt herein und verkuendet was von einer Party.' gag_tf_npc9
 
@@ -136,9 +187,9 @@
 ;;; off. Ruhe gibts dann wieder mit /gag_ombatis on.
 ;;; Die neuen Meldungen fehlen aber noch
 
-/def -p7 -agCred -mregexp -q -t'^Ombatis sagt: Hallo (.*)! (.*) \
-	hat mich zu Dir geschickt! :-\\)$' gag_tf_ombtrigger1=\
-	/echo -aCred %P2 hat Dir einen Ombatis geschickt!%;\
+/def -p7 -agCred -mglob -q -t'Ombatis sagt: Hallo *! * \
+	hat mich zu Dir geschickt! :-)' gag_tf_ombtrigger1=\
+	/echo -aCred %5 hat Dir einen Ombatis geschickt!%;\
 	/gag_ombatis on
 
 /def -p7 -agCgreen -msimple -q -t'Ombatis macht sich geschwind davon.' \
@@ -150,7 +201,7 @@
 			/gag_ombatis aus%;\
 		/def -1 -p7 -agCgreen -msimple -q -t'Du knuddelst Ombatis.' \
 			gag_tf_ombtrigger4 = /undef gag_tf_ombtrigger3%;\
-		knuddel ombatis
+		/send !\\knuddel ombatis
 
 
 /def gag_ombatis=\
@@ -299,12 +350,18 @@
 /def -p1 -agCblue -msimple -q -t'Du schielst durch die Brille und siehst:' \
     gag_tf_item1
 
+;;; Der Schuettelhelm nervt auch:
+
+/def -p0 -agCblue -q -mglob -q -t'* schuettelt sich einfach so.' gag_tf_item2
+/def -p0 -agCblue -q -mglob -q -t'* schuettelt entruestet den Kopf.' gag_tf_item3
+/def -p0 -agCblue -q -mglob -q -t'* wird von einem Schuettelhelm gruendlich durchgeschuettelt.' gag_tf_item4
+
 
 ;;; Die Meldung vom Wecker reicht auch einmal
 
-/def -p1 -mregexp -q -t'^([A-Z][a-z]+)s\'? Wecker klingelt bei Dir.*$' gag_tf_weck1=\
+/def -p1 -mregexp -q -t'^([A-Z][a-z]+)s\'? Wecker klingelt bei Dir\\.$' gag_tf_weck1=\
 	/def -p2 -aggCblue -mregexp -q -t'^%P1s\\'? Wecker klingelt \
-		bei Dir.*$$' gag_tf_weck1a%;\
+		bei Dir\\\\.$$' gag_tf_weck1a%;\
 	/repeat -20 1 /purge gag_tf_weck1a
 
 /def -p1 -mregexp -q -t'^([A-Z][a-z]+) piept Dich an\\.$' gag_tf_weck2=\
@@ -333,8 +390,78 @@
 /def -p1 -agCblue -mglob -q -t'* ruft: !&$#\'!! Grube!' gag_tf_grube
 
 
-;;; im Kampf An- und Ausziehen sowie Zuecken und Wegstecken anderer gaggen.
+;;; im Kampf An- und Ausziehen sowie Zuecken und Wegstecken anderer gagen.
 
 /def -p0 -E(kampf) -agCblue -q -mglob -q -t'* zieht * {aus.|an.}' gag_tf_wear
 /def -p0 -E(kampf) -agCblue -q -mglob -q -t'* steckt * zurueck.' gag_tf_unwield
 /def -p0 -E(kampf) -agCblue -q -mglob -q -t'* zueckt *.' gag_tf_wield
+
+;;; Haustiere koennen auch nerven (konfigurierbar via CFG_GAG_ANIMALS)
+;;; wenn beim Laden von gag.tf CFG_GAG_ANIMALS nicht gesetzt ist, werden
+;;; die Trigger gar nicht erst gesetzt
+;Kater
+
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* leckt sich sein Fell.' gag_tf_animal1
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* schaut Dich mit leuchtenden Augen an.' gag_tf_animal2
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* miaut leise.' gag_tf_animal3
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* legt sich auf den Boden und schliesst die Augen.' gag_tf_animal4
+
+; Katze
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* kratzt sich mit ihrem rechten Hinterbein hinter den Ohren.' gag_tf_animal11
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* schleicht herein.' gag_tf_animal12
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* schleicht * hinterher.' gag_tf_animal13
+
+
+; Maus
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* tippelt herein.' gag_tf_animal21
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* tippelt * hinterher.' gag_tf_animal22
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* tippelt aufgeregt herum.' gag_tf_animal23
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* kratzt sich hinter dem Ohr.' gag_tf_animal24
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'HUCH, fast waerst Du auf * getreten.' gag_tf_animal25
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -msimple -t'Jemand kneift Dir in die Hacke und quiekt dabei.' gag_tf_animal26
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* stellt sich auf die Hinterbeine und putzt sich *' gag_tf_animal27 = \
+	/def -p0 -1 -agCblue -q -mglob -t'*Nase.' gag_tf_animal27a
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'AAAAHHH! Eine Maus! Direkt vor Dir!' gag_tf_animal28
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* schaut zu * hoch. * zwinkert kurz*' gag_tf_animal29 = \
+	/def -p0 -1 -agCblue -q -mglob -t'*Kreis.' gag_tf_animal29a
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* knabbert * sanft am Ohr. * muss kurz*' gag_tf_animal30 = \
+	/def -p0 -1 -agCblue -q -mglob -t'*gekitzelt.' gag_tf_animal30a
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'Die Maus * auf * Schulter zwinkert Dir zu.' gag_tf_animal210
+
+; Hund
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* trabt herein.' gag_tf_animal31
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* trabt * hinterher.' gag_tf_animal32
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* wirft Dir einen skeptischen Blick zu.' gag_tf_animal33
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* gaehnt herzzerreissend.' gag_tf_animal34
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* kratzt sich mit der linken Pfote an der Nase.' gag_tf_animal35
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* gibt ein kurzes Bellen von sich.' gag_tf_animal36
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* schleicht um * Beine.' gag_tf_animal37
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* legt sich auf den Boden und schliesst die Augen.' gag_tf_animal38
+/ifdef CFG_GAG_ANIMALS -p0 -agCblue -q -mglob -t'* hebt sein Bein ...' gag_tf_animal39
+
+; funkelnder Spitzhut (Vesray Sit)
+/def -p7 -agCblue -mglob -q -t'Dein funkelnder Spitzhut teilt Dir mit: *' gag_tf_spitzhut1 = \
+    /if ({-6}=~'Hey! Wenn Du so weiter machst, wird') \
+	/echo -aCred Der funkelnde Spitzhut nimmt Feuerschaden!%;\
+    /endif
+
+; rabenschwarzer Ring (Vesray Sit)
+/def -p0 -agCblue -msimple -q -t'Du hoerst ein leises Fluestern in einer \
+	alten, boshaften Sprache, das aus dem' gag_tf_vesrayring1 = \
+	/def -1 -p0 -agCblue -msimple -q -t'rabenschwarzen Ring in Deinen \
+		Kopf dringt.' gag_tf_vesrayring2
+
+;/createlist wegmeldungen
+
+;/def -p1 -aCgreen -mglob -t'{*} ist gerade nicht da: *' t_wegmeldung = \
+;	/set wegmeldung_gag=0%;\
+;	/if (getvalueof("wegmeldungen",{1})=~{-5}) \
+;	  /substitute -ag%; \
+;	  /set wegmeldung_gag=1%;\
+;        /endif%;\
+;	/test uaddtolist("wegmeldungen",{1},{-5})%;
+
+;/def -p1 -aCgreen -mglob -t'*                      *' t_wegmeldung2 = \
+;	/if (wegmeldung_gag) /substitute -ag%;/endif
+
+;/def wegmeldung = /result getvalueof("wegmeldungen",{1})
