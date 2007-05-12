@@ -101,7 +101,7 @@ Erweitert die Funktionalitaet des '-p'-Parameters von /echo um das Attribut \
 /defh echo2 = \
 	/let param=%*%;\
 	/let reg=$[strcat("(^ *(-((p|e)|((a|w)[^ -]+)) )+)")] %;\
-	/if ((regmatch(reg,param)) & (strstr({P0},"-p")!=-1)) \
+	/if ((regmatch(reg,param)==1) & (strstr({P0},"-p")!=-1)) \
 	  /let part1=%P0%;\
 	  /let part2=$[substr(param,strlen(part1))]%;\
 	  /let off=$[strstr(part2,"@{N}")] %;\
