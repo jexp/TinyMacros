@@ -1,4 +1,10 @@
 ; $Log: info.tf,v $
+; Revision 1.10  2003/10/16 19:26:11  thufhnik
+; Info_kurz -> InfoKurz da es sonst Kollisionen mit den /purges gibt
+;
+; Revision 1.9  2003/10/10 19:54:52  thufhnik
+; neues Macro: Info_kurz
+;
 ; Revision 1.8  2003/04/13 15:41:16  thufhnik
 ; kleiner Bugfix in ep-diffs
 ;
@@ -25,7 +31,7 @@
 ; Scratch
 ;
 
-/set info_tf_version=$Id: info.tf,v 1.8 2003/04/13 15:41:16 thufhnik Exp $
+/set info_tf_version=$Id: info.tf,v 1.10 2003/10/16 19:26:11 thufhnik Exp $
 /set info_tf_author=Thufhir@mg.mud.de
 /set info_tf_requires=mg_properties.tf util.vfunc.tf
 /set info_tf_desc=Info schoener anzeigen
@@ -52,6 +58,7 @@
 
 /purge InfoTrigger
 /purge InfoOut
+/purge InfoKurz
 /purge -mglob Info_*
 /purge remove_info
 
@@ -62,8 +69,10 @@
 	/echo%;\
 	/purge InfoTrigger%;\
 	/purge InfoOut%;\
+	/purge InfoKurz%;\
 	/purge -mglob Info_*%;\
 	/quote -S /unset `"/listvar -mglob -s INFO_*%;\
+;"
 	/purge remove_info
 
 ;;; Ab hier gehts eigentlich los
@@ -244,3 +253,30 @@
 	/purge -mglob Info_*%;\
 	/check_vorsicht %INFO_VS %INFO_FR%;\
 	/eval_hook property_update
+
+; Abfrage der LP und KP ueber "kurzinfo"
+
+/def InfoKurz = \
+	/def -1 -mregexp -p1 -w -q -agCblue -t'^Gesundheit: +0 \\\\|#*[. ]*\
+		\\\\| +([1-9][0-9]*)( \\\\(([1-9][0-9]*)\\\\))?$$' \
+		Info_kurz_lp = \
+		/set p_lp %%P1%%;\
+		/if ({P2}!~'') \
+			/set p_maxlp %%P3%%;\
+		/else \
+			/set p_maxlp %%P1%%;\
+		/endif%;\
+	/def -1 -mregexp -p1 -w -q -agCblue -t'^Konzentration: +0 \\\\|#*[. ]*\
+		\\\\| +([1-9][0-9]*)( \\\\(([1-9][0-9]*)\\\\))?$$' \
+		Info_kurz_kp = \
+		/let Info_cont=%*%%;\
+		/set p_mp %%P1%%;\
+		/if ({P2}!~'') \
+			/set p_maxmp %%P3%%;\
+		/else \
+			/set p_maxmp %%P1%%;\
+		/endif%%;\
+		/if (Info_cont!~'') \
+			/eval %%Info_cont%%;\
+		/endif%;\
+	/send !\\kurzinfo
