@@ -1,4 +1,7 @@
 ; $Log: vorsicht.tf,v $
+; Revision 1.20  2003/12/09 16:24:07  thufhnik
+; Fix in check_vorsicht, siehe auch kommentar unten, danke madness.
+;
 ; Revision 1.19  2002/09/04 12:00:32  mh14
 ; mist vorsicht war immer noch nich wieder richtig, ein %; zuviel escaped
 ;
@@ -56,7 +59,7 @@
 ; Log eingefuegt, Hilfetexte korrigiert
 ;
 
-/set vorsicht_tf_version $Id: vorsicht.tf,v 1.19 2002/09/04 12:00:32 mh14 Exp $
+/set vorsicht_tf_version $Id: vorsicht.tf,v 1.20 2003/12/09 16:24:07 thufhnik Exp $
 /set vorsicht_tf_author Dotz@mg.mud.de, Mesirii@mg.mud.de
 /set vorsicht_tf_requires=lists.tf
 /set vorsicht_tf_desc=beliebige Fluchtrichtung und Festsetzen der Vorsicht
@@ -102,7 +105,9 @@ Trigger, der die Vorsicht und Fluchtrichtung vom Teddy abfaengt und auf Ueberein
 	/let temp_escape=$[({2}=~"keine")?"":{-1}]%;\
 	/if (temp_escape!~p_escape) \
 	    /echo -p @{Cred}Fluchtrichtung geaendert auf: %temp_escape @{n}, zuruecksetzen auf %p_escape%;\
-	    /fl %p_escape %p_escape_tf%;\
+; 08.12.2003 madness
+; ein %%; hinzugefueg, da sonst der erste + zweite befehl als ein befehl erkannt wird
+	    /fl %p_escape%%;%p_escape_tf%;\
 	/endif%;
 
 /def -F -t"Vorsicht: ([0-9]+|keine)[.] Fluchtrichtung: (.+) $" -mregexp -agCyellow -p110 t_whimpie = \
