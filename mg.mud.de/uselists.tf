@@ -227,9 +227,11 @@ Mit /gotank kann man das Tanken etwas beschleunigen. Man gibt als Parameter einf
 	   /set value=%;\
 	   /while (++i<=T0) \
 	     /test value:=strcat(value," ",\{T%{i}\})%;\
+;/set value%;\
 	   /done%;\
 ;/set value%;\
 	   /let dotank=$[substr(value,1)]%;\
+;/let dotank%;\
 	   /if (dotank=/"_*") \
 	      /let dotank=$[substr(dotank,1)]%;\
 	   /else \
