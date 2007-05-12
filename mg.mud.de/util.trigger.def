@@ -1,2 +1,2 @@
 /set mud_custom_prompt_response=Neues Alias: tf_prompt  = %1
-/set mud_custom_prompt=alias tf_prompt %1
+/set mud_custom_prompt=!alias tf_prompt %1
