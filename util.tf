@@ -1,4 +1,12 @@
 ; $Log: util.tf,v $
+; Revision 1.45  2003/07/25 14:59:22  olm
+; Schoenheitskorrektur: ueberfluessiges /echo in /kill_process entfernt
+; (/ifecho !opt_q /echo ...)
+;
+; Revision 1.44  2003/05/06 13:49:46  lje
+;
+; xtitle setzt jetzt Titel- und Iconnamen
+;
 ; Revision 1.43  2002/09/25 23:21:36  mh14
 ; mkdir_all versucht jetzt nichtmehr leerstrings als verz. zu erzeugen
 ;
@@ -126,7 +134,7 @@
 ;  Log eingefuegt
 ;
 
-/set util_tf_version $Id: util.tf,v 1.43 2002/09/25 23:21:36 mh14 Exp $
+/set util_tf_version $Id$
 /set util_tf_author=Mesirii@mg.mud.de
 /set util_tf_requires=lists.tf
 /set util_tf_desc diverse Hilfsmakros
@@ -143,9 +151,39 @@
 
 /def wecho_output = /echo -a%{wecho_attr} [%*]
 
-; Feststellen des OS
 ; ********************* END CONFIG **********************
 
+/set ISMACRO_CACHE_TIME=60
+
+/hcreatelist ismacro_cache
+
+/def ismacro_cache=\
+     /let tvalue=%;\
+     /test tvalue:=value%;\
+     /let tmp=$[hgetvalueof("ismacro_cache",{1})]%;\
+     /test value:=tvalue%;\
+     /if (tmp=~error | abs(tmp)<time()) /return -1%; /endif%;\
+     /return tmp>0%;
+
+/def cache_macro = \
+     /let tmp=%;\
+     /test tmp:=value%;\
+     /hdeletekeyandvalue ismacro_cache %1%;\
+     /haddtolist ismacro_cache %1 $[(time()+ISMACRO_CACHE_TIME)*(({2}) ? 1 : -1)]%;\
+     /test value:=tmp%;\
+     
+/def _ismacro = \
+     /let tmp=%;\
+     /test tmp:=ismacro_cache({1})%;\
+     /if (tmp!=-1) /return %tmp%; /endif%;\
+     /eval -s0 /test tmp:=\${%1}%;\
+     /test tmp:=strlen(tmp)%;\
+     /cache_macro %1 $[tmp>0]%;\
+     /return tmp>0
+
+;/if (ver()=/"*5*") /eval /def ismacro = ${_ismacro}%; /endif
+
+; Feststellen des OS
 /addh info \
 Setzt die Variable OS auf das verwendete Betriebssystem (bisher 'win' und 'linux').
 /addh var OS
@@ -162,8 +200,12 @@ Setzt die Variable OS auf das verwendete Betriebssystem (bisher 'win' und 'linux
      /endif%;\
      /set OS=win%;\
   /else \
-     /set OS=linux%;\
-  /endif%;\
+     /let ver=$(/version)%;\
+     /if (strstr(ver,"Darwin")>-1) /set OS=macos%;\
+     /else \
+       /set OS=linux%;\
+     /endif%;\
+  /endif%;
 
 /addh info Schnelles Senden von Kommandos ans Mud, direkt als String mit char(13) (Return) getrennt
 /addh ex /send_fast n%;o%;s
@@ -171,13 +213,13 @@ Setzt die Variable OS auf das verwendete Betriebssystem (bisher 'win' und 'linux
 /addh send_fast comm
 /def send_fast = \
      /let param=%*%;\
-     /test param:=replace("%;",char(13),param)%;\
+     /test param:=replace("%;",strcat(char(13),SEND_PREFIX),param)%;\
      /send %param
 
 /def send_fast_n = \
      /let count=%1%; /shift%;\
      /let param=%;\
-     /test param:=strcat({*},char(13))%;\
+     /test param:=strcat(SEND_PREFIX, {*},char(13))%;\
      /send $[strrep(param,count)]
 
 ;   /let verstring=$(/version)%;\
@@ -393,14 +435,14 @@ Ersetzt read, tfread, _read in asynchronen Makros. Es ist ein boeser Workaround,
 
 /def kill_process = \
 	/if (strstr({-5},{1})>-1) \
-	  /ifecho !opt_q /echo Killing: %-1%;\
+	  /ifecho !opt_q Killing: %-1%;\
 	  /kill %2%;\
 	/endif%;
 
 /addh info \
 Setzt den Titel des xterms.
 /addh xtitle comm
-/defh xtitle = /echo -r \033]2;%*\07
+/defh xtitle = /echo -r \033]0;%*\007
 
 /def recall_file = \
    /def recall_write = /test tfwrite(recall_handle,{*})%; \
