@@ -1,4 +1,7 @@
 ; $Log: util.prompts.tf,v $
+; Revision 1.11  2003/12/11 10:35:49  mh14
+;  /msend repariert wg. SEND_PREFIX
+;
 ; Revision 1.10  2001/10/10 22:10:21  mh14
 ; Default-Konfiguration in .tf Files verschoben
 ;
@@ -21,7 +24,7 @@
 ;  Log eingefuegt
 ;
 
-/set util_prompts_tf_version $Id: util.prompts.tf,v 1.10 2001/10/10 22:10:21 mh14 Exp $
+/set util_prompts_tf_version $Id: util.prompts.tf,v 1.11 2003/12/11 10:35:49 mh14 Exp $
 /set util_prompts_tf_author=Mesirii@mg.mud.de
 /set util_prompts_tf_requires lists.tf util.hooks.tf
 /set util_prompts_tf_desc Makros zum Nutzen der Prompts, des Muds um Makros auszufuehren
@@ -128,7 +131,12 @@ Hook der den letzten Zeitpunkt speichert, an dem etwas ans Mud geschickt wurde. 
 
 /def msend =\
 	/send_hook %*%;\
-	/send %*%;
+	/if (substr({*},0,1)!~SEND_PREFIX) \
+	   /send %{SEND_PREFIX}%*%;\
+	/else \
+	   /send %*%;\
+	/endif
+
 
 ;/def prompt = \
 ;	/test prompt:={*}%;\
