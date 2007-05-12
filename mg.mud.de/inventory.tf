@@ -1,4 +1,33 @@
 ; $Log: inventory.tf,v $
+; Revision 1.30  2004/04/14 07:41:55  thufhnik
+; Vesrays Ring in %inv_vesring
+; Bei der Ermittlung von %inv_ring stoeren dieverse AT_MISC nicht mehr
+;
+; Revision 1.29  2004/01/25 13:49:09  thufhnik
+; Nach dem Login einmal den Elfenbeinblock mit "dare" testen
+;
+; Revision 1.28  2003/12/01 05:36:45  thufhnik
+; Nebelamulett
+;
+; Revision 1.27  2003/11/30 12:04:57  thufhnik
+; /inv_check laeuft beim Start jetzt sicher durch.
+;
+; Revision 1.26  2003/09/13 09:33:34  thufhnik
+; Magierpfade werden jetzt auch beim inv_check beruecksichtigt
+; MGtool
+;
+; Revision 1.25  2003/08/25 09:35:18  thufhnik
+; Terminatorschaedel
+;
+; Revision 1.24  2003/07/27 22:20:04  olm
+; Leere Geldkarte wurde nicht erkannt und nicht rausgegaggt.
+;
+; Revision 1.23  2003/07/17 18:44:28  thufhnik
+; dann das ganze nochmal sauberer
+;
+; Revision 1.22  2003/07/17 18:40:03  thufhnik
+; wenn CFG_INV_MORE_LINES == 0 dann zeilen 0 ans mud.
+;
 ; Revision 1.21  2003/04/15 12:30:46  thufhnik
 ; befleckte Ruestungen
 ;
@@ -68,7 +97,7 @@
 ; Scratch
 ;
 
-/set inventory_tf_version=$Id: inventory.tf,v 1.21 2003/04/15 12:30:46 thufhnik Exp $
+/set inventory_tf_version=$Id: inventory.tf,v 1.30 2004/04/14 07:41:55 thufhnik Exp $
 /set inventory_tf_author=Thufhir@mg.mud.de
 /set inventory_tf_requires=util.hooks.tf util.trigger.tf
 /set inventory_tf_desc=Pruefen ob gewisse Gegenstaende im Inv vorhanden sind
@@ -81,6 +110,7 @@
 /set_var CFG_INV_NOTIFY_CHANGE 1
 
 ; Wieviele Zeilen sollen beim Scrollen mit More uebrig bleiben? (zeilen auto -5)
+; 0 fuer zeilen 0
 /set_var CFG_INV_MORE_LINES 5
 
 ; Sollen Misc-Ruestungen automatisch angezogen werden?
@@ -90,6 +120,7 @@
 ; Variablen initialisieren
 
 /set inv_amu=
+/set inv_arnischaedel=0
 /set inv_bmuenzen=0
 /set inv_boerse=0
 /set inv_chaosball=0
@@ -105,6 +136,7 @@
 /set inv_kerbholz=0
 /set inv_licht=0
 /set inv_muenzen=0
+/set inv_nebelamu=0
 /set inv_ohrenschuetzer=0
 /set inv_paket=0
 /set inv_plakette=0
@@ -125,6 +157,7 @@
 /set inv_teddy=0
 /set inv_tischaedel=0
 /set inv_tkamu=0
+/set inv_vesring=0
 /set inv_wsterne=0
 
 ; Makros und Trigger
@@ -136,15 +169,17 @@
 /addh info \
 Setzt einige Variablen (inv_*) je nachdem, ob gewisse Dinge im Inventory \
 vorhanden sind. Nach Beendigung der Pruefung wird der Hook inventory_update \
-ausgefuehrt. 
+ausgefuehrt.
 /addh syn /inv_check
+/addh ex /inv_check
 /addh inv_check mak
-/def inv_check = \
+/defh inv_check = \
 	/if (!inv_check_running) \
 		/set inv_check_running=1%;\
-		/def -1 -agCblue -p1 -w -q -msimple -t'Okay, Deine Zeilenzahl \
-			steht nun auf 0.' inv_check_cont = /inv_check1%;\
+		/def -1 -agCblue -Fp1 -w -q -msimple -t'Okay, Deine \
+			Zeilenzahl steht nun auf 0.' inv_check_cont%;\
 		/send !\\zeilen 0%;\
+		/tf_prompt inv_check /inv_check1%;\
 	/endif
 
 /def inv_check1 = \
@@ -162,6 +197,15 @@ ausgefuehrt.
 	/set inv_seil=0%;\
 	/set inv_spruehdose=0%;\
 	/set inv_teddy=0%;\
+	/ifdef (p_state=~"magier") -w -agCblue -p1 -mregexp -q -t'^ ([^ ]+)\
+		[s\\'] MGtool v([0-9.]+) \\\\[[0-9]+:[0-9]+:[0-9]+\\\\]\
+		\\\\.$$' inv_check_xtool = \
+		/if (tolower({P1})=~p_name) \
+			/if (!is_file_loaded("xtool.tf")) \
+				/mload -c xtool.tf%%;\
+			/endif%%;\
+			/set inv_xtool=%%P2%%;\
+		/endif%;\
 	/def -w -agCblue -p1 -mregexp -q -t'^ Eine (leere )?Geldboerse( mit \
 		(einer|[0-9]+) Muenzen?)?\\\\.$$' \
 		inv_check_boerse = \
@@ -228,6 +272,7 @@ ausgefuehrt.
 	/def -Fp1000000 -w -mregexp -q -t'(^ .+) \\\\(befleckt\\\\)(.*)' \
 		inv_fleckweg = /test substitute(strcat({P1},{P2}))%;\
 	/set inv_amu=%;\
+	/set inv_arnischaedel=0%;\
 	/set inv_chaosball=0%;\
 	/set inv_engelsfluegel=0%;\
 	/set inv_fussring=0%;\
@@ -235,6 +280,7 @@ ausgefuehrt.
 	/set inv_helm=%;\
 	/set inv_hose=%;\
 	/set inv_hyrue=0%;\
+	/set inv_nebelamu=0%;\
 	/set inv_ohrenschuetzer=0%;\
 	/set inv_rdm=0%;\
 	/set inv_ring=%;\
@@ -249,6 +295,7 @@ ausgefuehrt.
 	/set inv_tarnhelm=0%;\
 	/set inv_tischaedel=0%;\
 	/set inv_tkamu=0%;\
+	/set inv_vesring=0%;\
 	/if (is_file_loaded("status_klerus.tf")) \
 		/set klerus_quiet 1%;\
 	/endif%;\
@@ -287,12 +334,13 @@ ausgefuehrt.
 			/set inv_amu=sabberamulett%%;\
 		/endif%%;\
 		/test ++inv_sabberamu%;\
-	/def -w -agCblue -p2 -mregexp -q -t'^ Ein Fussring\
-		( \\\\(angezogen\\\\))?\\\\.$$' inv_check_fussring = \
-		/if ({P1} =~ "" & CFG_INV_WEAR_AUTO) \
-			/send !\\\\trage fussring%%;\
+	/def -w -agCblue -p2 -mregexp -q -t'^ Das Nebelamulett( \
+		\\\\(angezogen\\\\))?\\\\.$$' inv_check_nebelamu = \
+		/if ({P1} !~ "") \
+			/set inv_amu=nebelamulett%%;\
+			/purge inv_check_amu%%;\
 		/endif%%;\
-		/test ++inv_fussring%;\
+		/test ++inv_nebelamu%;\
 	/def -1 -w -agCblue -p1 -mregexp -q -t'^ Ein Chaosball \
 		\\\\(pulsierend\\\\)( \\\\(angezogen\\\\))?\\\\.$$' \
 		inv_check_chaosball = \
@@ -307,6 +355,32 @@ ausgefuehrt.
 		/set inv_rue=$$[tolower({P2})]%;\
 	/def -1 -w -agCblue -p2 -mregexp -q -t'^ Ein Nasenring( \\\\(\
 		angezogen\\\\))?\\\\.$$' inv_check_nasenring%;\
+	/def -1 -w -agCblue -p2 -mregexp -q -t'^ Ein Fussring\
+		( \\\\(angezogen\\\\))?\\\\.$$' inv_check_fussring = \
+		/if ({P1} =~ "" & CFG_INV_WEAR_AUTO) \
+			/send !\\\\trage fussring%%;\
+		/endif%%;\
+		/test ++inv_fussring%;\
+	/def -1 -w -agCblue -p2 -mregexp -q -t'^ Ein rabenschwarzer Ring\
+		( \\\\(angezogen\\\\))?\\\\.$$' inv_check_vesring = \
+		/if ({P1} =~ "" & CFG_INV_WEAR_AUTO) \
+			/send !\\\\trage vesrayring%%;\
+		/endif%%;\
+		/test ++inv_vesring%;\
+	/def -1 -w -agCblue -p2 -mregexp -q -t'^ Der Siegelring der Chaosgilde\
+		( \\\\(angezogen\\\\))?\\\\.$$' inv_check_csiegelring = \
+		/if ({P1} =~ "" & CFG_INV_WEAR_AUTO) \
+			/send !\\\\trage siegelring%%;\
+		/endif%;\
+	/def -1 -w -agCblue -p2 -mregexp -q -t'^ Der Ring des Chaos\
+		( \\\\(angezogen\\\\))?\\\\.$$' inv_check_chaosring%;\
+; der hat leider keine eindeutige id, um ihn anziehen zu koennen ;(
+	/def -1 -w -agCblue -p2 -mregexp -q -t'^ Ein Verlobungsring von \
+		[A-Z][A-Za-z]+( \\\\(angezogen\\\\))?\\\\.$$' \
+		inv_check_verlobungsring = \
+		/if ({P1} =~ "" & CFG_INV_WEAR_AUTO) \
+			/send !\\\\trage verlobungsring%%;\
+		/endif%;\
 	/def -1 -w -agCblue -p1 -mregexp -q -t'^ ([^ ].+ )?([A-Z][^ ]+ring|\
 		Ring).* \\\\(angezogen\\\\)\\\\.$$' inv_check_ring = \
 		/set inv_ring=$$[tolower({P2})]%;\
@@ -371,6 +445,13 @@ ausgefuehrt.
 		/if ({P1} !~ "") \
 			/set inv_helm=tarnhelm%%;\
 		/endif%;\
+	/def -1 -w -agCblue -p2 -mregexp -q -t'^ Der Schaedel eines \
+		Terminators( \\\\(angezogen\\\\))?\\\\.$$' \
+		inv_check_terminatorschaedel = \
+		/test ++inv_arnischaedel%%;\
+		/if ({P1} !~ "") \
+			/set inv_helm=terminatorschaedel%%;\
+		/endif%;\
 	/def -1 -w -agCblue -p1 -mregexp -q -t'^ (Eine? |Der |Die )?\
 		([a-z]+ )?(([A-Z][a-z\\\\-]+)?([Hh](elm|ut)|[Mm]uetze|\
 		[Kk]rone)) (.* )?\\\\(angezogen\\\\)\\\\.$$' inv_check_helm = \
@@ -402,7 +483,12 @@ ausgefuehrt.
 	/if (inv_geldkarte == -1) \
 		/def -1 -w -agCblue -p1 -mregexp -q -t'^Dein Guthaben betraegt \
 			([0-9]+) Muenzen\\\\.$$' inv_check_guthaben = \
-			/set inv_geldkarte=%%P1%;\
+			/set inv_geldkarte=%%P1%%;\
+			/undef inv_check_guthaben2%;\
+		/def -1 -w -agCblue -p1 -msimple -q -t'Welches Guthaben? :-)' \
+			inv_check_guthaben2 = \
+			/set inv_geldkarte=0%%;\
+			/undef inv_check_guthaben%;\
 		/send !\\guthaben%;\
 		/tf_prompt inventory /inv_cont final%;\
 	/else \
@@ -410,18 +496,24 @@ ausgefuehrt.
 	/endif
 
 /def inv_checkfinal = \
-	/def -1 -w -q -p100 -mregexp -agCblue -t'^Ok, Deine Zeilenzahl wird \
-		nun automatisch ermittelt \\\\(derzeit [0-9]+\\\\)\\\\.$$' \
-		inv_check_final_g1%;\
-	/def -1 -w -q -p100 -msimple -agCblue -t'Bitte beachte, dass dies nur \
-		einwandfrei funktioniert, wenn Dein Client' \
-		inv_check_final_g2%;\
-	/def -1 -w -q -p100 -msimple -agCblue -t'Telnetnegotiations \
-		unterstuetzt (siehe auch "hilfe telnegs").' \
-		inv_check_final_g3 = \
-		/unset inv_check_running%%;\
+	/if (CFG_INV_MORE_LINES) \
+		/def -1 -w -q -p100 -mregexp -agCblue -t'^Ok, Deine Zeilenzahl \
+			wird nun automatisch ermittelt \\\\(derzeit \
+			[0-9]+\\\\)\\\\.$$' \
+			inv_check_final_g1%;\
+		/def -1 -w -q -p100 -msimple -agCblue -t'Bitte beachte, dass \
+			dies nur einwandfrei funktioniert, wenn Dein Client' \
+			inv_check_final_g2%;\
+		/def -1 -w -q -p100 -msimple -agCblue -t'Telnetnegotiations \
+			unterstuetzt (siehe auch "hilfe telnegs").' \
+			inv_check_final_g3 = \
+			/unset inv_check_running%%;\
+			/eval_hook inventory_update%;\
+		/send !\\zeilen auto -%CFG_INV_MORE_LINES%;\
+	/else \
+		/unset inv_check_running%;\
 		/eval_hook inventory_update%;\
-	/send !\\zeilen auto -%CFG_INV_MORE_LINES
+	/endif
 
 /def -E(inv_wsterne) -mglob -Fp100 -w -t'Du nimmst einen Wurfstern in die \
 	Hand und wirfst ihn nach *' inv_wsterne_throw = /test --inv_wsterne%;\
@@ -449,4 +541,16 @@ ausgefuehrt.
 /ifdef CFG_INV_NOTIFY_CHANGE -E(!inv_check_running) -Fp1 -q -w -mglob \
 	-t'Du ziehst * {an.|aus.}' inv_notify_change = /inv_check
 
+/ifdef (p_state=~"magier") -E(inv_check_running) -Fp1000000 -w -q -mregexp \
+	-t'^( [^ ].+\\.) \\[.+\\]$' inv_substpath = \
+	/test substitute({P1})
+
+/def inv_elfenbeinblock_auto = \
+	/remove_from_hook inventory_update /inv_elfenbeinblock_auto%;\
+	/if (inv_elfenbeinblock) \
+		/send !\\dare%;\
+	/endif%;\
+	/purge inv_elfenbeinblock_auto
+
+/add_to_hook inventory_update /inv_elfenbeinblock_auto
 /add_to_hook loadsaved /inv_check
