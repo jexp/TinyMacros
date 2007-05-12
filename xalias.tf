@@ -1,4 +1,8 @@
 ; $Log: xalias.tf,v $
+; Revision 1.4  2003/08/04 10:01:51  lje
+;
+; Fix fuer Fernschreiber
+;
 ; Revision 1.3  2003/04/08 09:31:10  lje
 ;
 ; xmore auch noch berücksichtigt
@@ -11,7 +15,7 @@
 ; erweiterte aliasnamen (?,*,..) fileinfo,log,umbenannt,config list location
 ;
 
-/set xalias_tf_version $Id: xalias.tf,v 1.3 2003/04/08 09:31:10 lje Exp $
+/set xalias_tf_version $Id: xalias.tf,v 1.4 2003/08/04 10:01:51 lje Exp $
 /set xalias_tf_author=Vardion@mg.mud.de
 /set xalias_tf_requires=functions.tf lists.tf
 /set xalias_tf_desc=Erstellung von Aliases auf Client-Basis
@@ -74,8 +78,9 @@
 ;;; Leidere bugts manchmal und Teddy-Meldungen etc werden als Prompt gewertet -
 ;;; deswegen der Zusatztest mit strlen() und substr()
 /def -p1 -q -F -hPROMPT alias_get_prompt = \
-	/set aliprompt=$[strlen({*}) < 2 & {*} !~ ']' | strlen({*}) > 1 & \
-		substr({*}, -1, 1) !~ ':' & substr({*}, -1, 1) !~ '>' & \
+	/set aliprompt=$[strlen({*}) < 2 & {*} !~ ']' & {*} !~ '' | \
+		strlen({*}) > 1 & substr({*}, -1, 1) !~ ':' & \
+		substr({*}, -1, 1) !~ '>' & \
 		substr({*}, 0, 8) !~ '--mehr--' & \
 		substr({*}, 0, 8) !~ '*** More']
 
