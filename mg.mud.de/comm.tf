@@ -1,4 +1,7 @@
 ; $Log: comm.tf,v $
+; Revision 1.93  2003/08/25 13:03:28  nieten
+; remote-Trigger etwas sicherer gemacht
+;
 ; Revision 1.92  2003/03/14 14:00:54  nieten
 ; Spieler Geist buggt nun nicht mehr auf -Moerder rum
 ;
@@ -302,7 +305,7 @@
 ; erste Version
 ;
 
-/set comm_tf_version=$Id: comm.tf,v 1.92 2003/03/14 14:00:54 nieten Exp $
+/set comm_tf_version=$Id: comm.tf,v 1.93 2003/08/25 13:03:28 nieten Exp $
 /set comm_tf_author=Dotz@mg.mud.de
 /set comm_tf_requires=!help.tf !config.tf util.tf(1.18) util.sfunc.tf(1.8) util.trigger.tf(1.11) util.windows.tf lists.tf loading.tf(1.33) util.completion.def, util.echo.tf(1.13)
 /set comm_tf_desc=Einfaerbung und Formatierung der Kommunikation, Logging und einfache History
@@ -340,6 +343,7 @@
 /set_var comm_window 1
 ; Logging der Ebenen aus.
 /set_var comm_ebenen_window 0
+
 
 ; kopieren einiger Makros, in comm.cfg
 ;/rename_mac p* comm_p* comm
@@ -518,6 +522,9 @@ fuehrt zu Ausgaben wie@{N}\
 /addh see /comm_add_ebene, /comm_t_ebene, %comm_color_lines
 /addh comm_ebenen_list list
 /cfg_info mud comm EBENEN +Ebenenfarben:comm_ebenen_list
+
+/set_var comm_ebenen 1
+/cfg_info mud comm EBENEN_EIN Ebenen_einfaerben:comm_ebenen
 
 
 /addh info \
@@ -925,7 +932,7 @@ Trigger, der eigene remotes einfaerbt.
 /addh comm_t_remote1 trig
 
 /def -p5 -E(comm_remote_colors!~"-"&!comm_mpa_mail) -ag -mregexp \
-    -t"^([A-Za-z ]+)->([A-Za-z]+\\'?) " comm_t_remote1 = \
+    -t"^([A-Z][A-Za-z ]+)->([A-Z][A-Za-z]+\\'?) " comm_t_remote1 = \
     /let comm_col=$(/last %comm_remote_colors)%;\
     /echo -p @{B%comm_col}%P1@{x$[comm_color_lines?comm_col:""]}->%P2 %PR%;\
 ; Text hoert nicht mit '.' auf oder "Ferne" fehlt -> mehrzeilig
@@ -936,8 +943,10 @@ Trigger, der eigene remotes einfaerbt.
 	        /set comm_remote_ferne=1%%;\
 	    /endif%%;\
 	    /if (comm_remote_ferne & comm_satzende({*})) \
-	        /purge comm_t_remote_help%%;\
+	        /purge -mglob comm_{h|t}_remote_help%%;\
 	    /endif%;\
+	/def -1 -F -p9999 -hPROMPT comm_h_remote_help = \
+	    /purge comm_t_remote_help%;\
     /endif
 
 ; Klappt nicht, falls %p_name nicht genau den Spielernamen enthaelt, also raus.
@@ -1062,7 +1071,7 @@ Wird nicht ausgefuehrt, falls das Wegesystem den aktuellen Standort herausfinden
 ; comm_t_ebene muss eine hoehere Prioritaet als comm_t_sagt und
 ; comm_t_teilemithaben, damit z.B. bei "-grats:sagt: Klasse!" die Zeile
 ; nicht doppelt verarztet wird.
-/def -p7 -agCblue  -E(!comm_mpa_mail) -mregexp \
+/def -p7 -agCblue  -E(!comm_mpa_mail&comm_ebenen) -mregexp \
     -t"^\\[([^]:]+):([^] ]*)(\\]| )" comm_t_ebene = \
 ;/echo -aCcyan %0: Ebene/Team=%P1  Spieler=%P2  ]=%P3  Nachricht=%PR%;\
     /let comm_ebene=%P1%;\
@@ -1267,7 +1276,7 @@ Damit das %mud_short_who Kommando nicht stoert, waehrend man sich im Editor befi
     /if (trig_is_active(comm_trig_number)) \
 	/return%;\
     /endif%;\
-    /trig_grab -y"r#^([A-Z][A-Za-z]+[A-Za-z0-9], ?)+\$" -e"r#^([A-Z][A-Za-z]+[A-Za-z0-9], )*([A-Z][A-Za-z]+[A-Za-z0-9][.])\$" -d" " -cye -M/comm_update_living2 -C%{mud_short_who-!\\kkwer} -F0 -ag%;\
+    /trig_grab -y"r#^([A-Z][A-Za-z]+[A-Za-z0-9], ?)+\$" -e"r#^([A-Z][A-Za-z]+[A-Za-z0-9](, | und ))*([A-Z][A-Za-z]+[A-Za-z0-9][.])\$" -d" " -cye -M/comm_update_living2 -C%{mud_short_who-!\\kkwer} -F0 -ag%;\
     /set comm_trig_number=%?%;\
 ;/list -i trig_grab_*_%comm_trig_number
 
