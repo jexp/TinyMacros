@@ -60,7 +60,7 @@
 	/endif%;
 
 /def gpara2 = \
-	no%;betrete portal%;/msend %{1-1}.%;/h_action_prompt%;sw%;\
+	no%;betritt portal%;/msend %{1-1}.%;/h_action_prompt%;sw%;\
 	/wpara %1%;\
 	/if ({#}>1) /go %2%; /else /cont_way%; /endif%;
 
@@ -214,7 +214,7 @@ Eine Regexp um die Himmelsrichtungen aus %P2 zu holen.
 /loadways
 /loadnodes
 
-/eval /hloadlist %ways_location ways_cache
+/load_cache
 /eval /loadlist %ways_location often
 /createlist often2
 
@@ -248,3 +248,29 @@ Eine Regexp um die Himmelsrichtungen aus %P2 zu holen.
 		/endif
 
 
+/createlist transports
+
+/addtolist transports jolle_leave (Die Jolle legt am Hafen von .+ an|Hafen von .+)\\.$
+
+/addtolist transports jolle_enter Eine Jolle( legt an)?\\.$
+
+/addtolist transports galeere_leave (Die Orkgaleere rammt fast den Anlegeplatz|Hafen von .+|Ein kleiner Steg)\\.$
+/addtolist transports galeere_enter Eine Orkgaleere( rammt fast den Anlegeplatz)?\\.$
+
+/addtolist transports piratenschiff_enter Ein Piratenschiff( legt an)?\\.$
+/addtolist transports piratenschiff_leave (Das Piratenschiff legt am Hafen von .+ an|Hafen von .+)\\.$
+
+/addtolist transports postschiff_enter (Die M/S Lofoten|Das Postschiff M/S Lofoten legt an)\\.$
+/addtolist transports postschiff_leave (Hafen von .+|Du hoerst eine Durchsage: .Verehrte Passagiere, wir erreichen jetzt.+|.+Kai befindet sich .+\\..)
+
+/addtolist transports floss_enter (Ein Floss|Das Floss legt an)\\.$
+
+/def leave_transport = \
+	/getvalueof transports %1_leave%;\
+	/def -aCblue -mregexp -t"^%?" t_way_transport = /if (%# == 1 | {*} =/ "*%{-1}*") /undef t_way_transport\%; /cw verlasse %1\%; /endif%;\
+	%mud_look_command%;
+
+/def enter_transport = \
+	/getvalueof transports %1_enter%;\
+	/def -aCblue -mregexp -t"^%?" t_way_transport = /if (%# == 1 | {*} =/ "*%{-1}*") /undef t_way_transport\%; /cw betritt %1\%; /endif%;\
+	%mud_look_command%;
