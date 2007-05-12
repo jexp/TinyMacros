@@ -45,7 +45,7 @@
 ; fileinfo,log,mudspezifische dinge konfigurierbar,listenfunktionen vorgezogen
 ;
 
-/set crypt_tf_version $Id: crypt.tf,v 1.15 2003/01/09 16:38:39 lje Exp $
+/set crypt_tf_version $Id$
 /set crypt_tf_author=Vardion@mg.mud.de
 /set crypt_tf_requires=lists.tf break_string.tf functions.tf
 /set crypt_tf_desc=verschluesselte Kommunikation uebers Mud
@@ -54,7 +54,7 @@
 
 ;;; (c) Vardion@MorgenGrauen
 
-;;; $Id: crypt.tf,v 1.15 2003/01/09 16:38:39 lje Exp $
+;;; $Id$
 
 ;;; Bitte tragt in bs_teilemit_von und bs_teilemit_an ein, wenn Ihr da was
 ;;; loggen wollt. Als Beispiel logge ich in bs_teilemit_von den Text.
@@ -235,7 +235,7 @@
 /def -p100000 -mregexp -q -ag -t' CTM aus der Ferne: ?' \
 	decrypt_remote = \
 	/let rem_pos=%; \
-	/set crypttext=%; \
+	/set crypttext=%PR%; \
 	/if ((rem_pos:=strstr({PL}, '->')) > -1) \
 		/set ctm_partner=$[tolower(substr({PL}, 0, rem_pos))]%; \
 		/if (!regmatch('^[A-Za-z]+$$', ctm_partner)) \
