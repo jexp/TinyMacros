@@ -3,7 +3,7 @@
 ;; (c) 2001 olm@uni.de, Olli@mg.mud.de
 ;;
 
-/set erwarte_tf_version=$Id: erwarte.tf,v 1.5 2002/10/06 22:49:31 olm Exp $
+/set erwarte_tf_version=$Id: erwarte.tf,v 1.9 2004/10/07 15:50:52 chbr Exp $
 /set erwarte_tf_author=Olli@mg.mud.de
 /set erwarte_tf_desc=erweiterte Erwarte-Anzeige
 
@@ -50,7 +50,7 @@ die onlineFarbe verwendet)
 /loadlist -q -c -p erwarte_color1
 /loadlist -q -c -p erwarte_color2
 
-/def -mregexp -t'^([a-zA-Z0-9]+)   I S T   J E T Z T   D A !!!' -ag -p2000 t_erwarte = \
+/def -mregexp -t'^([a-zA-Z0-9]+)   I S T   J E T Z T   D A !!!$' -ag -p2000 t_erwarte = \
 	/getvalueof erwarte_color1 $[tolower({P1})]%;\
 	/if (value=~error) \
 		/let ecn=%erwarte_color_online_name%;\
@@ -64,10 +64,17 @@ die onlineFarbe verwendet)
 		/echo -p @{x%erwarte_color_online_normal}Erwartet  (@{x%erwarte_color_online}online@{x%erwarte_color_online_normal}): @{x%ecn}%P1 @{x%erwarte_color_online_normal}- @{x%erwarte_color_online_grund}%value@{n}%;\
 	/endif%;\
 	/if (erwarte_beep=~"on") \
+	    /if ((isList("erwarte_beep_whitelist")!~error)&(count_entries("erwarte_beep_whitelist")>0)) \
+		/getvalueof erwarte_beep_whitelist $[tolower({P1})]%;\
+		/if (value!~error) \
+		    /beep%;\
+		/endif%;\
+	    /else \
 		/beep%;\
+	    /endif%;\
 	/endif%;
 
-/def -mregexp -t'^([a-zA-Z0-9]+)   I S T   J E T Z T   N I C H T   M E H R   D A !!!' -ag -p2000 t_erwarte2 = \
+/def -mregexp -t'^([a-zA-Z0-9]+)   I S T   J E T Z T   N I C H T   M E H R   D A !!!$' -ag -p2000 t_erwarte2 = \
 	/getvalueof erwarte_color2 $[tolower({P1})]%;\
 	/if (value=~error) \
 		/getvalueof erwarte_color1 $[tolower({P1})]%;\
@@ -85,9 +92,97 @@ die onlineFarbe verwendet)
 	/else \
 		/echo -p @{x%erwarte_color_offline_normal}Erwartet (@{x%erwarte_color_offline}offline@{x%erwarte_color_offline_normal}): @{x%ecn}%P1 @{x%erwarte_color_offline_normal}- @{x%erwarte_color_offline_grund}%value@{n}%;\
 	/endif%;\
-        /if (erwarte_beep=~"on") \
-                /beep%;\
-        /endif%;
+	/if (erwarte_beep=~"on") \
+	    /if ((isList("erwarte_beep_whitelist")!~error)&(count_entries("erwarte_beep_whitelist")>0)) \
+		/getvalueof erwarte_beep_whitelist $[tolower({P1})]%;\
+		/if (value!~error) \
+		    /beep%;\
+		/endif%;\
+	    /else \
+		/beep%;\
+	    /endif%;\
+	/endif%;
+
+/def -mregexp -t'^([\\(a-zA-Z0-9\\)]+)   I S T   J E T Z T   D A !!!$' -ag -p2000 t_erwarte3 = \
+	/getvalueof erwarte_color1 $[tolower({P1})]%;\
+	/if (value=~error) \
+		/let ecn=%erwarte_color_online_name%;\
+	/else \
+		/let ecn=%value%;\
+	/endif%;\
+	/getvalueof erwarte $[tolower({P1})]%;\
+	/if ((value=~error)|(value=~"")) \
+		/echo -p @{x%erwarte_color_online_normal}Erwartet  (@{x%erwarte_color_online}online@{x%erwarte_color_online_normal}): @{x%ecn}%P1@{n}%;\
+	/else \
+		/echo -p @{x%erwarte_color_online_normal}Erwartet  (@{x%erwarte_color_online}online@{x%erwarte_color_online_normal}): @{x%ecn}%P1 @{x%erwarte_color_online_normal}- @{x%erwarte_color_online_grund}%value@{n}%;\
+	/endif%;\
+	/if (erwarte_beep=~"on") \
+	    /if ((isList("erwarte_beep_whitelist")!~error)&(count_entries("erwarte_beep_whitelist")>0)) \
+		/getvalueof erwarte_beep_whitelist $[tolower({P1})]%;\
+		/if (value!~error) \
+		    /beep%;\
+		/endif%;\
+	    /else \
+		/beep%;\
+	    /endif%;\
+	/endif%;
+
+/def -mregexp -t'^([\\(a-zA-Z0-9\\)]+)   I S T   J E T Z T   N I C H T   M E H R   D A !!!' -ag -p2000 t_erwarte4 = \
+	/getvalueof erwarte_color2 $[tolower({P1})]%;\
+	/if (value=~error) \
+		/getvalueof erwarte_color1 $[tolower({P1})]%;\
+		/if (value=~error) \
+			/let ecn=%erwarte_color_offline_name%;\
+		/else \
+			/let ecn=%value%;\
+		/endif%;\
+	/else \
+		/let ecn=%value%;\
+	/endif%;\
+	/getvalueof erwarte $[tolower({P1})]%;\
+	/if ((value=~error)|(value=~"")) \
+		/echo -p @{x%erwarte_color_offline_normal}Erwartet (@{x%erwarte_color_offline}offline@{x%erwarte_color_offline_normal}): @{x%ecn}%P1@{n}%;\
+	/else \
+		/echo -p @{x%erwarte_color_offline_normal}Erwartet (@{x%erwarte_color_offline}offline@{x%erwarte_color_offline_normal}): @{x%ecn}%P1 @{x%erwarte_color_offline_normal}- @{x%erwarte_color_offline_grund}%value@{n}%;\
+	/endif%;\
+	/if (erwarte_beep=~"on") \
+	    /if ((isList("erwarte_beep_whitelist")!~error)&(count_entries("erwarte_beep_whitelist")>0)) \
+		/getvalueof erwarte_beep_whitelist $[tolower({P1})]%;\
+		/if (value!~error) \
+		    /beep%;\
+		/endif%;\
+	    /else \
+		/beep%;\
+	    /endif%;\
+	/endif%;
+
+
+/def -mregexp -t'([a-zA-Z0-9]+)   I S T   J E T Z T   S I C H T B A R !!!$' -ag -p2000 \
+	t_erwarte5 = \
+	/getvalueof erwarte_color1 $[tolower({P1})]%;\
+	/if (value=~error) \
+		/let ecn=%erwarte_color_online_name%;\
+	/else \
+		/let ecn=%value%;\
+	/endif%;\
+	/getvalueof erwarte $[tolower({P1})]%;\
+	/if ((value=~error)|(value=~"")) \
+		/echo -p @{x%erwarte_color_online_normal}Erwartet  (@{x%erwarte_color_online}online@{x%erwarte_color_online_normal}): @{x%ecn}%P1@{n}%;\
+	/else \
+		/echo -p @{x%erwarte_color_online_normal}Erwartet  (@{x%erwarte_color_online}online@{x%erwarte_color_online_normal}): @{x%ecn}%P1 @{x%erwarte_color_online_normal}- @{x%erwarte_color_online_grund}%value@{n}%;\
+	/endif%;\
+	/if (erwarte_beep=~"on") \
+	    /if ((isList("erwarte_beep_whitelist")!~error)&(count_entries("erwarte_beep_whitelist")>0)) \
+		/getvalueof erwarte_beep_whitelist $[tolower({P1})]%;\
+		/if (value!~error) \
+		    /beep%;\
+		/endif%;\
+	    /else \
+		/beep%;\
+	    /endif%;\
+	/endif%;
+
+
 
 /def erwarte_kkwer = \
 	/set after_kkwer=/erwarte_display%;\
