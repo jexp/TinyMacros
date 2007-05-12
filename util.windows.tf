@@ -42,7 +42,7 @@
 ;  Log eingefuegt
 ;
 
-/set util_windows_tf_version $Id: util.windows.tf,v 1.17 2002/10/18 19:11:40 nieten Exp $
+/set util_windows_tf_version $Id$
 /set util_windows_tf_author=Mesirii@mg.mud.de
 /set util_windows_tf_requires lists.tf 
 /set util_windows_tf_desc gezieltes Umleiten von Mudausgaben in Dateien und andere Fenster
@@ -70,6 +70,14 @@ In das als erster Parameter angegebene Fenster werden die vom als Rest angegeben
 /addh add_to_window_r comm
 
 /def add_to_window_r = /test _add_to_window({1},{-1},"-mregexp")%;
+
+/addh info \
+In das als erster Parameter angegebene Fenster werden die vom als Rest angegebenen Regexp-Trigger geschrieben, aber trotzdem noch im normalen Fenster angezeigt und zwar wird der gematchte Text mit den als 2. Parameter angegebenen Attributen eingefaerbt.
+
+/addh ex /add_to_window_rc Tod Cblack \\[Tod:.*
+/addh add_to_window_rc comm
+
+/def add_to_window_rc = /test _add_to_window({1},{-2},strcat("-mregexp -P0",{2}))%;
 
 /createlist windows
 /addh info \
@@ -121,16 +129,21 @@ Mit dieser Variable koennen zusaetzliche Parameter an xterm bzw. cmd uebergebene
 
 /def show_window_unix = \
 	/def -1 -hRESUME -ag h_resume = /test 0%;\
-	/set output=$(/sys "ps x | grep xterm")%;\
-	/if (output!/strcat("*xterm -title ",{1},"*")) \
-	/sh -q xterm -title "%1" %window_options \
-	    -e tail -%2f $[get_window_file({1})] &%;\
+	/set output=$(/sys "ps x | grep tail")%;\
+	/let tail=tail -%2f $[get_window_file({1})]%;\
+	/if (strstr(output,tail)==-1) \
+	/if (TERM=/"screen*") \
+	    /sys screen -X screen -t "%1" %tail%;\
+	/else \
+	    /sh -q xterm -title "%1" %window_options \
+		-e %tail &%;\
+	/endif%;\
 	/endif
 
 /def show_window_win = \
 	/def -1 -hRESUME -ag h_resume = /test 0%;\
 	/sh -q cmd %window_options \
-	    /c "start tail -%2f $[make_dos_path(get_window_file({1}))]"
+'	    /c "start tail -%2f $[make_dos_path(get_window_file({1}))]"
 
 /addh info \
 liefert den Dateinamen fuer das Logging dieses windows zurueck
@@ -151,7 +164,7 @@ liefert den Dateinamen fuer das Logging dieses windows zurueck
 	      /show_window %window%;\
 	   /endif%;\
 	/else \
-	  /if (regmatch("(.+) (.+)",value)==1) \
+	  /if (regmatch("(.+) (.+)",value)) \
 	    /let handle=%P1%;\
 	    /let window_trigger_counter=$[1+{P2}]%;\
 	    /uaddtolist windows %window %handle %window_trigger_counter%;\
@@ -213,6 +226,18 @@ Funktion die an eine Beat-Hook gehaengt wird um Timestamps in alle Logs zu schre
 
 /def window_timestamps2 = \
 	/test tfwrite({2},ftime("[%%X]",time())) %;
+
+
+/def add_to_window_all = /test _add_to_window("all","*","-mglob")%;
+/def move_to_window_all = /test _add_to_window("all","*","-mglob -ag")%;
+/def redirect_all = \
+	/move_to_window_all%;\
+	/if (!ismacro("echo_save")) /def echo_save=${echo}%; /endif%;\
+	/def echo=/test getopts("a:poerw:"),write_to_window("all",{*})%;\
+
+/def stop_redirect = \
+	/remove_window all%;\
+	/def echo=${echo_save}%;
 
 
 /addh_fileinfo
