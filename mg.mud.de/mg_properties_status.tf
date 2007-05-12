@@ -1,11 +1,14 @@
 ;
 ; $Log: mg_properties_status.tf,v $
+; Revision 1.2  2003/12/19 16:04:43  thufhnik
+; Farben fuer LP in der statuszeile auch konfigurierbar
+;
 ; Revision 1.1  2002/11/27 10:58:39  mh14
 ; trennung von mg_properties.tf von den statuszeilensettings
 ;
 ;
 
-/set mg_properties_status_tf_version $Id: mg_properties_status.tf,v 1.1 2002/11/27 10:58:39 mh14 Exp $
+/set mg_properties_status_tf_version $Id: mg_properties_status.tf,v 1.2 2003/12/19 16:04:43 thufhnik Exp $
 /set mg_properties_status_tf_author=Mesirii@mg.mud.de
 /set mg_properties_status_tf_requires=lists.tf util.tf util.hooks.tf util.trigger.tf util.sfunc.tf status.tf(1.19) mg_properties.tf(1.46)
 /set mg_properties_status_tf_desc Statuszeilendefinitionen für Morgengrauen Properties
@@ -48,8 +51,12 @@
 
 ; Lebenspunkte
 
+/set_var CFG_STATUS_COLOR_LP_1=Cred
+/set_var CFG_STATUS_COLOR_LP_2=Cyellow
+/set_var CFG_STATUS_COLOR_LP=Cgreen
+
 /set sl_lp_doc=Lebenspunkte, $[status_doc_attr("LP_1","<1/3%","LP_2","<2/3%", "LP","sonst")]
-/set_status_var_num p_lp p_lp 3 p_maxlp/3 Cred p_maxlp*2/3 Cyellow Cgreen
+/eval /set_status_var_num p_lp p_lp 3 p_maxlp/3 %{CFG_STATUS_COLOR_LP_1} p_maxlp*2/3 %{CFG_STATUS_COLOR_LP_2} %{CFG_STATUS_COLOR_LP}
 
 ; Magiepunkte (+ Elfenbeinblock)
 
