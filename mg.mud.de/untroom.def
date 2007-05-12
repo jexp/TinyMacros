@@ -39,7 +39,8 @@ Kommando zum Untersuchen von Details in einem Raum.
 /set mud_examine_in_room_typo=typo
 /set mud_examine_in_room_command=unt %{*} im raum
 
-/set mud_examine_item_command=unt %{*} an %unt_item
+/set mud_examine_item_command=unt %{*}
+; an %unt_item
 /set mud_examine_item_idea=md %unt_item: 
 /set mud_examine_item_typo=typo %unt_item: 
 
