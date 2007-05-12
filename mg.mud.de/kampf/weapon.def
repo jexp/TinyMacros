@@ -1,0 +1,60 @@
+/if (CFG_USE_MG_MUD_DE_KAMPF_WEAPON > 1) \
+	/exit%;\
+/endif
+
+/set schadensarten=Feuer, Eis, Sturm, Magie, Krach, Wasser, Blitz, Pfeil, Messer,Felsen, Boese, Saeure, Terror, Peitsche, Quetschen, Explosion, Widerhaken und Gift, Heilig, Schwert, Keule, Messer, Speer
+
+
+/def -b^[x b_waffenwechsel = /weapon_draw
+
+/set weapon_list_name=waffen
+/set weapon_list_location=-c
+
+/loadnamedlist weapon
+
+/set weapon_desc_list_name=weapon_desc
+/set weapon_desc_list_location=-c
+
+/loadnamedlist weapon_desc
+
+;/createlist %weapon_list
+;/weapon_add bss 1 blutsaugerschwert
+;/weapon_add sk 1 streitkolben
+;/weapon_add vs 2 vollstrecker
+
+/addsave weapon_shield
+
+/rename_mac sw weapon_use weapon
+/rename_mac lw weapon_show weapon
+/rename_mac ss weapon_use_shield weapon
+/rename_mac ls weapon_show_shield weapon
+/rename_mac add_shield weapon_add_shield weapon
+/rename_mac add_weapon weapon_add weapon
+
+/addsave weapon
+/addsave weapon_hands
+/set shield_list_name=shields
+/set shield_list_location=-c
+/loadnamedlist shield
+
+;/createlist shields
+;/weapon_add_shield fs feuerschild
+;/weapon_add_shield ms metallschild
+
+/init_var weapon_container
+/addsave weapon_container
+
+/set weapon_drawn=0
+/addsave weapon_drawn
+/set p_free_hands=2
+/addsave p_free_hands
+
+; schildwechsel
+/set weapon_shield_worn=0
+/addsave weapon_shield_worn
+
+
+
+
+
+

@@ -1,0 +1,6 @@
+/set aris_list=aris
+
+/eval /loadlist -c -dkampf %aris_list
+
+/rename_mac sa ari_set ari
+

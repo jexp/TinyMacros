@@ -1,0 +1,34 @@
+/set spell_list=sprueche
+/eval /loadlist -c -vp_guild %spell_list
+
+; anderes Beispiel:
+;/eval /set spell_list=%{p_guild}_spells
+;/eval /loadlist -c %spell_list
+
+/rename_mac sz spell_set spell
+/rename_mac lz spell_show spell
+/rename_mac z spell_set_and_cast spell
+
+/rename_mac riz spell_cond_repeat spell
+/rename_mac rz spell_repeat spell
+/rename_mac rest spell_remaining_time spell
+
+/set spell_do_repeat=1
+
+/set spell=
+/set spell_hands=
+/set spell_mp=
+/set spell_block_sek=
+
+/addsave spell
+/addsave spell_hands
+/addsave spell_mp
+/addsave spell_block_sek
+
+/createlist spell_queue
+
+/set spell_next_time=0
+
+;/spell_add abk haende frei mp zeit bis wieder spruch
+;/spell_add du 0 5 2 dunkelheit
+;/spell_add i 2 40 7 irkitis

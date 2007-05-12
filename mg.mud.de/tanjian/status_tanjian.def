@@ -1,0 +1,4 @@
+/createnewlist autokampf_spells
+/addtolist autokampf_spells kokoro (tanjian_kokoro) 3 4
+/addtolist autokampf_spells tegatana (tanjian_teom) 4 16
+/addtolist autokampf_spells omamori (tanjian_teom) 4 12

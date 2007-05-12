@@ -1,0 +1,120 @@
+; $Log: user_config.def,v $
+; Revision 1.16  2002/11/27 10:58:39  mh14
+; trennung von mg_properties.tf von den statuszeilensettings
+;
+; Revision 1.15  2002/10/19 17:48:01  rumburuk
+; gag.tf integriert
+;
+; Revision 1.14  2002/09/03 11:44:17  mh14
+; team.tf integriert
+;
+; Revision 1.13  2002/06/13 10:52:48  mh14
+; weapon.tf rein, ueberfluessige /cfg_info geloescht
+;
+; Revision 1.12  2002/06/13 08:29:38  mh14
+; /mload -U mit Texten versehen, diverse configure Sachen aus der config.tf hierherverschoben
+;
+; Revision 1.11  2002/05/15 16:12:52  thufhnik
+; inventory.tf zugefuegt
+;
+; Revision 1.10  2002/04/26 13:37:17  nieten
+; /config_status wird nur ausgefuehrt, wenn es definiert wurde
+;
+; Revision 1.9  2002/04/24 09:21:54  thufhnik
+; erwarte.tf zugefuegt
+;
+; Revision 1.8  2002/04/20 16:19:32  thufhnik
+; info.tf zugefuegt
+;
+; Revision 1.7  2002/04/16 12:29:31  mh14
+; aus user_config.cfg verschoben, da konfiguerierbar
+;
+; Revision 1.6  2001/11/27 21:16:17  mh14
+; connect hook jetzt durch ersten > Prompt in worldconnect.tf
+;
+; Revision 1.5  2001/10/07 18:33:10  mh14
+; trigger fuer connect hook, begruessungsstring vom mud
+;
+; Revision 1.4  2001/10/03 10:37:34  mh14
+; kampfmacros in user_config.cfg verschoben
+;
+; Revision 1.3  2001/10/01 23:52:40  mh14
+; kampfmakros
+;
+; Revision 1.2  2001/10/01 01:44:28  mh14
+; 2 files in user_config.cfg verschoben
+;
+; Revision 1.1  2001/09/30 00:37:14  mh14
+; *** empty log message ***
+;
+; Revision 1.6  2001/09/12 23:08:34  mh14
+;  keys.tf
+;
+; Revision 1.5  2001/09/09 19:16:59  mh14
+; requires bereinigt
+;
+; Revision 1.4  2001/09/06 21:11:44  mh14
+;  Log eingefuegt
+;
+
+/cfg_info status mg all		Generelles
+/cfg_info status mg chaos	Chaos
+/cfg_info status mg tanjian	Tanjian
+/cfg_info status mg kaempfer	Kaempfer
+/cfg_info status mg karate	Karateka
+/cfg_info status mg abenteurer	Abenteurer
+/cfg_info status mg zauberer	Zauberer
+/cfg_info status mg seher	Seher
+
+; sind aber noch nicht umgestellt
+/cfg_info USE mg_mud_de Morgengrauen
+
+/mload -U"Kommunikationsfarben_und_log" -c comm.tf
+/mload -U"Hydraanzeige" -c hydra.tf
+/mload -U"Punkteanzeige_umformatieren" -c info.tf
+/mload -U"erweiterte_Erwarte-Anzeige" -c erwarte.tf
+/mload -U"Inventory_Abfrage" -c inventory.tf
+/mload -U"MG_spezifische_Properties" -c mg_properties.tf
+/mload -U"Statuszeilensettings_MG_Properties" -c mg_properties_status.tf
+/mload -U"Statustrigger" -c status_ext.tf
+/mload -U"Kneipen" -c uselists.tf
+/mload -U"Gagen_nervender_Ausgaben" -c gag.tf
+
+;------------- Kampf ---------------------------------------
+/cfg_info USE MG_MUD_DE kampf Kampfmakros
+
+/mload -U"Fernwaffen" -c -dkampf ari.tf
+/mload -U"Autokampf" -c -dkampf autokampf.tf
+/mload -U"Kampfmakros" -c -dkampf kampf.tf
+/mload -U"Scrollreduzierer" -c -dkampf reduce.tf
+/mload -U"Zaubersprueche" -c -dkampf spell.tf
+/mload -U"Vorsichtsfunktionen" -c -dkampf vorsicht.tf
+/mload -U"Waffenfunktionen" -c -dkampf weapon.tf
+/mload -U"Team-Makros" -c -dkampf team.tf
+/mload -U"TF-basierter Focus" -c -dkampf focus.tf
+; -------------- Gilden -----------------------------------
+/cfg_info USE MG_MUD_DE CHAOS_CHAOS Chaotenzeugs
+
+/cfg_info USE MG_MUD_DE TANJIAN_STATUS_TANJIAN Tanjianstatus
+/cfg_info USE MG_MUD_DE TANJIAN_TANJIAN Tanjianmakros
+/cfg_info USE MG_MUD_DE KLERUS_KLERUS Klerusmakros
+/cfg_info USE MG_MUD_DE KLERUS_STATUS_KLERUS Klerusstatus
+/cfg_info USE MG_MUD_DE ZAUBERER_KOMA Zauberer_Kompo_Anzeige
+/cfg_info USE MG_MUD_DE ZAUBERER_STATUS_ZAUBERER Zaubererstatus
+/cfg_info USE MG_MUD_DE ZAUBERER_ZAUBERER Zauberermakros
+/cfg_info USE MG_MUD_DE KARATE_KARATE Karatemakros
+
+/cfg_info status mg Morgengrauen
+
+;/ifdo (ismacro("config_status")) \
+;    /config_status {node}_{spell_busy}_{lp}{poison}_{mp}_{vorsicht}_{flucht}_{kampf}_{weapon}{shield}_{world}_{modes}_{clock}
+
+
+;/config_status Kn{node}_Sp{spell_busy}_LP{lp}{poison}_MP{mp}_V{vorsicht}_Fl{flucht}_Ka{kampf}_W{weapon}S{shield}_{world}_{modes}_{clock}
+
+;/config_status {node}_{spell_busy}_{lp}{poison}_{mp}_{vorsicht}_{flucht}_{kampf}_{weapon}{shield}_{@world:5}_[{@more:1}{@read:1}{@log:1}{@mail:1}{insert:1}]_{@clock}
+
+; Gilde laden
+
+/eval /mload -U -c -vp_guild %p_guild.tf
+

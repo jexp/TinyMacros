@@ -1,0 +1,29 @@
+/add_to_hook connect angriffsmeldung
+
+/set do_beat=1
+
+/set do_beat_5=0
+/beat 5
+
+/add_to_hook beat_5 /kampf_check
+
+; fuer Leute ohne Reporttool (Teddy, Zauberstab,..)
+;/add_to_hook beat_5 /check_punkte
+
+/init_var kampf kampf_spellwaffe
+
+;/rename_mac ar kampf_start_ari_only kampf
+
+;/def cc = /set kampf_spellwaffe_spell=1%;/kampf_start_spell_ari cm
+
+/ifdef (CFG_USE_MG_MUD_DE_KAMPF_WEAPON<2) -E(kampf>0) -t"*{nimm?t}*" -mglob \
+	-ag kampf_t_nimm
+
+/ifdef (CFG_USE_MG_MUD_DE_KAMPF_WEAPON<2) -E(kampf>0) -t"Du zueckst (.+)\\." \
+	-ag -mregexp kampf_t_zuecke = \
+	/set show_weapon=$[artikel_entfernen({P1})]%;
+
+/ifdef (CFG_USE_MG_MUD_DE_KAMPF_WEAPON<2) -E(kampf>0) -t"Du steckst (.+) \
+	zurueck\\." -ag -mregexp kampf_t_steckeweg = \
+	/set show_weapon=%;
+

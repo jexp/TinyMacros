@@ -1,0 +1,33 @@
+/addh info Variable, die anzeigt, ob TF die Steuerung der Flucht komplett uebernimmt, oder ob auf die Trigger aus dem Mud geachtet wird.
+/addh tf_vorsicht var
+/set_var tf_vorsicht=0
+
+/addh info der Wert der im Mud als Vorsicht gesetzt wird, wenn TF die Steuerung der Flucht komplett! uebernimmt
+/addh tf_min_vorsicht var
+/set_var tf_min_vorsicht=10
+
+/addh info die Fluchtrichtung, die gesetzt wird, wenn TF die Steuerung der Vorsicht komplett uebernimmt
+/addh tf_not_flucht var
+/set_var tf_not_flucht=schlafe ein
+
+/addh info \
+steuert, ob die Vorsicht beim Fliehen für 10 Sekunden auf 0 gesetzt wird.
+/addh see testvorsicht, exec_vorsicht
+/addh vorsicht_null var
+/set_var vorsicht_null=1
+
+/addh info \
+steuert, ob eine Fluchtrichtung aus mehr als einem Befehl, das Setzen der Vorsicht beim Fliehen für 10 Sekunden auf 0 aufhebt. Bei Fluchtrichtungen aus nur einem Befehl wird wenn dieses Flag gesetzt ist, trotzdem die Vorsicht auf 0 gesetzt.
+/addh see testvorsicht, exec_vorsicht
+/addh fr_vorsicht_null var
+
+/set_var fr_vorsicht_null=0
+
+
+/addh info Hook der statt /v 100 auch v 100 erlaubt
+/addh h_send_v hook
+/def -h"SEND {v} [0-9]*" -p999 -mglob h_send_v = /v %2%;
+
+/addh info Hook der statt /fl no%;s%;w%;/go home%; auch fl no%;s%;w%;/go home%; erlaubt
+/addh h_send_fl hook
+/def -h"SEND {fl} *" -p999 -mglob h_send_fl = /fl %-1%;

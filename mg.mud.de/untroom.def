@@ -1,0 +1,119 @@
+; untroom.tf
+
+/addh info \
+Diese Liste enthaelt all die Worte, die beim Raumuntersuchen uebergangen werden sollen. Falls sie veraendert wurde, wird sie bei /quit sortiert und abgespeichert.
+/addh see untroom.tf
+/addh most list
+/loadlist -c most
+/set most_changed=0
+
+/addh info \
+Untersucht den Boden.
+/addh ub
+/addh info \
+Untersucht die Wand.
+/addh uw
+/addh info \
+Untersucht den Himmel.
+/addh uh
+/addh info \
+Untersucht die Decke.
+/addh ud
+/defh ub = /unt boden%;
+/defh uw = /unt wand%;
+/defh ud = /unt decke%;
+/defh uh = /unt himmel%;
+
+/addh info \
+Regexp fuer Substantive.
+/addh see untroom.tf
+/addh noun_regexp var
+/set noun_regexp=(^|[^A-Z])([A-Z][A-Za-z'-]+[a-zA-Z])[^a-zA-Z'-]
+
+/addh info \
+Kommando zum Untersuchen von Details in einem Raum.
+/addh see untroom.tf
+/addh mud_examine_in_room_command
+
+/set mud_examine_in_room_idea=md
+/set mud_examine_in_room_typo=typo
+/set mud_examine_in_room_command=unt %{*} im raum
+
+/set mud_examine_item_command=unt %{*} an %unt_item
+/set mud_examine_item_idea=md %unt_item: 
+/set mud_examine_item_typo=typo %unt_item: 
+
+/set mud_ask_npc_command=frage %ask_npc nach %{*}
+/set mud_ask_npc_idea=md %ask_npc: 
+/set mud_ask_npc_typo=typo %ask_npc: 
+
+/addh info \
+Kommando zum Absetzen eines typos.
+/addh see untroom.tf
+/addh mud_typo_command var
+/set mud_typo_command=typo
+
+; delay for mud logs for fast examining
+/set_delay 1 1
+
+/set nl_time 1000
+/set newline=0
+
+/createlist highlight_untroom_actions
+/add_action_word lesen
+/add_action_word tuer
+/add_action_word umrisse
+/add_action_word suche
+/add_action_word koennte
+/add_action_word versuch
+/add_action_word loch
+/add_action_word tafel
+/add_action_word zettel
+/add_action_word unscheinbar
+/add_action_word ?
+/add_action_word scheint
+/add_action_word fast
+/add_action_word wohl
+
+
+/addh info \
+Enthaelt alle Details, die standardmaessig mit untersucht werden sollen. Sie werden als Details der P_LONG des Raumes betrachtet.
+/addh see untroom
+/addh default_details cfg
+
+/createnewlist default_details
+/add_default_detail himmel
+/add_default_detail boden
+/add_default_detail wand
+/add_default_detail decke
+
+/def -b^x^d b_delete_sub_details = /delete_sub_details %;
+/def -b^x^# b_nichts_unt = /nichts_unt %;
+/def -b^x^o b_toggle_show_origin = /toggle_show_origin %;
+/def -b^x^i b_detail_idee = /detail_idee%;
+/def -b^x^l b_inputtypo = /inputtypo%;
+/def -b^x^a b_add_most = /add_most%;
+
+
+
+/addh info \
+Enthaelt die fuer die Zuordnung "dekliniertes Wort" -> Nominativ.
+/addh see /add_deklination
+/addh deklinations list
+
+/loadlist -c deklinations
+
+/if (isEmptyList(deklinations)) \
+    /addlisttosave deklinations -c deklinations%;\
+/if (!ismacro("add_deklination")) \
+    /def add_deklination = /addtolist deklinations %1 %2%;\
+/endif%;\
+    /add_deklination hauses haus%;\
+    /add_deklination haeusern haeuser%;\
+    /add_deklination dorfes dorf%;\
+    /add_deklination waenden waende%;\
+    /add_deklination lichts licht%;\
+    /add_deklination lichtes licht%;\
+    /add_deklination geraeuschen geraeusche%;\
+    /add_deklination bodens boden%;\
+/endif

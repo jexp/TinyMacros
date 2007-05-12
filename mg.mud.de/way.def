@@ -1,0 +1,250 @@
+; $Log: way.def,v $
+; Revision 1.17  2003/04/04 08:00:14  thufhnik
+; typo in mud_what_output
+;
+; Revision 1.16  2002/10/15 18:57:09  nieten
+; reise nach sonneninsel geht nun auch richtig
+;
+; Revision 1.15  2002/10/04 17:09:54  mh14
+; add_portal gefixt
+;
+; Revision 1.14  2002/09/27 22:15:54  mh14
+; Reise als Wegemakro per /reise ziel eingebaut
+;
+; Revision 1.13  2002/09/08 14:02:13  mh14
+; gnorm2 muss aus kompatibilitaetsgruenden drin bleiben
+;
+; Revision 1.12  2002/09/04 07:52:27  mh14
+; /gpara und setzt auch noch nen . dahinter
+;
+; Revision 1.11  2002/09/04 07:46:47  mh14
+; /gpara schickt jetzt die dimensionsnummer per /msend um nicht mit aliasen zu kollidieren
+;
+; Revision 1.10  2002/06/13 11:58:20  mh14
+; Bug bei Fehlermeldung des Muds raus
+;
+; Revision 1.9  2002/04/16 12:11:40  mh14
+; neues configsystem
+;
+; Revision 1.8  2002/03/27 23:51:44  mh14
+; dimensionsverwaltung geaendert
+;
+; Revision 1.7  2002/02/20 13:32:44  lje
+; /add_portal erzeugte kein %; am ende des teleportiere-Befehls
+;
+; Revision 1.6  2002/02/04 21:47:00  mh14
+; /loadways und /loadnodes eingebaut
+;
+; Revision 1.5  2002/01/31 18:36:36  nieten
+; Bug in /add_portal gefixt
+;
+; Revision 1.4  2002/01/07 00:02:18  mh14
+; add_portal hinzugefuegt
+;
+; Revision 1.3  2001/12/04 16:23:45  nieten
+; %way_location sollte NICHT "-c -dahab" sein
+;
+
+/cfg_info way mud Mudspezifisches
+/cfg_info way mud P32_NAME Name_von_Portal_32:p32_name
+
+/set_var p32_name p32
+
+/def gpara = \
+	/let para_destination=$[{#} ? dimension({1}) : 1]%;\
+	/if (lastpoint!~p32_name) \
+	  /set after_go=/gpara2 %para_destination %lastpoint%;\
+	  /go %{p32_name}%;\
+	/else \
+	  /gpara2 %para_destination%;\
+	/endif%;
+
+/def gpara2 = \
+	no%;betrete portal%;/msend %{1-1}.%;/h_action_prompt%;sw%;\
+	/wpara %1%;\
+	/if ({#}>1) /go %2%; /else /cont_way%; /endif%;
+
+/def gnorm = \
+	/if (lastpoint!~p32_name) \
+	  /set after_go=/gpara2 0 %lastpoint%;\
+	  /go %{p32_name}%;\
+	/else \
+	  /gpara2 0%;\
+	/endif%;
+
+/def gnorm2 = /gpara2 0
+
+/eval /set way_mode=%mud_shortest_output
+
+/set portal_node=tport
+
+/addh info \
+Standardwert fuer die Anzahl der Zeilen, die beim Abspeichern einer Knotenbeschreibung genutzt werden sollen. Kann durch Parameter fuer /end, /replacenode und /addnode ueberschrieben werden. Bei einem Wert von 0 werden alle Zeilen benutzt (siehe ?mud_exits_output).
+/addh default 0
+/addh addlines var
+/set_var addlines 0
+/addsave addlines
+
+/cfg_info way ADDLINES Zeilen_Knotenerkennung:addlines
+
+/addh info \
+Gibt an, ob Portale genutzt werden sollen (1 ja, 0 nein).
+/addh see  way.tf, portale
+/addh portals var
+
+/cfg_info way mud PORTALS Portale_benutzen:portals
+
+/set_var portals 1
+/addsave portals
+
+/addh info \
+Ein Kommando, dessen Ausgabe tf erkennen kann, welches nicht auffaellig ist und auch keine Aktionen im Mud erzeugt.
+/addh see mud_recognize_output, way.tf
+/addh mud_recognize_command var
+
+/cfg_info mud commands RECOGNIZE_COMMAND Marker_Kommando:mud_recognize_command
+/set_var mud_recognize_command kobold aus
+
+/addh info \
+Die Ausgabe von ?mud_recognize_command.
+/addh see mud_recognize_command, way.tf
+/addh mud_recognize_output var
+
+/set_var mud_recognize_output Der Kobold wird Dich nicht stoeren!
+/cfg_info mud commands RECOGNIZE_OUTPUT Marker_Ausgabe:mud_recognize_output
+
+/addh info \
+Kommando zum Anschauen des Raumes.
+/addh see way.tf, untroom.tf
+/addh mud_look_command var
+/set_var mud_look_command schaue
+/cfg_info mud commands LOOK_COMMAND Schaue-Kommando:mud_look_command
+
+/addh info \
+Kommando zur Anzeige der Ausgaenge.
+/addh mud_show_exits_command var
+
+/set_var mud_show_exits_command ausgaenge
+/cfg_info mud commands SHOW_EXITS_COMMAND Ausgaenge-Kommando:mud_show_exits_command
+
+/addh info \
+Kommando zur Anzeige der p_short.
+/addh mud_show_short_command var
+/set_var mud_show_short_command kschau
+/cfg_info mud commands SHOW_SHORT_COMMAND Kurzbeschreibungskommando:mud_show_short_command
+
+/addh info \
+Eine Regexp, um nur die p_short aus dem info von mud_show_short_command zu extrahieren (in %P1).
+/set_var mud_extract_short_regexp ^(.+)$
+/cfg_info mud commands EXTRACT_SHORT_REXEXP Regexp_fuer_Ausgaenge:mud_extract_short_regexp
+
+/addh info \
+Kommando zum Anzeigen aller NPCs (auch im Dunkeln).
+/addh see way.tf, npc, bug_way
+/addh mud_show_npc var
+/set_var mud_show_npc knuddel alle
+/cfg_info mud commands SHOW_NPC NPC-Festtellen:mud_show_npc
+
+/addh info \
+Kommando zum Unterdruecken aller Bewegungsmeldungen durchs MUD.
+/addh see way.tf
+/addh mud_shortest_output
+/set_var mud_shortest_output ultrakurz
+/cfg_info mud commands SHORTEST_OUTPUT Ultrakurz:mud_shortest_output
+
+
+/addh info \
+Kommando zum Anzeigen nur kurzer Bewegungsmeldungen durchs MUD.
+/addh see way.tf
+/addh mud_short_output
+/set_var mud_short_output kurz
+/cfg_info mud commands SHORT_OUTPUT Kurzmodus:mud_short_output
+
+/addh info \
+Kommando zum Anzeigen aller Bewegungsmeldungen durchs MUD.
+/addh see way.tf
+/addh mud_long_output
+/set_var mud_long_output lang
+/cfg_info mud commands LONG_OUTPUT Langmodus:mud_long_output
+
+/addh info \
+Ausgabe des Muds bei Fehler.
+/addh see way.tf
+/addh mud_what_output
+/set_var mud_what_output Wie bitte?
+/cfg_info mud commands WHAT_OUTPUT Fehlerausgabe_des_Muds:mud_what_output
+
+/def -p200 -t"*Du bist nun im \"Lang\"modus.*" -mglob -ag gag_lang = \
+	   /set walk_mode=%mud_long_output%;
+
+/def -p200 -t"*Du bist nun im \"Kurz\"modus.*" -mglob -ag gag_kurz = \
+	   /set walk_mode=%mud_short_output%;
+
+/def -p200 -t"*Du verlierst fuer einen Moment die Orientierung.*" -mglob -ag \
+     gag_tele = /nop %;
+
+/def -p200 -t"*Du bist nun im \"Ultrakurz\"modus.*" -mglob -ag gag_uk = /set walk_mode=%mud_shortest_output%;
+
+/def -p200 -ag -t"*Mit Deinen Augenproblemen sollte man nicht ultrakurz herumlaufen, das ist*" -mglob t_gag_brille0  = /set walk_mode=%mud_shortest_output%;
+
+
+/addh info \
+Die Ausgabe des Muds, wenn es dunkel ist. Wird gebraucht, um festzustellen, dass man den Raum gewechselt hat.
+/addh mud_darkness var
+/set_var mud_darkness Finsternis
+/cfg_info mud commands DARKNESS Finsternis:mud_darkness
+
+/addh info \
+Die Art, wie Ausgaenge der Raeume angegeben werden (als regexp), so dass in P2 alle Ausgaenge stehen.
+/addh mud_exits_output var
+/set_var mud_exits_output (keine sichtbaren Ausgaenge|sichtbare Ausgaenge: |sichtbaren Ausgang: |sicheren Ausgang: )([^\.]*\.)
+/cfg_info mud commands EXITS_OUTPUT Regexp_alle_Ausgaenge:mud_exits_output
+
+/addh info \
+Eine Regexp um die Himmelsrichtungen aus %P2 zu holen.
+/addh mud_exits_regexp var
+/set_var mud_exits_regexp ([a-z_]+)(, ?| und |\.?$)
+/cfg_info mud commands EXITS_REGEXP Regexp_einzelne_Ausgaenge:mud_exits_regexp
+
+;/set ways_location=-c
+/set ways_location=-c
+
+/loadlist -l xtramoves
+/loadlist -l comm_abbr
+/loadways
+/loadnodes
+
+/eval /hloadlist %ways_location ways_cache
+/eval /loadlist %ways_location often
+/createlist often2
+
+/addh info Fuegt ein Morgengrauen Portal zu den Wegen hinzu
+/addh syn /add_portal knoten portalnummer
+/addh ex /add_portal tiger 3
+/addh add_portal comm
+
+/def add_portal = \
+	/if ({#}!=2 | {2}!/"[0-9]*") \
+	   /echo Syntax: /add_portal knoten portalnummer%;\
+	/else \
+	  /getnode %1%;\
+	  /let tmp=%value%;\
+	  /_add_way tport %tmp b state:seher 1 teleportiere %2%%;%;\
+	  /_add_way %tmp tport b state:seher 0%;\
+	/endif%;
+
+/def -t"Du loeschst Deine Reiseroute." -msimple -aCblue t_reise_aus = \
+	/purge t_tmp_reise*%;/set reisecount=0
+
+/def reise = \
+	!reise nach %*%;\
+	/set reisecount=0%;\
+	%mud_short_output%;\
+	/def -mglob -aCblue -t"*reist*" -1 t_tmp_reise1 = \
+	   /def -mregexp -P0Cblue -t"(Ausgang|Ausgaenge)" -n2 t_tmp_reise2 = \
+		/if (++reisecount>=2) \
+		     /echo -aCblue Reise beendet!%%%; \
+		     /continue%%%; \
+		/endif
+
+

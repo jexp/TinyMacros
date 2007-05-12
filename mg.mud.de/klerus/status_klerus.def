@@ -1,0 +1,4 @@
+/createnewlist autokampf_spells
+/addtolist autokampf_spells heiligenschein (klerus_hs) 2 22 
+/addtolist autokampf_spells messerkreis (klerus_mk) 3 45
+/addtolist autokampf_spells /klerus_do_es (klerus_es!~'') 4 50

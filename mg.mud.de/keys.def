@@ -1,0 +1,81 @@
+/def keys_default = \
+  /set tasten_slist=0%;\
+  /setdesc 1 Kampf%;\
+    /setkey 1 2 /attack&Attack%;\
+    /setkey 1 7 v 0&Vorsicht aus%;\
+    /setkey 1 8 /exec_vorsicht&Fliehen%;\
+  /setdesc 2 Wege%;\
+    /setkey 2 1 /wo&Wo%;\
+    /setkey 2 2 /back&Back%;\
+    /setkey 2 3 /c&Continue%;\
+    /setkey 2 4 /go norm&Normalwelt%;\
+    /setkey 2 5 /go para&Parawelt%;\
+    /setkey 2 6 /go haus&Haus Mesi%;\
+    /setkey 2 7 /go Kimbiss&Imbiss%;\
+    /setkey 2 9 /go lager&Lager%;\
+    /setkey 2 10 /go tport&Portal%;\
+    /setkey 2 11 /shownode&Shownode%;\
+    /setkey 2 12 /showways&Showways%;\
+  /setdesc 3 Untroom%;\
+    /setkey 3 1 /untroom&Untroom%;\
+    /setkey 3 2 /reunt&Reunt%;\
+    /setkey 3 3 /nichts_unt&Uebergehen%;\
+    /setkey 3 4 /detail_idee&Detail%;\
+    /setkey 3 5 /inputtypo&Typo%;\
+    /setkey 3 6 /add_most&Immer Ignorieren%;\
+    /setkey 3 7 /delete_sub_details&Subdetails ign.%;\
+    /setkey 3 8 /input_todo&Todo eingeben%;\
+    /setkey 3 9 /nichts&Eingabe loeschen%;\
+    /setkey 3 10 /input_idee&Detail Idee%;\
+  /set tasten_slist=1%;\
+  /keys_save_list%;\
+  /echo -p -aCyellow Standard-Funktionstastenbelegung geladen, @{Cmagenta}Editiermodus mit Alt-e@{n}
+
+
+
+; Richtungstasten auf Numpad
+; Wird jetzt ueber konfigurierbare Liste keys_bindings in der keys.tf gemacht
+; /def -b^[Oq b_kp_sw = /_sw%;
+; /def -b^[Or b_kp_s = /_s%;
+; /def -b^[Os b_kp_so = /_so%;
+; /def -b^[Ot b_kp_w = /_w%;
+; /def -b^[Ov b_kp_o = /_o%;
+; /def -b^[Ow b_kp_nw = /_nw%;
+; /def -b^[Ox b_kp_n = /_n%;
+; /def -b^[Oy b_kp_no = /_no%;
+; /def -b^[Om b_kp_ob = /_ob%;
+; /def -b^[On b_kp_u = /_u%;
+; /def -b^[Ok b_kp_u = /_u%;
+; /def -b^[Ou b_kp_look = /_schaue%;
+; /def -b^[Op b_kp_vorw = /i_vorw %;
+/def _sw = sw%;
+/def _s = s%;
+/def _so = so%;
+/def _w = w%;
+/def _o = o%;
+/def _nw = nw%;
+/def _n = n%;
+/def _no = no%;
+/def _ob = ob%;
+/def _u = u%;
+;look
+/def _schaue = /echo %; %mud_look_command%;
+;score
+/def _score = info%;
+
+; Rueckwaerts- Vorwaertssuche in der Input-History
+/def -Bup b_up = /dokey recallb
+/def -Bdown b_down = /dokey recallf
+/def -BPgDn b_pgdown = /dokey searchf
+/def -BPgUp b_pgup = /dokey searchb
+
+
+; Evaluieren des eingetippten Textes mit Alt+Enter
+/def -b"^[^m" b_return_sub = /set sub=full%;/dokey NEWLINE%;/set sub=off
+
+; Laden wenn noch nicht vorhanden
+/ifdo (isList(keys_list_name)=~error) /keys_load_list
+
+; Standardbelegung wenn keine Liste vorhanden
+/ifdo (isList(keys_list_name)=~error|count_entries(keys_list_name)==0) /keys_default
+

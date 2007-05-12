@@ -1,0 +1,92 @@
+; $Log: base_files.def,v $
+; Revision 1.15  2002/09/17 09:02:44  mh14
+; ladereihenfolge i18n.tf
+;
+; Revision 1.14  2002/05/12 09:12:55  thufhnik
+; util.conv.tf aufgenommen
+;
+; Revision 1.13  2002/04/18 21:58:09  mh14
+; help.tf vorgeladen
+;
+; Revision 1.12  2002/04/16 12:11:24  mh14
+; mapper.tf eingebunden
+;
+; Revision 1.11  2002/04/16 11:51:44  mh14
+; enthaelt jetzt auch die Pakete aus base_files.cfg, Einstellung ueber /configure -> Paketverwaltung
+;
+; Revision 1.10  2001/10/10 22:10:21  mh14
+; Default-Konfiguration in .tf Files verschoben
+;
+; Revision 1.9  2001/10/03 09:39:22  mh14
+; worldconnect eingebaut
+;
+; Revision 1.8  2001/10/02 00:24:52  mh14
+; sshload eingetragen
+;
+; Revision 1.7  2001/09/15 19:45:34  mh14
+; i18n,util.vfunc wegen custom mit vorgezoegen
+;
+; Revision 1.6  2001/09/12 08:06:27  mh14
+; i18n eingebunden
+;
+; Revision 1.5  2001/09/09 19:05:05  mh14
+; loading.tf per mload geladen
+;
+; Revision 1.4  2001/09/07 00:05:44  mh14
+; util.debug.tf wegen Testen als Basis vorladen
+;
+; Revision 1.3  2001/09/06 23:08:29  mh14
+;  properties.tf in base_files.def
+;
+; Revision 1.2  2001/09/06 21:11:44  mh14
+;  Log eingefuegt
+;
+
+/load -q lists.tf
+/load -q config.tf
+/load -q util.hooks.tf
+/load -q util.tf
+/load -q util.echo.tf
+/load -q util.sfunc.tf
+/load -q util.debug.tf
+/load -q util.timer.tf
+/load -q util.vfunc.tf
+/load -q loading.tf
+/load -q i18n.tf
+/load -q help.tf
+
+/mload -U loading.tf
+/mload -U config.tf
+/mload -U sshload.tf
+/mload -U lists.tf
+/mload -U i18n.tf
+/mload -U util.abbrev.tf
+/mload -U util.completion.tf
+/mload -U util.debug.tf
+/mload -U util.echo.tf
+/mload -U util.hooks.tf
+/mload -U util.prompts.tf
+/mload -U util.quote.tf
+/mload -U util.repeat.tf
+/mload -U util.sfunc.tf
+/mload -U util.stack.tf
+/mload -U util.timer.tf
+/mload -U util.trigger.tf
+/mload -U util.vfunc.tf
+/mload -U util.windows.tf
+/mload -U util.conv.tf
+/mload -U util.tf
+/mload -U help.tf
+/mload -U properties.tf
+/mload -U worldconnect.tf
+
+/mload -U mapper.tf
+/mload -U keys.tf
+/mload -U untroom.tf
+/mload -U status.tf
+/mload -U way.tf
+/mload -U xalias.tf
+/mload -U break_string.tf
+/mload -U functions.tf
+/mload -U crypt.tf
+

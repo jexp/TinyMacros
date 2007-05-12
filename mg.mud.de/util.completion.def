@@ -1,0 +1,17 @@
+/addh info \
+Mud-Kommando, dass die Zeilen des Terminals setzt. Dabei sollte der Parameter 0 fuer keine Begrenzung stehen.
+/addh see completion
+/addh mud_set_line_count var
+/set mud_set_line_count=zeilen
+
+/addh info \
+Mud-Kommando, dass das Inventory des Spielers anzeigt.
+/addh see completion
+/addh mud_inventory var
+/set mud_inventory=i -f -s
+
+/addh info \
+Mud-Kommando, dass in Kurzform anzeigt, welche Spieler anwesend sind.
+/addh see completion
+/addh mud_short_who var
+/set mud_short_who=!kkwer

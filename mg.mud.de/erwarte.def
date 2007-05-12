@@ -1,0 +1,14 @@
+; Die Farben, wenn jemand ins Mud kommt
+/set_var erwarte_color_online_normal BCwhite
+/set_var erwarte_color_online_grund BCred
+/set_var erwarte_color_online_name BCyellow
+/set_var erwarte_color_online BCgreen
+
+; Die Farben, wenn jemand das Mud verlaesst
+/set_var erwarte_color_offline Cred
+/set_var erwarte_color_offline_normal BCwhite
+/set_var erwarte_color_offline_grund Cred
+/set_var erwarte_color_offline_name Cyellow
+
+; Piepts? on/off
+/set_var erwarte_beep on

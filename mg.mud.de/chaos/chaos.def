@@ -1,0 +1,10 @@
+/set demon_list_name=demons
+/set demon_list_location=-c -dchaos
+
+/loadnamedlist demon
+
+/set spell_list_name=sprueche
+/set spell_list_location=-c -dchaos
+
+/loadnamedlist spell
+
