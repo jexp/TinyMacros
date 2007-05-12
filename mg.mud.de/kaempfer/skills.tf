@@ -1,4 +1,10 @@
 ; $Log: skills.tf,v $
+; Revision 1.6  2004/03/14 07:55:22  thufhnik
+; man sollte das auch komplett machen... :(
+;
+; Revision 1.5  2004/03/14 07:46:40  thufhnik
+; "praktisch ueberhaupt nicht" in die %-umrechnung eingebaut
+;
 ; Revision 1.4  2003/03/22 15:53:56  thufhnik
 ; %-Zeichen in Umgebrochenen Kampfbrotmeldungen
 ;
@@ -13,7 +19,7 @@
 ; Scratch
 ;
 
-/set skills_tf_version $Id: skills.tf,v 1.4 2003/03/22 15:53:56 thufhnik Exp $
+/set skills_tf_version $Id: skills.tf,v 1.6 2004/03/14 07:55:22 thufhnik Exp $
 /set skills_tf_author=Thufhir@mg.mud.de
 /set skills_tf_requires=
 /set skills_tf_desc Skills der Trves in %
@@ -32,14 +38,15 @@
 	    uebel|sehr sehr schlecht|sehr schlecht|schlecht|maessig|\
 	    durchschnittlich|befriedigend|sehr befriedigend|recht gut|\
 	    ganz gut|gut|sehr gut|ausgezeichnet|hervorragend|perfekt|\
-	    absolut perfekt)', {*})) \
+	    absolut perfekt|praktisch ueberhaupt nicht)', {*})) \
 		/if ({P1} =~ 'weit entfernt von ') /let ks_abzug=4%; \
 		/elseif ({P1} =~ 'noch laengst nicht ') /let ks_abzug=3%; \
 		/elseif ({P1} =~ 'bald schon ') /let ks_abzug=2%; \
 		/elseif ({P1} =~ 'fast ') /let ks_abzug=1%; \
 		/else /let ks_abzug=0%;\
 		/endif%;\
-		/if ({P2} =~ 'absolut superuebel') /let ks_base=5%;\
+		/if ({P2} =~ 'praktisch ueberhaupt nicht') /let ks_base=0%;\
+		/elseif ({P2} =~ 'absolut superuebel') /let ks_base=5%;\
 		/elseif ({P2} =~ 'superuebel') /let ks_base=10%;\
 		/elseif ({P2} =~ 'sehr sehr uebel') /let ks_base=15%;\
 		/elseif ({P2} =~ 'sehr uebel') /let ks_base=20%;\
