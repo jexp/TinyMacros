@@ -1,4 +1,27 @@
 ; $Log: status_zauberer.tf,v $
+; Revision 1.33  2004/01/10 15:24:16  thufhnik
+; Missing & in extrahand
+;
+; Revision 1.32  2003/10/19 11:10:39  thufhnik
+; Trigger fuer Schmerzen
+;
+; Revision 1.31  2003/07/12 12:17:29  thufhnik
+; p_sub_guil muss "verwandlung" und nicht "wandlung" heissen
+;
+; Revision 1.30  2003/07/10 09:36:40  thufhnik
+; Typo im zrufe-trigger (wenn kein comm.tf benutzt wird)
+; Meldung wenn im Kampf zu dunkel (-> Hook: too_dark)
+;
+; Revision 1.29  2003/06/24 11:40:00  thufhnik
+; Gefaehrte
+; Magisterspruchtrigger werden nur noch geladen wenn p_sub_guild entspricht
+;
+; Revision 1.28  2003/06/12 13:58:22  thufhnik
+; hngl, bug in den schutzzaubern in der letzten version eingebaut gehabt
+;
+; Revision 1.27  2003/06/10 14:25:38  thufhnik
+; Feuerwalze
+;
 ; Revision 1.26  2003/01/10 16:56:49  olm
 ; Ruestetrigger, macht daraus auch nur eine Zeile.
 ;
@@ -81,7 +104,7 @@
 ; Scratch
 ;
 
-/set status_zauberer_tf_version $Id: status_zauberer.tf,v 1.26 2003/01/10 16:56:49 olm Exp $
+/set status_zauberer_tf_version $Id: status_zauberer.tf,v 1.33 2004/01/10 15:24:16 thufhnik Exp $
 /set status_zauberer_tf_author=Thufhir@mg.mud.de
 /set status_zauberer_tf_requires=util.hooks.tf config.tf(1.16)
 /set status_zauberer_tf_desc=Statuszeile und Report fuer die Zauberergilde
@@ -183,6 +206,11 @@
 /set_var CFG_MG_ZAUBERER_ZSCHILD_4_ECHO_ATTR Cgreen,h
 /set_var CFG_MG_ZAUBERER_ZSCHILD_AUS_ECHO_TEXT Zauberschild aus
 /set_var CFG_MG_ZAUBERER_ZSCHILD_AUS_ECHO_ATTR Cred
+
+; Feuerwalze (#1 wird durch die Richtung ersetzt)
+/set_var CFG_MG_ZAUBERER_FEUERWALZE_ECHO_TEXT Feuerwalze #1
+/set_var CFG_MG_ZAUBERER_FEUERWALZE_ECHO_ATTR Cgreen
+/set_var CFG_MG_ZAUBERER_FEUERWALZE_MOVE_ECHO_ATTR Cbgred,Cwhite
 
 ; Farben fuer die Elemente
 /set_var CFG_STATUS_COLOR_ZAUBERER_ICE Cblue,h
@@ -310,6 +338,10 @@
 /set_var CFG_MG_ZAUBERER_SSCHADEN_ALR_ECHO_TEXT Stabschaden schon eingestellt
 /set_var CFG_MG_ZAUBERER_SSCHADEN_ALR_ECHO_ATTR Cyellow
 
+; Schmerzen
+/set_var CFG_MG_ZAUBERER_SCHMERZEN_ECHO_TEXT Schmerzen: #1
+/set_var CFG_MG_ZAUBERER_SCHMERZEN_ECHO_ATTR Cgreen
+
 ; Vorahnung
 /set_var CFG_STATUS_TEXT_ZAUBERER_SCHUTZ_4 V
 /set_var CFG_STATUS_COLOR_ZAUBERER_SCHUTZ_4 Cgreen
@@ -317,6 +349,10 @@
 ; Irritiere
 /set_var CFG_MG_ZAUBERER_IRRITIERE_ECHO_ATTR Cgreen
 /set_var CFG_MG_ZAUBERER_IRRITIERE_ECHO_TEXT Irritiere
+
+; Gefaehrte
+/set_var CFG_MG_ZAUBERER_GEFAEHRTE_ECHO_ATTR Cgreen
+/set_var CFG_MG_ZAUBERER_GEFAEHRTE_ECHO_TEXT Gefaehrte
 
 ; Schutzzone
 /set_var CFG_MG_ZAUBERER_SCHUTZZONE_ECHO_ATTR Cgreen
@@ -340,7 +376,7 @@
 /set_var CFG_MG_ZAUBERER_WANDLUNG_WASSER_ECHO_ATTR Cgreen
 
 ; Lernen
-/set_var CFG_MG_ZAUBERER_LEARN_ECHO_ATTR Cbggreen
+/set_var CFG_MG_ZAUBERER_LEARN_ECHO_ATTR Cbggreen,Cwhite
 
 ; Fehlende Kompos
 /set_var CFG_MG_ZAUBERER_MISSING_KOMPO_ECHO_ATTR Cred
@@ -349,6 +385,10 @@
 ; Nicht standesgemaesse Waffen / Ruestung
 /set_var CFG_MG_ZAUBERER_WRONG_ARMOR_ECHO_ATTR Cbgred,Cwhite
 /set_var CFG_MG_ZAUBERER_WRONG_ARMOR_ECHO_TEXT Nicht standesgemaesse Waffen / Ruestungen!
+
+; Abgeschwaechter Angriff durch Dunkelheit
+/set_var CFG_MG_ZAUBERER_TOO_DARK_ECHO_ATTR Cbgred,Cwhite
+/set_var CFG_MG_ZAUBERER_TOO_DARK_ECHO_TEXT Abgeschwaechter Angriff durch Dunkelheit!
 
 ; zemotes und zrufe
 /set_var CFG_MG_ZAUBERER_ZEMOTE_ECHO_ATTR Ccyan
@@ -388,7 +428,7 @@
 /set_var CFG_MG_ZAUBERER_VERZOEGERUNG_ECHO_TEXT @{B}Verzoegerung:@{n}
 
 ; Parawelt im Fluchtest
-/set_var CFG_MG_ZAUBERER_PARA_ECHO_ATTR Cbgred
+/set_var CFG_MG_ZAUBERER_PARA_ECHO_ATTR Cbgred,Cwhite
 
 ; Unterstuetzender Zauberstab
 /set_var CFG_MG_ZAUBERER_STAB_ECHO_ATTR g
@@ -569,14 +609,12 @@
 		/elseif ({P1} =~ "gleissend blaue") \
 			/let ZAUBERER_SCHUTZ_QUAL 4%%;\
 		/endif%%;\
-		/set status_attr_zauberer_schutz="%%;\
 		/let ZAUBERER_SCHUTZ_COLOR=%%;\
 		/test ZAUBERER_SCHUTZ_COLOR:=$$[strcat(\
 			"CFG_MG_ZAUBERER_SCHUTZ_",ZAUBERER_SCHUTZ_QUAL,\
 			"_ECHO_ATTR")]%%;\
-		/set status_attr_zauberer_schutz=$$[strcat(\
-			status_attr_zauberer_schutz,ZAUBERER_SCHUTZ_COLOR,\
-			status_attr_zauberer_schutz)]%%;\
+		/set status_attr_zauberer_schutz=$$[strcat('"',\
+			ZAUBERER_SCHUTZ_COLOR,'"')]%%;\
 		/cfg_echo $$[strcat("MG_ZAUBERER_SCHUTZ_",\
 			ZAUBERER_SCHUTZ_QUAL)] %%*%%;\
 		/eval_hook spell
@@ -611,14 +649,12 @@
 		/elseif ({P2} =~ "gleissend goldene") \
 			/let ZAUBERER_SCHUTZ_QUAL 4%%;\
 		/endif%%;\
-		/set status_attr_zauberer_schutz="%%;\
 		/let ZAUBERER_SCHUTZ_COLOR=%%;\
 		/test ZAUBERER_SCHUTZ_COLOR:=$$[strcat(\
 			"CFG_MG_ZAUBERER_SCHUTZHUELLE_",ZAUBERER_SCHUTZ_QUAL,\
 			"_ECHO_ATTR")]%%;\
-		/set status_attr_zauberer_schutz=$$[strcat(\
-			status_attr_zauberer_schutz,ZAUBERER_SCHUTZ_COLOR,\
-			status_attr_zauberer_schutz)]%%;\
+		/set status_attr_zauberer_schutz=$$[strcat('"',\
+			ZAUBERER_SCHUTZ_COLOR,'"')]%%;\
 		/cfg_echo $$[strcat("MG_ZAUBERER_SCHUTZHUELLE_",\
 			ZAUBERER_SCHUTZ_QUAL)] %%*%%;\
 		/eval_hook spell
@@ -640,7 +676,7 @@
 	/purge zauberer_extrahand_g%;\
 	/def -Fp8 -1 -q -w -agCblue -msimple -t'Du hast jetzt eine \
 		zusaetzliche Hand zur Verfuegung.' zauberer_extrahand_g = \
-		/set p_free_hands=$[min(3,++p_free_hands)]%;\
+		/set p_free_hands=$[min(3,++p_free_hands)]%%;\
 		/cfg_echo MG_ZAUBERER_EXTRAHAND %%*%%;\
 		/eval_hook spell
 
@@ -827,8 +863,9 @@
 
 ; Zauberschild
 
-/def -Fp8 -msimple -q -w -agCblue -t'Du drehst Pirouetten in der festgelegten \
-	Schrittfolge und murmelst die' zauberer_zschild = \
+/ifdef p_sub_guild=~"abwehr" -p0 -msimple -q -w -agCblue -t'Du drehst \
+	Pirouetten in der festgelegten Schrittfolge und murmelst die' \
+	zauberer_zschild = \
 	/cfg_echogag MG_ZAUBERER_ZSCHILD %*%;\
 	/purge -mglob zauberer_zschild_g*%;\
 	/def -Fp8 -1 -msimple -q -w -agCblue -t'vorgeschriebenen Worte.' \
@@ -845,36 +882,72 @@
 		/elseif ({P1} =~ "gleissend rote") \
 			/let ZAUBERER_SCHUTZ_QUAL 4%%;\
 		/endif%%;\
-		/set status_attr_zauberer_schutz="%%;\
 		/let ZAUBERER_SCHUTZ_COLOR=%%;\
 		/test ZAUBERER_SCHUTZ_COLOR:=$$[strcat(\
 			"CFG_MG_ZAUBERER_ZSCHILD_",ZAUBERER_SCHUTZ_QUAL,\
 			"_ECHO_ATTR")]%%;\
-		/set status_attr_zauberer_schutz=$$[strcat(\
-			status_attr_zauberer_schutz,ZAUBERER_SCHUTZ_COLOR,\
-			status_attr_zauberer_schutz)]%%;\
+		/set status_attr_zauberer_schutz=$$[strcat('"',\
+			ZAUBERER_SCHUTZ_COLOR,'"')]%%;\
 		/cfg_echo $$[strcat("MG_ZAUBERER_ZSCHILD_",\
 			ZAUBERER_SCHUTZ_QUAL)] %%*%%;\
 		/eval_hook spell
 
-/def -Fp8 -mregexp -q -w -agCblue -t'^Die (gleissend rote|rot leuchtende|\
-	roetlich schimmernde|fahlroetliche) Schutzaura um Dich loest sich \
-	langsam auf\\.$' zauberer_zauberschild_aus = \
+/ifdef p_sub_guild=~"abwehr" -p0 -mregexp -q -w -agCblue -t'^Die (gleissend \
+	rote|rot leuchtende|roetlich schimmernde|fahlroetliche) Schutzaura \
+	um Dich loest sich langsam auf\\.$' zauberer_zauberschild_aus = \
 	/cfg_echo MG_ZAUBERER_ZSCHILD_AUS %*%;\
 	/if /ismacro autokampf_update%; /then \
 		/autokampf_update zauberschild%;\
 	/endif
 
+; Feuerwalze
+
+/ifdef p_sub_guild=~"angriff" -p0 -msimple -q -w -agCblue -t'Vorsichtig \
+	oeffnest Du das Flaeschchen und giesst Dir unter Rezitation der' \
+	zauberer_feuerwalze = \
+	/cfg_echogag MG_ZAUBERER_FEUERWALZE %*%;\
+	/def -p0 -1 -msimple -q -w -agCblue -t'vorgeschriebenen Worte die \
+		Loesung mit dem Phosphor ueber die Haende. Na,' \
+		zauberer_feuerwalze_1 = \
+		/cfg_echogag MG_ZAUBERER_FEUERWALZE %%*%;\
+	/def -p0 -1 -msimple -q -w -agCblue -t'hoffentlich klappt das...' \
+		zauberer_feuerwalze_2 = \
+		/cfg_echogag MG_ZAUBERER_FEUERWALZE %%*%;\
+	/def -p0 -1 -msimple -q -w -agCblue -t'Eine gewaltige Feuerwalze \
+		entsteht aus Deinen Haenden, die auch sofort in die' \
+		zauberer_feuerwalze_3 = \
+		/cfg_echogag MG_ZAUBERER_FEUERWALZE %%*%;\
+	/def -p0 -1 -msimple -q -w -agCblue -t'gewuenschte Richtung \
+		davonrollt.' zauberer_feuerwalze_4 = \
+		/eval_hook spell%%;\
+		/cfg_echogag MG_ZAUBERER_FEUERWALZE %%*%;\
+	/def -p0 -1 -mregexp -q -w -agCblue -t'^Die Feuerwalze rollt nach \
+		(.+)\\\\.$$' zauberer_feuerwalze_5 = \
+		/if (!CFG_ECHO_GAG_LEVEL) \
+			/echo -- %%*%%;\
+		/elseif (CFG_ECHO_GAG_LEVEL==1) \
+			/echo -a%%CFG_MG_ZAUBERER_FEUERWALZE_ECHO_ATTR -- \
+				%%*%%;\
+		/else \
+			/echo -a%%CFG_MG_ZAUBERER_FEUERWALZE_ECHO_ATTR -- $$\
+				[sprintf(CFG_MG_ZAUBERER_FEUERWALZE_ECHO_TEXT,\
+				{P1})]%%;\
+		/endif%;\
+	/def -Fp1 -1 -msimple -q -w -agCblue -t'Ein unglaublicher Luftsog \
+		saugt Dich an.' zauberer_feuerwalze_move = \
+		/cfg_echocolor MG_ZAUBERER_FEUERWALZE_MOVE %%*%;\
+	/repeat -5 1 /purge zauberer_feuerwalze_move
+
 ; Irritiere
 
-/def -Fp8 -mglob -q -w -agCblue -t'Voellig ueberraschend drueckst Du * einen*' \
-	zauberer_irritiere = \
+/ifdef p_sub_guild=~"beherrschung" -p0 -mglob -q -w -agCblue -t'Voellig \
+	ueberraschend drueckst Du * einen*' zauberer_irritiere = \
 	/cfg_echogag MG_ZAUBERER_IRRITIERE %*%;\
 	/purge zauberer_irritiere_g*%;\
-	/def -Fp8 -1 -mregexp -q -w -agCblue -t'Lotusstaub in die Nase\\\\.$$' \
+	/def -p0 -1 -mregexp -q -w -agCblue -t'Lotusstaub in die Nase\\\\.$$' \
 		zauberer_irritiere_g1 = \
 		/cfg_echogag MG_ZAUBERER_IRRITIERE %%*%;\
-	/def -Fp8 -1 -mregexp -q -w -agCblue -t'(Der |Die |Das |Eine? |)(.+) \
+	/def -p0 -1 -mregexp -q -w -agCblue -t'(Der |Die |Das |Eine? |)(.+) \
 		schaut ziemlich verdutzt aus\\\\.$$' zauberer_irritiere_g2 = \
 		/if (CFG_ECHO_GAG_LEVEL > 1) \
 			/echo -pa%%CFG_MG_ZAUBERER_IRRITIERE_ECHO_ATTR \
@@ -885,13 +958,32 @@
 		/endif%%;\
 		/eval_hook spell
 
+; Gefaehrte
+
+/ifdef p_sub_guild=~"illusion" -p0 -msimple -q -w -agCblue -t'Du beginnst \
+	einen kleinen Hexentanz um den Punkt, an dem Dein Gefaehrte' \
+	zauberer_gefaehrte = \
+	/purge -mglob zauberer_gefaehrte_g*%;\
+	/cfg_echogag MG_ZAUBERER_GEFAEHRTE %*%;\
+	/def -p0 -1 -msimple -q -w -agCblue -t'entstehen soll.' \
+		zauberer_gefaehrte_g1 = \
+		/cfg_echogag MG_ZAUBERER_GEFAEHRTE %%*%;\
+	/def -p0 -1 -msimple -q -w -agCblue -t'Eine klare, etwas salzig \
+		riechende Wolke entsteht und aus ihrer Mitte' \
+		zauberer_gefaehrte_g2 = \
+		/cfg_echogag MG_ZAUBERER_GEFAEHRTE %%*%;\
+	/def -p0 -1 -msimple -q -w -agCblue -t'entsteigt eine Gestalt.' \
+		zauberer_gefaehrte_g3 = \
+		/cfg_echo MG_ZAUBERER_GEFAEHRTE %%*%;\
+		/eval_hook spell
+
 ; Schutzzone
 
-/def -Fp8 -msimple -q -w -agCblue -t'Du drehst Dich mit ausgestreckten Armen \
-	um Deine Achse.' zauberer_schutzzone = \
+/ifdef p_sub_guild=~"abwehr" -p0 -msimple -q -w -agCblue -t'Du drehst Dich \
+	mit ausgestreckten Armen um Deine Achse.' zauberer_schutzzone = \
 	/cfg_echogag MG_ZAUBERER_SCHUTZZONE %*%;\
 	/purge zauberer_schutzzone_g*%;\
-	/def -Fp8 -1 -mregexp -q -w -agCblue -t'^Du deutest nach (.+)\\\\.$$' \
+	/def -p0 -1 -mregexp -q -w -agCblue -t'^Du deutest nach (.+)\\\\.$$' \
 		zauberer_schutzzone_g1 = \
 		/if (CFG_ECHO_GAG_LEVEL > 1) \
 			/echo -pa%%CFG_MG_ZAUBERER_SCHUTZZONE_ECHO_ATTR \
@@ -901,7 +993,7 @@
 		/endif%%;\
 		/eval_hook spell%%;\
 		/purge zauberer_schutzzone_g*%;\
-	/def -Fp8 -1 -msimple -q -w -agCblue -t'Eine Zone rotgluehender, \
+	/def -p0 -1 -msimple -q -w -agCblue -t'Eine Zone rotgluehender, \
 		durcheinanderwirbelnder Funken erfuellt den Raum.' \
 		zauberer_schutzzone_g2 = \
 		/cfg_echo MG_ZAUBERER_SCHUTZZONE %%*%%;\
@@ -917,16 +1009,41 @@
 
 ; Wandlung
 
-/def -Fp8 -msimple -q -w -agCblue -t'Du oeffnest eine kleine Phiole und \
-	uebergiesst Dich mit deren Inhalt.' zauberer_wandlung = \
+/ifdef p_sub_guild=~"verwandlung" -p0 -msimple -q -w -agCblue -t'Du oeffnest \
+	eine kleine Phiole und uebergiesst Dich mit deren Inhalt.' \
+	zauberer_wandlung = \
 	/cfg_echogag MG_ZAUBERER_WANDLUNG %*%;\
 	/purge zauberer_wandlung_g1%;\
-	/def -Fp8 -mglob -q -w -1 -agCblue -t'Fuer einen Moment fuehlst Du \
+	/def -p0 -mglob -q -w -1 -agCblue -t'Fuer einen Moment fuehlst Du \
 		Dich wie in {Blitz|Feuer|Luft|Eis|Erde|Wasser} eingehuellt.' \
 		zauberer_wandlung_g1 = \
 		/cfg_echo $$[strcat("MG_ZAUBERER_WANDLUNG_",\
 			toupper({9}))] %%*%%;\
 		/eval_hook spell
+
+; Schmerzen
+
+; CFG_MG_ZAUBERER_SCHMERZEN_ECHO_TEXT
+
+/def -p1 -w -q -msimple -agCblue -t'Eine silberne Nadel erscheint in Deiner \
+	Hand.' zauberer_schmerzen = \
+	/cfg_echogag MG_ZAUBERER_SCHMERZEN %*%;\
+	/purge -mglob zauberer_schmerzen_g*%;\
+	/def -p0 -mglob -q -w -1 -agCblue -t'Du wirfst sie auf *.' \
+		zauberer_schmerzen_g1 = \
+		/cfg_echogag MG_ZAUBERER_SCHMERZEN %%*%;\
+	/def -p0 -mregexp -q -w -1 -agCblue -t'^(D(er|ie|as) |Eine? )?.*\
+		([A-Z][^ ]+).* kruemmt sich vor Schmerzen\\\\.$$' \
+		zauberer_schmerzen_g2 = \
+		/if (!CFG_ECHO_GAG_LEVEL) \
+			/echo -- %%*%%;\
+		/elseif (CFG_ECHO_GAG_LEVEL==1) \
+			/echo -a%%CFG_MG_ZAUBERER_SCHMERZEN_ECHO_ATTR -- %%*%%;\
+		/else \
+			/echo -a%%CFG_MG_ZAUBERER_SCHMERZEN_ECHO_ATTR -- $$\
+				[sprintf(CFG_MG_ZAUBERER_SCHMERZEN_ECHO_TEXT,\
+				{P3})]%%;\
+		/endif
 
 ; Stabschaden
 
@@ -1053,6 +1170,13 @@
 	angemessene Waffen oder Ruestungen.' zauberer_wrong_armor = \
 	/cfg_echo MG_ZAUBERER_WRONG_ARMOR %*
 
+; Abgeschwaechte Angriffe durch Dunkelheit
+
+/def -p0 -q -w -agCblue -msimple -t'Du siehst nichts und schlaegst \
+	orientierungslos um Dich.' zauberer_too_dark = \
+	/cfg_echo MG_ZAUBERER_TOO_DARK %*%;\
+	/eval_hook too_dark
+
 ; fehlende Kompos
 
 /def -Fp8 -q -w -agCblue -msimple -t'Dir fehlen die noetigen Materialien!' \
@@ -1111,7 +1235,7 @@
                     /let comm_ebene_text= %%PR%%;\
                     /comm_format_ebene%%;\
                     /comm_write 1 %%?%;\
-                /def -p7 -ag -E(comm_zrufe&!comm_mpa_mai) -mregexp \
+                /def -p7 -ag -E(comm_zrufe&!comm_mpa_mail) -mregexp \
                     -t" an alle( Zauberer|n Zauberern)[.]" \
                     comm_zemote = \
                     /let comm_ebene=zRufe%%;\
@@ -1121,20 +1245,22 @@
                     /comm_write 1 %%?%;\
         /endif
 
-/status_zauberer_zrufe
-
 ; Rueste
 
-/def -Fp1 -ag -mregexp -q -t' machs?t ein paar beschwoerende Gesten ueber (der|dem|die) ([^.]+)[.]' t_zauberer_rueste = \
+/def -Fp1 -ag -mregexp -q -t' machs?t ein paar beschwoerende Gesten ueber \
+	(der|dem|die) ([^.]+)[.]' zauberer_rueste = \
         /set zauberer_rueste_name=%PL%;\
-        /def -mregexp -1 -F -ag -q -t' blitzt kurz gruenlich auf[.]$$' t_zauberer_rueste_1 = \
+        /def -mregexp -1 -F -ag -q -t' blitzt kurz gruenlich auf[.]$$' \
+		zauberer_rueste_1 = \
 		/if (zauberer_rueste_name!~"Du") \
-	                /cfg_echocolor MG_ZAUBERER_RUESTE Rueste (%%zauberer_rueste_name): %%PL%%;\
+	                /cfg_echocolor MG_ZAUBERER_RUESTE Rueste \
+				(%%zauberer_rueste_name): %%PL%%;\
 		/else \
 			/cfg_echocolor MG_ZAUBERER_RUESTE Rueste: %%PL%%;\
 		/endif
 
 ; Sachen beim Laden starten
 
+/status_zauberer_zrufe
 /zauberer_set_report
 /config_status
