@@ -1,4 +1,7 @@
 ; $Log: way.tf,v $
+; Revision 1.49  2003/08/20 12:53:06  nieten
+; /shorten produziert keine Ausgabe mehr
+;
 ; Revision 1.48  2002/12/03 03:53:26  mh14
 ; setali benutzerfreundlicher
 ;
@@ -143,7 +146,7 @@
 ;  Log eingefuegt
 ;
 
-/set way_tf_version $Id: way.tf,v 1.48 2002/12/03 03:53:26 mh14 Exp $
+/set way_tf_version $Id: way.tf,v 1.49 2003/08/20 12:53:06 nieten Exp $
 /set way_tf_author=Mesirii@mg.mud.de
 /set way_tf_requires=!lists.tf util.sfunc.tf util.prompts.tf util.hooks.tf util.trigger.tf(1.18) util.vfunc(1.21)
 /set way_tf_desc Wegesystem
@@ -1287,9 +1290,9 @@ Erstellt aus der Abfolge der Knoten den eigentlichen Weg, testet ggf. ueber 'ask
            /create_way %min_way %;\
 ; den letzen wegebefehl (xtramoves) suchen und das kurz davorhaengen
 	   /if (real_way=~"") /break%; /endif%;\
-           /let off=$[strrchr(substr(real_way,0,strlen(real_way)-1),";")+1] %;\
+           /let off=$[strrchr(substr(real_way,0,strlen(real_way)-1),";")+1]%;\
 ;	   /echo $[strcat(substr(real_way,off-2,1),";",substr(real_way,off,1))]%;\
-	   /while (off>-1 & (substr(real_way,off-2,1)!~"%" | substr(real_way,off,1)=~"/")) \
+	   /while (off>0 & (substr(real_way,off-2,1)!~"%" | substr(real_way,off,1)=~"/")) \
  	     /let off=$[strrchr(substr(real_way,0,off-1),";")+1] %;\
 ;	   /echo $[strcat(substr(real_way,off-2,1),";",substr(real_way,off,1))]%;\
 	   /done%;\
@@ -1358,7 +1361,7 @@ Befehls bekommt (ueber ?mud_recognize_command).
 /def klp2 = \
 ; damit die Prompts der vorangegangenen Kommandos abgefangen werden
 ; anpassen
-    /if (regmatch(mud_recognize_output,fulldetail)==1) \
+    /if (regmatch(mud_recognize_output,fulldetail)) \
 	/set fulldetail=%;\
 	/eval -s0 %* %;\
     /else \
@@ -1587,7 +1590,7 @@ Fuehrt den angegebenen Weg aus. Dabei werden die integrierten Sonderbefehle bzw.
 	     /if (substr(comm,0,1)=~"/") /set br=1 %; /endif %;\
 	     /if ((verify!=0)|(cond_go!~"")|(br!=0)) \
 ;	       /echo before golp %comm%;\
-;	       /if (regmatch("^/golp (.+)$",comm)==1) \
+;	       /if (regmatch("^/golp (.+)$",comm)) \
 ;		  /echo lp2 %P1%;\
 ;/add_catchup_action /lp2 %P1\%;/set go=1%;\
 ;	          /lp2 %P1 %; \
@@ -1760,7 +1763,7 @@ Ist verify==2, dann wird nur das Monster geknuddelt, das im Weg steht, und nach 
         /set real_way=$[strcat(last_comm,"%;",real_way)] %;\
 	/set last_comm=%;\
         /let from=%lastpoint %;\
-        /if ((regmatch(strcat("(^|:)",from,":([^:]+)"),min_way)==1)) \
+        /if ((regmatch(strcat("(^|:)",from,":([^:]+)"),min_way))) \
            /let to=%P2 %;\
 	  /if (verify==1) \
            /_show_way %from %to %;\
@@ -1920,6 +1923,12 @@ Loescht den Cache mit den Wegen.
 /defh clear_cache = /hcreatelist ways_cache%;
 
 
+/defh save_cache = \
+	/hsavelist %ways_location ways_cache
+
+/defh load_cache = \
+	/hloadlist %ways_location ways_cache
+
 /addh info \
 Entfernt alle Wege aus dem Cache, die den angegebenen Knoten oder Teilweg enthalten.
 /addh ex '/remove_from_cache knotenname' oder '/remove_from_cache knoten1 knoten2'.
@@ -2014,7 +2023,7 @@ Aus der uebergebenen Abfolge der Wegknoten ermittelt diese Funktion den komplett
 	/let akt_way=%;\
 	/while (akt_way=~"" & value!~error) \
 ;/set value%;\
-            /if ((regmatch("([bpn0-9]) ([^ ]+) ([0-9]+) ?(.+)?",value)==1)) \
+            /if ((regmatch("([bpn0-9]) ([^ ]+) ([0-9]+) ?(.+)?",value))) \
 	         /let ber=%P1%;\
 	         /let allow=%P2%;\
 	         /let akt_way2=%P4%;\
@@ -2088,7 +2097,11 @@ Aus der uebergebenen Abfolge der Wegknoten ermittelt diese Funktion den komplett
 ;	  /result strcat(res)%;\
 	  /return%;\
 	/endif%;\
+	/let oldway=%;\
+	/test oldway:={1}%;\
+	/if (oldway=/"%%;") \
 	/let oldway=$[substr({1},0,strlen({1})-2)]%;\
+	/endif%;\
 	/let newway=%3%;\
 ;/let oldway%;\
 ;/let newway%;\
@@ -2117,7 +2130,7 @@ Aus der uebergebenen Abfolge der Wegknoten ermittelt diese Funktion den komplett
 	/endif%;\
 	/done%;\
 	/set value=$[strcat(oldway,((strlen(oldway)>0)?"%;":""),"/golp ",{2}," ",opt_count,"%;",newway)]%;\
-;	/result strcat(oldway,"\%;/golp ",{2}," ",opt_count,"\%;",newway)%;
+;	/result strcat(oldway,"%%;/golp ",{2}," ",opt_count,"%%;",newway)%;
 
 
 /def addoftenusedway = \
@@ -2200,7 +2213,7 @@ Testet, ob die aktuellen Properties erlauben, diesen Weg zu gehen.
 	    /let allow=$[substr({1},off+1)]%;\
 	    /getvalueof ${world_character} %key%;\
 	    /if (value!~error) \
-	      /if (regmatch("[0-9]+",value)==1) \
+	      /if (regmatch("[0-9]+",value)) \
 		 /if ((0+value)<(0+allow)) \
 		   /result 0%;\
 		 /else \
@@ -2553,7 +2566,7 @@ Wenn ein '+' vor dem Befehl steht, wird versucht, ihn und auch den Rueckbefehl z
 ;   /if (value=~error) /input /rueckwaerts %;\
 ;   /else \
      /let reg=$[strcat("([0|1]) (.*)$")] %;\
-     /if (regmatch(reg,value)==1) \
+     /if (regmatch(reg,value)) \
        /if ({P1}==0) /rueckwaerts %P2 %;\
        /else \
           /input /rueckwaerts %P2%;\
@@ -2668,11 +2681,22 @@ Begrenzt die Raumbeschreibung, die in %fulldetail steht, auf bis einschliesslich
 ; anpassen
 ;     /set fulldetail%;\
      /set room_npcs=%;\
+; mschau
      /if (regmatch("^(@{N})?[[][^]]+[]]",fulldetail)) \
         /set fulldetail=%PR%;\
      /endif%;\
      /if (regmatch(mud_exits_output,fulldetail)) \
-        /set fulldetail=%PL%P0%;\
+	/let off=$[strrchr({PL},"@")]%;\
+	/if (off>-1) \
+	   /set room_exits=$[substr({PL},off)]%P0%;\
+	   /set fulldetail=$[substr({PL},0,off)]%;\
+	/else \
+	   /if ({#} & {1}=="noexits") \
+	   /set fulldetail=%PL%;\
+	   /else /set fulldetail=%PL%P0%;\
+	   /endif%;\
+	/endif%;\
+;        /set fulldetail=%PL%P0%;\
 	/set room_npcs=%PR%;\
 	/if (strstr(room_npcs,"@{N}")==0) \
 	  /set room_npcs=$[substr(room_npcs,4)]%;\
@@ -2721,6 +2745,18 @@ Zeigt die Raummeldung an, die das letzte, /wo, /end, /wgo, /addnode verarbeitet 
 /def wo_raum = \
 	/echo2 -aCyellow -p %fulldetail
 
+
+/addh info \
+Erkennt aus der Langbeschreibung, die das Kommando produziert das als erster Parameter \
+übergeben wird den Zielraum (wenn bekannt) und geht dorthin. Der zweite Parameter wird \
+zur Identifikation der Zeile vor der Raumbeschreibung gebraucht.
+/addh goto comm
+
+/def goto = \
+   /trig_grab -b%2 -Paddpoint_end -ag -C"%1" \
+    -M'/test getpoint2("/_go","/echo Knoten nicht gefunden!")'%;\
+   /set getpoint_trig=%?
+
 /addh info \
 Erkennt, welcher Knoten der aktuelle Raum ist.
 /addh syn /wo
@@ -2759,7 +2795,8 @@ Vergleicht die aktuelle Raumbeschreibung mit der Liste 'lastpoints' und liefert 
 ;/vdebug value%;\
       /endif%;\
       /test fulldetail:=strcat("@{N}",fulldetail)%;\
-      /restricttoexit%;\
+      /restricttoexit noexits%;\
+;      /test fulldetail:=strcat(fulldetail,room_exits)%;\
       /let char_count=0%;\
       /let res_key=%;\
       /let new_fulldetail=%;\
@@ -2969,7 +3006,6 @@ Wandelt den uebergebenen Weg aus dem Format 'o%;w%;w%;gehe nach oben%;s%;s%;s%;'
 	   /let t=$[substr(t,off+2)]%;\
 	 /done%;\
 	 /let res=$[strcat(res,",",(count>1)?count:"",substr(comm,0,strlen(comm)-2))]%;\
-	 /if (count>2) /echo %count %; /endif%;\
        /endif%;\
      /done%;\
 	/result res%;
