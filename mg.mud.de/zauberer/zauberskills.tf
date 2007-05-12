@@ -1,7 +1,7 @@
 ;;; 'zauberskills.tf' - Zauberer-Info anpassen
 ;;;
 
-/set zauberskills_tf_version $Id: zauberskills.tf,v 1.1 2002/08/05 21:43:39 lje Exp $
+/set zauberskills_tf_version $Id: zauberskills.tf,v 1.2 2003/05/07 22:19:33 olm Exp $
 /set zauberskills_tf_author=Vardion@mg.mud.de
 /set zauberskills_tf_requires=
 /set zauberskills_tf_desc=Anpassung der Zauberer-Einschaetzung
@@ -10,7 +10,7 @@
 ;;; Version: 1.19
 ;;; Letzte Aenderung: 05.08.2002  (c) Vardion@MorgenGrauen
 ;;;
-;;; $Id: zauberskills.tf,v 1.1 2002/08/05 21:43:39 lje Exp $
+;;; $Id: zauberskills.tf,v 1.2 2003/05/07 22:19:33 olm Exp $
 ;;;
 ;;; History:
 ;;;
@@ -433,69 +433,101 @@
 	/let ZS_MAX=0%; \
 	/if     (ZS_SPRUCH_WERTUNG =~ 'unaussprechbar uebel') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_0}-20 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-20%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'aeusserst uebel') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_1}-19 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-19%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'sehr uebel') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_1}-18 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-18%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'miserabelst') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_1}-17 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-17%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'aeusserst miserabel') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_1}-16 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-16%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'miserabel') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_1}-15 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-15%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'noch miserabel') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_1}-14 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-14%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'aeusserst schlecht') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_1}-13 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-13%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'sehr schlecht') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_1}-12 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-12%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'reichlich schlecht') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_1}-11 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-11%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'ziemlich schlecht') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_1}-10 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-10%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'schlecht') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_2} -9 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-9%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'gerade noch schlecht') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_2} -8 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-8%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'aeusserst ungenuegend') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_2} -7 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-7%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'ungenuegend') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_2} -6 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-6%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'aeusserst mangelhaft') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_2} -5 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-5%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'sehr mangelhaft') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_2} -4 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-4%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'mangelhaft') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_2} -3 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-3%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'gerade noch mangelhaft') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_2} -2 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-2%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'so gerade eben noch mangelhaft') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_2} -1 so g. e. noch mangelhaft%; \
+		/let ZS_VALUE=-1%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'mit Mueh und Not ausreichend') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_3}  0 m. Mueh u. Not ausreich.%; \
+		/let ZS_VALUE=0%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'nur knapp ausreichend') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_3}  1 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=1%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'ausreichend') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_3}  2 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=2%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'gut ausreichend') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_3}  3 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=3%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'schon fast befriedigend') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_3}  4 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=4%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'befriedigend') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_3}  5 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=5%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'sehr befriedigend') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_3}  6 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=6%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'ziemlich gut') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_3}  7 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=7%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'wirklich gut') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_3}  8 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=8%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'sehr gut') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_3}  9 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=9%;\
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'aussergewoehnlich gut') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_4} 10 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=10%;\
 		/let ZS_MAX=1%; \
 	/elseif (ZS_SPRUCH_WERTUNG =~ 'gar nicht') \
 		/let ZS_SP_BEW=@{%ZS_FARBE_0}-20 %ZS_SPRUCH_WERTUNG%; \
+		/let ZS_VALUE=-20%;\
 	/else  \
 		/let ZS_SP_BEW=  ? %ZS_SPRUCH_WERTUNG%; \
 	/endif%; \
@@ -503,5 +535,8 @@
 		((ZS_JN & ZS_GAG_JN) == 0)) \
 		/echo -p %ZS_SPRUCH_NAME%ZS_SP_ZWG %ZS_SP_LEV  %ZS_SP_HND \
 			%ZS_SP_KOM %ZS_SP_BEW%; \
+	/endif%;\
+	/if (ismacro('eval_hook')) \
+		/eval_hook set_skillability $[tolower({ZS_SPRUCH_NAME})] %ZS_VALUE%;\
 	/endif
 
