@@ -1,4 +1,7 @@
 ; $Log: base_files.def,v $
+; Revision 1.16  2003/10/09 12:14:04  nieten
+; lpc.tf defaultmaessig nicht laden
+;
 ; Revision 1.15  2002/09/17 09:02:44  mh14
 ; ladereihenfolge i18n.tf
 ;
@@ -90,3 +93,6 @@
 /mload -U functions.tf
 /mload -U crypt.tf
 
+; defaultmaessig nicht laden
+/set_var CFG_USE_LPC 0
+/mload -U lpc.tf
