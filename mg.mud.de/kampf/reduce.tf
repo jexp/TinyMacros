@@ -1,7 +1,7 @@
 
 ;;; reduce.tf - der Nachfolger von Ringors legendaerem kampfmeldungen.tf
 
-/set reduce_tf_version $Id: reduce.tf,v 2.6 2003/02/28 11:15:23 thufhnik Exp $
+/set reduce_tf_version $Id: reduce.tf,v 2.22 2004/07/16 08:27:32 thufhnik Exp $
 /set reduce_tf_author=Thufhir@mg.mud.de
 /set reduce_tf_requires=util.vfunc.tf util.hooks.tf
 /set reduce_tf_desc=Kampfscrollreduzierer
@@ -67,7 +67,8 @@
 ; ****E***  Eistrollschamanenpanzer
 ; ****G***  Panzer der Gier hat gesaugt
 ; ****M***  Robe der Magie gibt KP zurueck
-; ****Z***  Zauberschild reflektiert einen Angriff
+; ****A***  Aura der Delfen
+; ****Z***  Zauberschild
 ; ****2***  ESP + Umhang oder sonst was von oben
 ; *****G**  Silvanas Gluecksbringer
 ; *****K**  Morgoths Himmelkreuz oder das Kreuz aus der Gruft
@@ -93,6 +94,7 @@
 ;           Abwehr. Analog dazu werden die Farben 'gelb' und 'blau' fuer 
 ;           Karate-Abwehr von Gegnern benutzt.
 ; *Auswe**  ein Karateka oder Kaempfer weicht Magie aus
+; *DeSch**  Schutzschild der Dunkelelfen
 ;
 ; Fuer mich und fuer Euch hier nochmal die Meldungen mit den
 ; entsprechenden Schaeden (vorweg die Nummern die in RE_SCHADEN dafuer
@@ -233,6 +235,61 @@
 ; HISTORY
 ;
 ; $Log: reduce.tf,v $
+; Revision 2.22  2004/07/16 08:27:32  thufhnik
+; Meldung fuer Blitzhand wurde erweitert
+;
+; Revision 2.21  2004/05/10 10:43:27  chbr
+; Gloinsons Sahnetorten sollen auch ensprechend gewuerdigt werden
+;
+; Revision 2.20  2004/03/24 09:12:25  thufhnik
+; kleiner Bugfix in Kami Wind
+;
+; Revision 2.19  2004/03/23 10:12:28  thufhnik
+; - /re_purge_some ist jetzt mit in /re_loeschen und somit gestrichen
+; - /re_loeschen wird jetzt auch in /re_angriff aufgerufen
+; - Ein * extra im Waffenwurf fuer Blicke
+;
+; Revision 2.18  2004/03/15 11:12:42  thufhnik
+; Ein par kleinere CFode-Optimierungen
+;
+; Revision 2.17  2003/10/12 19:25:35  thufhnik
+; Kleine Bereinigung in re_attack_break
+;
+; Revision 2.16  2003/10/12 19:01:20  thufhnik
+; Runenschwerter im Schwerttanz der Delfen
+;
+; Revision 2.15  2003/09/05 12:07:45  thufhnik
+; hngl, der bug war noch ganz anders gelagert. ;(
+;
+; Revision 2.14  2003/09/05 11:55:47  thufhnik
+; in Aura war noch ein kleiner Bug
+;
+; Revision 2.13  2003/08/24 20:29:34  thufhnik
+; Delfen Aura
+;
+; Revision 2.12  2003/08/24 16:04:59  thufhnik
+; Delfen Entziehe
+; Delfen Parade (bei den Kaempfern mit im Trigger)
+; Delfen Schutzschild auch passiv
+;
+; Revision 2.11  2003/08/11 09:17:08  thufhnik
+; - Gildenspezifische Sachen nur noch laden wenn gebraucht, alle Leute, die
+;   mehrere chars in einem Fenster benutzen bitte in der reduce.cfg:
+;   /set RE_MULTIPLAYER_TF 1
+; - Kleiner Bugfix in der Feuerlanze
+;
+; Revision 2.10  2003/08/05 16:21:30  thufhnik
+; Dunkelelfenschild
+;
+; Revision 2.9  2003/06/23 14:24:29  thufhnik
+; Waffenfunktionen des Kriegshamsters
+;
+; Revision 2.8  2003/06/16 14:25:54  thufhnik
+; Bugfix in der Waffenfkt. des Zynh
+;
+; Revision 2.7  2003/06/16 14:10:59  thufhnik
+; Zombiering wurde umgebaut
+;
 ; Revision 2.6  2003/02/28 11:15:23  thufhnik
 ; Bugfix im Daemonenreport
 ;
@@ -270,11 +327,22 @@
 ;/purge -mglob re_*
 ;/purge remove_reduce
 
+;;; defines, falls nicht cvs-tf
+
 /if /!ismacro set_var%; /then \
 	/def set_var=/set %*%;\
 /endif
 
+/if /!ismacro ifdef%; /then \
+	/def ifdef = \
+		/if /test %%{1}%%; /then \
+			/def %%-1%%;\
+		/endif%;\
+/endif
+
 ;;; Konfigurierbare Sachen
+
+/set_var RE_MULTIPLAYER_TF 0
 
 /set_var RE_FARBE_ESP Cgreen
 /set_var RE_FARBE_RINGE Cmagenta
@@ -294,6 +362,7 @@
 /set RE_BUMI_STOP 0
 /set RE_BUMI_RAUS_START 0
 /set RE_BUMI_RAUS_STOP 0
+
 /for RE_i 0 9 /set RE_BUMI_RAUS_%RE_i ???
 /for RE_i 0 9 /set RE_BUMI_WERFER_%RE_i ???
 /set RE_SCHADEN=
@@ -325,6 +394,7 @@
 	Krachen.Schmettern.zu Brei.Pulver.zerstaeubt.atomisiert.vernichtet.\
 	Maximum!.Fehler!.STOP
 /set_var RE_FUELLZEICHEN :
+/set_var RE_PT _
 /set_var RE_ELEMENT_1 Angriffsart
 /set_var RE_ELEMENT_2 Angreifer
 /set_var RE_ELEMENT_3 Fuellzeichen
@@ -338,6 +408,8 @@
 /set_var RE_DAM_IGNORE 0
 /set_var RE_DAM_IGNORE_WHO 0
 
+/for RE_i 1 10 /set RE_PT%RE_i=0
+/for RE_i 1 10 /test RE_PT%RE_i:=strrep(RE_PT,RE_i)
 
 ;; Statusanzeige ein (in Kampfzeilen)
 /set_var RE_STATUS_SHOW 0
@@ -449,7 +521,12 @@
 	/set RE_TMP_TRENNER=%;\
 	/set RE_TMP_TRENNER_OPFER=%;\
 	/set RE_SICHER @{%RE_FARBE_35}/@{%RE_FARBE_35}%;\
-	/set RE_ART ....@{%RE_FARBE_14}normal@{%RE_FARBE_35}
+	/set RE_ART %RE_PT4@{%RE_FARBE_14}normal@{%RE_FARBE_35}%;\
+	/purge re_nixenhaar_1%;\
+	/if ((time() - RE_TAN_ZEIT) > 9 & RE_TAN_TMP !~ '') \
+		/purge -mglob re_tan_kshira_s*%;\
+		/set RE_TAN_TMP=%;\
+	/endif
 
 
 ;;; Das Ausgabemakro frei konfiguriert zusammenbasteln
@@ -519,7 +596,7 @@
 		/let RE_Laenge 1%;\
 		/while (RE_i < 19) \
 			/test RE_Laenge := RE_SCHADEN_%RE_i%;\
-			/set RE_MELDUNG_POST_%RE_i=$[strrep('.', \
+			/set RE_MELDUNG_POST_%RE_i=$[strrep(RE_PT, \
 				10-strlen(RE_Laenge))]%;\
 			/test ++RE_i%;\
 		/done%;\
@@ -540,6 +617,8 @@
 	/if ({PR} !/ '*.') \
 		/test RE_BREAKBUFFER:=strcat({P0},{PR})%;\
 		/re_str_can_break2%;\
+	/else \
+		/test substitute(strcat({P0},{PR}), 'x')%;\
 	/endif
 
 ;;; Einige Treffermeldungen werden umgebrochen.... ;(
@@ -649,7 +728,7 @@
 	    /test ((RE_i >= 0) & (strlen(RE_Puffer2) > RE_i+1))%; /do \
 		/let RE_Puffer3 $[strcat(RE_Puffer3, substr(RE_Puffer2, 0, \
 			(RE_i+2)/3), substr(RE_Puffer2, RE_i, 1) =~ '-' ? \
-			'-' : '.')]%;\
+			'-' : RE_PT)]%;\
 	        /let RE_Puffer2 $[substr(RE_Puffer2, RE_i+1)]%;\
 	/done%;\
 	/let RE_Puffer3 %RE_Puffer3%RE_Puffer2%;\
@@ -657,27 +736,16 @@
 
 
 ;;; 'Verbotene' Zeichen im Angreifer-Namen umwandeln
- 
+
 /def re_namekorrigieren=\
-	/let RE_ANAME %{*}%;\
-	/while /let RE_i $[strchr(RE_ANAME, '\'\\`\\? .,-')]%; /test \
-	    RE_i >= 0%; /do \
-		/let RE_ANAME $[strcat(substr(RE_ANAME, 0, RE_i), '_', \
-			substr(RE_ANAME, RE_i+1))]%;\
-	/done%;\
-	/echo -- %RE_ANAME
-
-
-; Einige Sachen muessen manchmal geloescht werden
-
-/def re_purge_some=\
-	/purge re_nixenhaar_1%;\
-	/if ((time() - RE_TAN_ZEIT) > 9 & RE_TAN_TMP !~ '') \
-		/purge -mglob re_tan_kshira_s*%;\
-		/set RE_TAN_TMP=%;\
-	/endif
-
-
+	/echo $[replace('\'', '_', \
+		replace('`', '_', \
+		replace('?', '_', \
+		replace(' ', '_', \
+		replace('.', '_', \
+		replace(',', '_', \
+		replace('-', '_', {*})))))))]
+	
 ;;; Die Abwehr-Anzeige zusammenbasteln
 
 /def re_abwehr=\
@@ -761,11 +829,10 @@
  
 /def re_waffe_restaurieren=\
 	/let RE_ANAME $(/re_namekorrigieren %RE_ANGREIFER)%;\
-	/test RE_WAFFE := strcat('!', RE_WAFFE_%{RE_ANAME})%;\
-	/if (RE_WAFFE =~ '!') \
+	/test RE_WAFFE := RE_WAFFE_%{RE_ANAME}%;\
+	/if (RE_WAFFE =~ '') \
 		/set RE_WAFFE ???%;\
 	/else \
-		/set RE_WAFFE $[substr(RE_WAFFE, 1)]%;\
 		/test RE_ART := RE_ART_%{RE_ANAME}%;\
 		/re_waffe_geraten%;\
 	/endif
@@ -892,11 +959,11 @@
 	        /set RE_ANGREIFER_ORG=%RE_ANGREIFER%;\
 	        /set RE_OPFER_ORG=%RE_OPFER%;\
 	        /set RE_WAFFE_ORG=%RE_WAFFE%;\
-		/set RE_ANGREIFER $[strcat(RE_ANGREIFER, strrep('.', \
+		/set RE_ANGREIFER $[strcat(RE_ANGREIFER, strrep(RE_PT, \
 			13-strlen(RE_ANGREIFER)))]%;\
-		/set RE_WAFFE $[strcat(RE_WAFFE, strrep('.', \
+		/set RE_WAFFE $[strcat(RE_WAFFE, strrep(RE_PT, \
 			12-strlen(RE_WAFFE)))]%;\
-		/set RE_OPFER $[strcat(RE_OPFER, strrep('.', \
+		/set RE_OPFER $[strcat(RE_OPFER, strrep(RE_PT, \
 			13-strlen(RE_OPFER)))]%;\
 		/re_ausgabe_status%;\
 		/re_ausgabe_zeile%;\
@@ -930,12 +997,24 @@
 	   /endif%;\
 	/endif%;\
 
+;;; Schwerttanz der Dunkelelfenkaempfer
+
+/def -p2 -q -agCblue -mglob -t'  Das Runenschwert greift * an.' re_rsangriff = \
+	/re_loeschen%;\
+	/let RE_ANAME Das Runenschwert%;\
+	/set RE_WAFFE Schwerttanz%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_15}Delfen@{%RE_FARBE_35}%;\
+	/let RE_ANAME $(/re_namekorrigieren $(/re_namekuerzen 13 \
+		$(/re_artikelkuerzen %RE_ANAME)))%;\
+	/set RE_ART_%{RE_ANAME} %RE_ART%;\
+	/set RE_WAFFE_%{RE_ANAME} %RE_WAFFE
+
 ;;; Die normalen Angriffe
  
 /def -p1 -q -agCblue -mregexp -t'^  ([^ ].+) greifs?t ([a-z\'\\` ]*([A-Z].*) \
 	mit .*|(([a-z\'\\` ]*[A-Z][-A-Za-z\'\\`]* )+)([-A-Za-z\'\\` ]*)) \
 	an\\.$' re_angriff=\
-	/re_purge_some%;\
+	/re_loeschen%;\
 	/let RE_ANAME %P1%;\
 	/if ({P4} =~ '') \
 		/test regmatch(RE_REGEXP_ATTACK_KIND, {P2})%;\
@@ -963,7 +1042,7 @@
 	/elseif (RE_WAFFE =/ '*blutruenstig *') \
 		/set RE_WAFFE $[substr(RE_WAFFE, \
 			strstr(RE_WAFFE, 'blutruenstig ')+13)]%;\
-		/set RE_ART ...@{%RE_FARBE_19}Raserei@{%RE_FARBE_35}%;\
+		/set RE_ART %RE_PT3@{%RE_FARBE_19}Raserei@{%RE_FARBE_35}%;\
 	/elseif (RE_WAFFE =/ '*vorsichtig *') \
 		/set RE_WAFFE $[substr(RE_WAFFE, \
 			strstr(RE_WAFFE, 'vorsichtig ')+11)]%;\
@@ -971,8 +1050,8 @@
 	/elseif (RE_WAFFE =/ '*schlangengleich *') \
 		/set RE_WAFFE $[substr(RE_WAFFE, \
 			strstr(RE_WAFFE, 'schlangengleich ')+16)]%;\
-		/set RE_ART ..@{%RE_FARBE_19}Schlange@{%RE_FARBE_35}%;\
-	/elseif (RE_WAFFE =~ 'Blitzen aus seinen Fingerkuppen') \
+		/set RE_ART %RE_PT2@{%RE_FARBE_19}Schlange@{%RE_FARBE_35}%;\
+	/elseif (RE_WAFFE =/ 'Blitzen aus {Deinen|seinen|ihren} Fingerkuppen') \
 		/set RE_WAFFE Blitzhand%;\
 	/elseif (RE_WAFFE =/ '*misslungenen *') \
 		/if (RE_WAFFE =/ '*total *') \
@@ -982,9 +1061,9 @@
 		/endif%;\
 		/set RE_WAFFE $[substr(RE_WAFFE, \
 			strstr(RE_WAFFE, 'misslungenen ')+13)]%;\
-		/set RE_ART ....@{%RE_FARBE_20}Karate@{%RE_FARBE_35}%;\
+		/set RE_ART %RE_PT4@{%RE_FARBE_20}Karate@{%RE_FARBE_35}%;\
 		/set RE_WAFFE $(/re_karatekuerzen %RE_WAFFE)%;\
-		/set RE_WAFFE $[strcat(RE_WAFFE, strrep('.', \
+		/set RE_WAFFE $[strcat(RE_WAFFE, strrep(RE_PT, \
 			5-strlen(RE_WAFFE)), RE_WAFFE_P)]%;\
 	/elseif (RE_WAFFE =/ '*gelungenen *') \
 		/if (RE_WAFFE =/ '*sehr *') \
@@ -994,9 +1073,9 @@
 		/endif%;\
 		/set RE_WAFFE $[substr(RE_WAFFE, \
 			strstr(RE_WAFFE, 'gelungenen ')+11)]%;\
-		/set RE_ART ....@{%RE_FARBE_20}Karate@{%RE_FARBE_35}%;\
+		/set RE_ART %RE_PT4@{%RE_FARBE_20}Karate@{%RE_FARBE_35}%;\
 		/set RE_WAFFE $(/re_karatekuerzen %RE_WAFFE)%;\
-		/set RE_WAFFE $[strcat(RE_WAFFE, strrep('.', \
+		/set RE_WAFFE $[strcat(RE_WAFFE, strrep(RE_PT, \
 			5-strlen(RE_WAFFE)), RE_WAFFE_P)]%;\
 	/elseif (regmatch(RE_REGEXP_KARATEKOMBI, RE_WAFFE)) \
 		/let RE_WAFFE_P %P2%;\
@@ -1017,7 +1096,7 @@
 /def -p1 -q -agCblue -mregexp -t'^  ([^ ].+) (verfehls?t|kitzels?t|kratzt|\
 	triffs?t|schlaegs?t|zerschmetters?t|pulverisiers?t|zerstaeubs?t|\
 	atomisiers?t|vernichtes?t) (.+)\\.$' re_schaden=\
-	/let RE_Pufferzeile=%PL%P0%PR%;\
+	/let RE_Pufferzeile=%P0%;\
 	/set RE_SCHADEN_VOR %P2%;\
 	/set RE_ANGREIFER %P1%;\
 	/let RE_Puffer %P3%;\
@@ -1225,12 +1304,12 @@
 	/if ({*} !/ '*.') \
 		/def -1 -p1 -q -mglob -agCblue -t'*.' re_ab_saeure1_1%;\
 	/endif%;\
-	/set RE_ART .....@{%RE_FARBE_21}Magie@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT5@{%RE_FARBE_21}Magie@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Saeure
 
 /def -p1 -q -agCblue -mglob -t'* schiesst einen Saeurestrahl auf *' \
 	re_ab_saeure2 = \
-	/set RE_ART .....@{%RE_FARBE_21}Magie@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT5@{%RE_FARBE_21}Magie@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Saeure
 	
 
@@ -1259,8 +1338,8 @@
 	/set RE_KARATE_ABWEHR Auswe%;\
 	/set RE_KARATE 3
 
-/def -p1 -q -agCblue -msimple -t'  Du weichst dem Angriff aus.' \
-	re_karate_ausw_akt = \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"karate") -p1 -q -agCblue \
+	-msimple -t'  Du weichst dem Angriff aus.' re_karate_ausw_akt = \
 	/set RE_KARATE_ABWEHR Auswe%;\
 	/set RE_KARATE 4
 
@@ -1272,7 +1351,7 @@
 /def -p2 -q -agCblue -mglob -t'* {schlaegt|schlaegst} mit ausgefahrenen \
 	Krallen auf *' re_katzen_kralle = \
 	/set RE_WAFFE Krallenschl%;\
-	/set RE_ART ....@{%RE_FARBE_21}Katzen@{%RE_FARBE_35}
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Katzen@{%RE_FARBE_35}
 
 ;;; Blitz
 
@@ -1281,7 +1360,7 @@
 	/set RE_ANGREIFER %P1%;\
 	/set RE_OPFER %P2%;\
 	/set RE_WAFFE Blitz%;\
-	/set RE_ART ....@{%RE_FARBE_21}Katzen@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Katzen@{%RE_FARBE_35}%;\
 	/re_blitzschaden
 
 ;;; Todeskralle
@@ -1292,7 +1371,7 @@
 		/def -p1 -agCblue -q -1 -mglob -t'*ein.' re_katzen_tkralle_1%;\
 	/endif%;\
 	/set RE_WAFFE Todeskralle%;\
-	/set RE_ART ....@{%RE_FARBE_21}Katzen@{%RE_FARBE_35}
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Katzen@{%RE_FARBE_35}
 
 ;;; Wasserstrahl
 
@@ -1316,7 +1395,7 @@
 		re_katzen_wasser_0 = \
 		/set RE_OPFER %%P3%%;\
 		/set RE_WAFFE Wasserstrahl%%;\
-		/set RE_ART ....@{%%RE_FARBE_21}Katzen@{%%RE_FARBE_35}%;\
+		/set RE_ART %RE_PT4@{%%RE_FARBE_21}Katzen@{%%RE_FARBE_35}%;\
 	/def -1 -p2 -q -agCblue -mregexp -t'^  ([^ ].*) Wasserstrahl verfehlt \
 		.+\\\\.$$' re_katzen_wasser_1 = \
 		/set RE_SCHADEN 1%%;\
@@ -1377,7 +1456,7 @@
 		/if (RE_WAFFE !/ 'G-Dolch*') \
 			/set RE_WAFFE Giftdolch%%;\
 		/endif%%;\
-		/set RE_ART ....@{%%RE_FARBE_21}Katzen@{%%RE_FARBE_35}%%;\
+		/set RE_ART %RE_PT4@{%%RE_FARBE_21}Katzen@{%%RE_FARBE_35}%%;\
 		/purge -mglob re_katzen_gdolch_*
 
 
@@ -1388,7 +1467,7 @@
 /def -p1 -q -agCblue -mglob -t'* {rammst|rammt} * das Knie in den \
 	Koerper.' re_kaempfer_knies=\
 	/set RE_WAFFE Kniestoss%;\
-	/set RE_ART .....@{%RE_FARBE_16}extra@{%RE_FARBE_35}
+	/set RE_ART %RE_PT5@{%RE_FARBE_16}extra@{%RE_FARBE_35}
 
 ;;; Kopfstoss
 
@@ -1396,7 +1475,7 @@
 	ihren) Kopf in den Leib|heftig mit (dem|Deinem) Kopf)\\.$' \
 	re_kaempfer_kopfs = \
 	/set RE_WAFFE Kopfstoss%;\
-	/set RE_ART .....@{%RE_FARBE_16}extra@{%RE_FARBE_35}
+	/set RE_ART %RE_PT5@{%RE_FARBE_16}extra@{%RE_FARBE_35}
 
 ;;; Kampftritt
 
@@ -1404,21 +1483,21 @@
 	heimtueckischen Kampftritt|tritt .+ heimtueckisch)\\.$' \
 	re_kaempfer_ktritt=\
 	/set RE_WAFFE Kampftritt%;\
-	/set RE_ART .....@{%RE_FARBE_16}extra@{%RE_FARBE_35}
+	/set RE_ART %RE_PT5@{%RE_FARBE_16}extra@{%RE_FARBE_35}
 
 ;;; Ellbogenschlag
 
 /def -p2 -q -agCblue -mglob -t'* {schlaegst|schlaegt} * mit {Deinem|dem|seinen\
 	|ihren} Ellbogen.' re_kaempfer_eschlag=\
 	/set RE_WAFFE Ellbogenschl%;\
-	/set RE_ART .....@{%RE_FARBE_16}extra@{%RE_FARBE_35}
+	/set RE_ART %RE_PT5@{%RE_FARBE_16}extra@{%RE_FARBE_35}
 
 ;;; Schildstoss
 
 /def -p1 -q -agCblue -mglob -t'* machst einen gelungenen Schildstoss gegen \
 	*.' re_kaempfer_schilds=\
 	/set RE_WAFFE Schildstoss%;\
-	/set RE_ART .....@{%RE_FARBE_16}extra@{%RE_FARBE_35}
+	/set RE_ART %RE_PT5@{%RE_FARBE_16}extra@{%RE_FARBE_35}
 
 /def -Fp1 -q -agCblue -mregexp -t'^([^ ].*) stoesst (.*) mit (.*)$' \
 	re_kaempfer_schilds2=\
@@ -1434,7 +1513,7 @@
 				/endif%%;\
 			/else \
 				/set RE_WAFFE Schildstoss%%;\
-				/set RE_ART .....@{%RE_FARBE_16}extra\
+				/set RE_ART %RE_PT5@{%RE_FARBE_16}extra\
 					@{%RE_FARBE_35}%%;\
 			/endif%;\
 	/else \
@@ -1445,7 +1524,7 @@
 			/endif%;\
 		/else \
 			/set RE_WAFFE Schildstoss%;\
-			/set RE_ART .....@{%RE_FARBE_16}extra@{%RE_FARBE_35}%;\
+			/set RE_ART %RE_PT5@{%RE_FARBE_16}extra@{%RE_FARBE_35}%;\
 		/endif%;\
 	/endif
 
@@ -1457,21 +1536,22 @@
 		/def -p1 -1 -q -agCblue -mglob -t'*.' re_kaempfer_wschlag_g%;\
 	/endif%;\
 	/set RE_WAFFE Waffenschlag%;\
-	/set RE_ART .....@{%RE_FARBE_16}extra@{%RE_FARBE_35}
+	/set RE_ART %RE_PT5@{%RE_FARBE_16}extra@{%RE_FARBE_35}
 
 ;;; Waffenwurf
  
 /def -Fp1 -q -agCblue -mregexp -t'^([A-Z][-A-Za-z, \'\\`]+) wirfs?t (.+) \
 	nach (.+)\\.$' re_kaempfer_wwurf = \
-	/if (({P2} =/ '* Blick')|({P2} =/ '* Wecker')|({P2} =/ '* Torte')|\
+	/if (({P2} =/ '* Blick*')|({P2} =/ '* Wecker')|({P2} =/ '* Torte')|\
 	    ({P2} =/ '*silberne Nadel')|({P2} =/ '*Schneeba*')|\
 	    ({P2} =/ '* Kissen*') | ({P2} =/ '* Eiswolke') | \
+	    ({P2} =/ '* Sahnetorte*') | \
 	    ({P1} =/ 'Dein Freund *') | ({P1} =/ 'Deine Freundin *')) \
 		/substitute -ax -- %P0%;\
 	/else \
 		/if ({P2} =/ '*Feuerball') \
 			/set RE_WAFFE Feuer%;\
-			/set RE_ART .....@{%RE_FARBE_21}Magie@{%RE_FARBE_35}%;\
+			/set RE_ART %RE_PT5@{%RE_FARBE_21}Magie@{%RE_FARBE_35}%;\
 		/else \
 			/set RE_WAFFE $(/re_namekuerzen 12 \
 				$(/re_artikelkuerzen %P2))%;\
@@ -1488,22 +1568,22 @@
 		/def -p1 -agCblue -q -1 -mglob -t'* an.' re_kaempfer_todess2%;\
 	/endif%;\
 	/if ({P1}=~'') \
-		/set RE_ART .....@{%RE_FARBE_17}lasch@{%RE_FARBE_35}%;\
+		/set RE_ART %RE_PT5@{%RE_FARBE_17}lasch@{%RE_FARBE_35}%;\
 	/elseif ({P1}=~'harmlosen ') \
-		/set RE_ART ...@{%RE_FARBE_17}harmlos@{%RE_FARBE_35}%;\
+		/set RE_ART %RE_PT3@{%RE_FARBE_17}harmlos@{%RE_FARBE_35}%;\
 	/elseif ({P1}=~'maechtigen ') \
-		/set RE_ART ..@{%RE_FARBE_18}maechtig@{%RE_FARBE_35}%;\
+		/set RE_ART %RE_PT2@{%RE_FARBE_18}maechtig@{%RE_FARBE_35}%;\
 	/elseif ({P1}=~'moerderischen ') \
-		/set RE_ART ..@{%RE_FARBE_18}toedlich@{%RE_FARBE_35}%;\
+		/set RE_ART %RE_PT2@{%RE_FARBE_18}toedlich@{%RE_FARBE_35}%;\
 	/else \
-		/set RE_ART .......@{%RE_FARBE_17}???@{%RE_FARBE_35}%;\
+		/set RE_ART %RE_PT7@{%RE_FARBE_17}???@{%RE_FARBE_35}%;\
 	/endif%;\
 	/set RE_WAFFE Todesstoss
 
 ;;; Rueckendeckung
 
-/def -p1 -q -agCmagenta -mregexp -t' faengs?t den Angriff( gegen .+|, der \
-	eigentlich .+ treffen sollte,) etwas ab\\.$' \
+/def -p1 -q -agCmagenta -mregexp -t' faengs?t den (Angriff|Schlag von .+)\
+	( gegen .+|, der eigentlich .+ treffen sollte,) etwas ab\\.$' \
 	re_kaempfer_rueckend = \
 	/if (RE_RDECKUNG =~ '*') \
 		/set RE_RDECKUNG R%;\
@@ -1513,19 +1593,20 @@
 		/test ++RE_RDECKUNG%;\
 	/endif
 
-/def -p1 -q -agCmagenta -mregexp -t' faengs?t den Schlag von .+ gegen .+ \
-	etwas ab\\.$' re_kaempfer_rueckend2 = \
-	/if (RE_RDECKUNG =~ '*') \
-		/set RE_RDECKUNG R%;\
-	/elseif (RE_RDECKUNG =~ 'R') \
-		/set RE_RDECKUNG 2%;\
-	/else \
-		/test ++RE_RDECKUNG%;\
-	/endif
+; folgender Trigger ist jetzt (hoffentlich!) oben mit drin:
+;/def -p1 -q -agCmagenta -mregexp -t' faengs?t den Schlag von .+ gegen .+ \
+;	etwas ab\\.$' re_kaempfer_rueckend2 = \
+;	/if (RE_RDECKUNG =~ '*') \
+;		/set RE_RDECKUNG R%;\
+;	/elseif (RE_RDECKUNG =~ 'R') \
+;		/set RE_RDECKUNG 2%;\
+;	/else \
+;		/test ++RE_RDECKUNG%;\
+;	/endif
 
-;;; Parade und Schildparade
+;;; Parade (auch der Delfen) und Schildparade
 
-/def -p1 -q -agCmagenta -mregexp -t'^([^ ].+) pariers?t den Angriff mit \
+/def -p1 -q -agCmagenta -mregexp -t'^([^ ].+) pariers?t .+ Angriff mit \
 	(.+)\\.$' re_kaempfer_parade = \
 	/if ({P1} =~ 'Du') \
 		/let RE_FarbPuffer %RE_FARBE_23%;\
@@ -1551,16 +1632,19 @@
 	/set RE_KARATE 3
 
 /def -p1 -q -agCmagenta -mregexp -t'^[^ ].+ machs?t einen \
-	Sprung nach hinten und weichs?t so' re_kaempfer_magausw_1 = \
+	S(prung nach hinten und weichs?t|alto rueckwaerts und entgehs?t) so' \
+	re_kaempfer_magausw_1 = \
 	/re_kaempfer_magausw
 
 /def -p1 -q -agCmagenta -mregexp -t'^[^ ].+ ducks?t [Ds]ich ganz \
 	geschwind und tauchs?t so unter' re_kaempfer_magausw_2 = \
 	/re_kaempfer_magausw
 
-/def -p1 -q -agCmagenta -mregexp -t'^[^ ].+ machs?t einen Salto \
-	rueckwaerts und entgehs?t so' re_kaempfer_magausw_3 = \
-	/re_kaempfer_magausw
+; folgender Trigger sollte jetzt (hoffentlich!) in magausw_1
+; mit drin sein:
+;/def -p1 -q -agCmagenta -mregexp -t'^[^ ].+ machs?t einen Salto \
+;	rueckwaerts und entgehs?t so' re_kaempfer_magausw_3 = \
+;	/re_kaempfer_magausw
 
 /def -p1 -q -agCmagenta -mregexp -t'^[^ ].+ umtaenzels?t den Angriff \
 	(vollstaendig|teilweise)\\.$' re_kaempfer_magausw_4 = \
@@ -1578,10 +1662,10 @@
 /def -Fp1 -q -agCblue -mregexp -t'^[^ ].+ feuers?t (.+) auf .+ ab\\.$' \
 	re_chaos_cb=\
 	/if ({P1} =/ '*magischen Pfeil') \
-		/set RE_ART .....@{%RE_FARBE_21}Magie@{%RE_FARBE_35}%;\
+		/set RE_ART %RE_PT5@{%RE_FARBE_21}Magie@{%RE_FARBE_35}%;\
 		/set RE_WAFFE Magie%;\
 	/else \
-		/set RE_ART .....@{%RE_FARBE_21}Chaos@{%RE_FARBE_35}%;\
+		/set RE_ART %RE_PT5@{%RE_FARBE_21}Chaos@{%RE_FARBE_35}%;\
 		/if ({P1} =/ '*Fluch') \
 			/set RE_WAFFE Boese%;\
                 /elseif ({P1} =/ '*Terrorattacke') \
@@ -1662,7 +1746,7 @@
 /def -p1 -q -agCblue -mglob -t'* {hebt|hebst} die Arme empor und \
 	{wirft|wirfst} uebelste Worte gegen *.' re_chaos_vb=\
 	/set RE_WAFFE Verbannen%;\
-	/set RE_ART .....@{%RE_FARBE_21}Chaos@{%RE_FARBE_35}
+	/set RE_ART %RE_PT5@{%RE_FARBE_21}Chaos@{%RE_FARBE_35}
 
 
 ;;; BIERSCHUETTLER
@@ -1672,12 +1756,12 @@
 /def -p1 -q -agCblue -mglob -t'* {erzeugt|erzeugst} einen Hitzeschlag gegen \
 	*.' re_bier_hs=\
 	/set RE_WAFFE Hitze%;\
-	/set RE_ART .....@{%RE_FARBE_21}Magie@{%RE_FARBE_35}
+	/set RE_ART %RE_PT5@{%RE_FARBE_21}Magie@{%RE_FARBE_35}
 
 /def -p1 -q -agCblue -mglob -t'* ueberrascht Dich mit einem Hitzeschlag.' \
 	re_bier_hs2=\
 	/set RE_WAFFE Hitze%;\
-	/set RE_ART .....@{%RE_FARBE_21}Magie@{%RE_FARBE_35}
+	/set RE_ART %RE_PT5@{%RE_FARBE_21}Magie@{%RE_FARBE_35}
 
 ;;; Erdbeben
  
@@ -1691,9 +1775,9 @@
 		/set RE_FLAECHE_ZEIT $$[time()]%%;\
 		/set RE_FLAECHE_WAFFE Erdbeben%%;\
 		/set RE_WAFFE Erdbeben%%;\
-		/set RE_FLAECHE_ART .....@{%%RE_FARBE_21}Magie\
+		/set RE_FLAECHE_ART %RE_PT5@{%%RE_FARBE_21}Magie\
 			@{%%RE_FARBE_35}%%;\
-		/set RE_ART .....@{%%RE_FARBE_21}Magie@{%%RE_FARBE_35}%%;\
+		/set RE_ART %RE_PT5@{%%RE_FARBE_21}Magie@{%%RE_FARBE_35}%%;\
 		/repeat -1 1 /purge re_bier_eb_3%;\
 	/def -1 -p1 -aCred -q -msimple -t'Etwas faellt von der Decke und \
 		trifft Dich.' re_bier_eb_3
@@ -1717,23 +1801,24 @@
 			/set RE_FLAECHE_WAFFE Wasser-Nebel%%;\
 		/endif%%;\
 		/set RE_WAFFE %%RE_FLAECHE_WAFFE%%;\
-		/set RE_FLAECHE_ART .....@{%%RE_FARBE_21}Magie\
+		/set RE_FLAECHE_ART %RE_PT5@{%%RE_FARBE_21}Magie\
 			@{%%RE_FARBE_35}%%;\
-		/set RE_ART .....@{%%RE_FARBE_21}Magie@{%%RE_FARBE_35}
+		/set RE_ART %RE_PT5@{%%RE_FARBE_21}Magie@{%%RE_FARBE_35}
 
 ;;; ZAUBERER
 
 ;;; Giftpfeil
 
-/def -p1 -q -agCblue -msimple -t'  Du murmelst die vorgeschriebenen Worte \
-	fuer den Giftpfeil.' re_zau_gpfeil = \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"zauberer") -p1 -q -agCblue \
+	-msimple -t'  Du murmelst die vorgeschriebenen Worte fuer den \
+	Giftpfeil.' re_zau_gpfeil = \
 	/purge -mglob re_zau_gpfeil_*%;\
 	/def -1 -p1 -q -agCblue -mregexp -t'^  Aus Deiner Hand schiesst ein \
 		giftgruener Pfeil auf (.+)\\\\.' re_zau_gpfeil_1 = \
 		/set RE_OPFER %%P1%%;\
 		/set RE_ANGREIFER Du%%;\
 		/set RE_WAFFE Giftpfeil%%;\
-		/set RE_ART ..@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%%;\
+		/set RE_ART %RE_PT2@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%%;\
 		/re_zgiftschaden
 
 /def -p1 -q -agCblue -mglob -t'  * murmelt: Khratrx venthrax whu!' \
@@ -1749,7 +1834,7 @@
 			/set RE_OPFER %%P3%%;\
 		/endif%%;\
 		/set RE_WAFFE Giftpfeil%%;\
-		/set RE_ART ..@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%%;\
+		/set RE_ART %RE_PT2@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%%;\
 		/re_zgiftschaden
 
 /def re_zgiftschaden = \
@@ -1792,21 +1877,22 @@
 
 ;;; Blitz
 
-/def -p1 -q -agCblue -msimple -t'  Du murmelst die vorgeschriebenen Worte \
-	fuer den Blitz.' re_zau_blitz = \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"zauberer") -p1 -q -agCblue \
+	-msimple -t'  Du murmelst die vorgeschriebenen Worte fuer den Blitz.' \
+	re_zau_blitz = \
 	/purge -mglob re_zau_blitz_*%;\
 	/def -1 -p1 -q -agCblue -msimple -t'  Aus Deiner Hand loesen sich \
 		mehrere grelle Blitze.' re_zau_blitz_1 = \
 		/set RE_ANGREIFER Du%%;\
 		/set RE_WAFFE Blitz%%;\
-		/set RE_ART ..@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%%;\
+		/set RE_ART %RE_PT2@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%%;\
 		/re_blitzschaden
 
 /def -p1 -q -agCblue -mregexp -t'^  Aus (.+) Hand loesen sich grelle \
 	Blitze und schiessen auf Dich zu\\.$' re_zau_blitz1 = \
 	/set RE_ANGREIFER $(/re_genitiv_loeschen %P1)%;\
 	/set RE_WAFFE Blitz%;\
-	/set RE_ART ..@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT2@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
 	/re_blitzschaden
 
 /def -p1 -q -agCblue -mglob -t'  * murmelt: Illuhxio fulhraxtrj whu!' \
@@ -1816,7 +1902,7 @@
 		ploetzlich grelle Blitze\\\\.$$' re_zau_blitz_1 = \
 		/set RE_ANGREIFER $$(/re_genitiv_loeschen %%P1)%%;\
 		/set RE_WAFFE Blitz%%;\
-		/set RE_ART ..@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%%;\
+		/set RE_ART %RE_PT2@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%%;\
 		/re_blitzschaden
 
 ;;; Feuerball
@@ -1829,13 +1915,13 @@
 		/set RE_FBALL (+)%;\
 		/set RE_FLAECHE_ANGREIFER %PL%;\
 		/set RE_FLAECHE_WAFFE Feuerball%;\
-		/set RE_FLAECHE_ART ..@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
+		/set RE_FLAECHE_ART %RE_PT2@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
 		/set RE_FLAECHE_TIME $[time()]%;\
 	/else \
 		/set RE_FBALL=%;\
 		/set RE_FLAECHE_ANGREIFER %PL%;\
 		/set RE_FLAECHE_WAFFE Feuerball%;\
-		/set RE_FLAECHE_ART ..@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
+		/set RE_FLAECHE_ART %RE_PT2@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
 		/set RE_FLAECHE_TIME $[time()]%;\
 	/endif%;\
 	/purge -mglob re_zau_fb_*%;\
@@ -1850,7 +1936,7 @@
 		schwarz|fast zu Asche)?|Dein Feuerball verfehlt (.+))\\\\.$$' \
 		re_zau_fb_2 = \
 		/set RE_WAFFE Feuerball%%RE_FBALL%%;\
-		/set RE_ART ..@{%%RE_FARBE_15}Zauberei@{%%RE_FARBE_35}%%;\
+		/set RE_ART %RE_PT2@{%%RE_FARBE_15}Zauberei@{%%RE_FARBE_35}%%;\
 		/if ({P6} !~ '') \
 			/set RE_ANGREIFER Du%%;\
 			/set RE_OPFER %%P6%%;\
@@ -1898,7 +1984,7 @@
 	(.+)\\.$' re_zau_ver_f = \
 	/purge re_zau_ver_f_1%;\
 	/set RE_WAFFE Feuer%;\
-	/set RE_ART ..@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT2@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER %PL%;\
 	/set RE_OPFER %P1%;\
 	/re_str_can_break%;\
@@ -1934,7 +2020,7 @@
 	ein\\.$' re_zau_ver_e = \
 	/purge re_zau_ver_e_1%;\
 	/set RE_WAFFE Eis%;\
-	/set RE_ART ..@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT2@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER %PL%;\
 	/set RE_OPFER %P1%;\
 	/re_str_can_break%;\
@@ -1972,7 +2058,7 @@
 	aus Funken\\.$' re_zau_ver_m = \
 	/purge re_zau_ver_m_1%;\
 	/set RE_WAFFE Magie%;\
-	/set RE_ART ..@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT2@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER %PL%;\
 	/set RE_OPFER %P1%;\
 	/re_str_can_break%;\
@@ -2010,7 +2096,7 @@
 	auf (.+)\\.$' re_zau_ver_w = \
 	/purge -mglob re_zau_ver_w_1%;\
 	/set RE_WAFFE Wasser%;\
-	/set RE_ART ..@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT2@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER %PL%;\
 	/set RE_OPFER %P1%;\
 	/re_str_can_break%;\
@@ -2047,7 +2133,7 @@
 	entstehen\\.$' re_zau_ver_l = \
 	/purge re_zau_ver_l_1%;\
 	/set RE_WAFFE Wind%;\
-	/set RE_ART ..@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT2@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER %PL%;\
 	/set RE_OPFER %P1%;\
 	/re_str_can_break%;\
@@ -2084,7 +2170,7 @@
 	ein\\.$' re_zau_ver_s = \
 	/purge re_zau_ver_s_1%;\
 	/set RE_WAFFE Saeure%;\
-	/set RE_ART ..@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT2@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER %PL%;\
 	/set RE_OPFER %P1%;\
 	/re_str_can_break%;\
@@ -2122,7 +2208,7 @@
 	Lautstaerke an\\.$' re_zau_ver_k = \
 	/purge re_zau_ver_k_1%;\
 	/set RE_WAFFE Krach%;\
-	/set RE_ART ..@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT2@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER %PL%;\
 	/set RE_OPFER %P1%;\
 	/re_str_can_break%;\
@@ -2170,7 +2256,7 @@
 		/def -1 -p1 -q  -agCblue -msimple -t'Schleim.' re_zau_ver_g_0%;\
 	/endif%;\
 	/set RE_WAFFE Gift%;\
-	/set RE_ART ..@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT2@{%RE_FARBE_15}Zauberei@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER %PL%;\
 	/set RE_OPFER %P1%;\
 	/re_str_can_break%;\
@@ -2211,7 +2297,7 @@
 	/set RE_ANGREIFER %PL%;\
 	/set RE_OPFER %P1%;\
 	/set RE_WAFFE Kaminari%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/re_blitzschaden
 
 /def -p1 -q -agCblue -w -mregexp -t' konzentriert sich und (seine|ihre) \
@@ -2219,7 +2305,7 @@
 	/purge -mglob re_tan_kaminari2_*%;\
 	/set RE_ANGREIFER %PL%;\
 	/set RE_WAFFE Kaminari%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/def -1 -p1 -agCblue -q -w -mglob -t'Kleine Blitze zucken um \
 		* herum durch die Luft.' re_tan_kaminari2_1%;\
 	/def -1 -p1 -agCblue -q -w -mregexp -t'Die Blitze rasen auf \
@@ -2241,15 +2327,16 @@
 	/endif%;\
 	/set RE_ANGREIFER %P1%;\
 	/set RE_WAFFE Arashi%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/re_tan_arashischaden
 
-/def -p1 -agCblue -q -w -msimple -t'Du konzentrierst Dich auf die Dich \
-	umgebende Luft.' re_tan_arashi1 = \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"tanjian") -p1 -agCblue -q -w \
+	-msimple -t'Du konzentrierst Dich auf die Dich umgebende Luft.' \
+	re_tan_arashi1 = \
 	/purge -mglob re_tan_arashi_*%;\
 	/set RE_ANGREIFER Du%;\
 	/set RE_WAFFE Arashi%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/def -1 -p2 -agCblue -q -w -msimple -t'Ein starker Wind kommt \
 		auf.' re_tan_arashi_1%;\
 	/re_tan_arashischaden
@@ -2268,7 +2355,7 @@
 		/set RE_ANGREIFER ???%;\
 	/endif%;\
 	/set RE_WAFFE Arashi%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/def -1 -p1 -agCblue -q -w -mregexp -t'Ploetzlich scheint sich \
 		der Wind auf (.+) zu konzentrieren\\\\.$$' \
 		re_tan_arashi_2 = \
@@ -2376,7 +2463,7 @@
 	/set RE_ANGREIFER %PL%;\
 	/set RE_OPFER %P1%;\
 	/set RE_WAFFE Samusa%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/re_tan_samusaschaden
 
 /def -p1 -q -agCblue -mregexp -t' konzentriert sich mit halb geschlossenen \
@@ -2392,7 +2479,7 @@
 		re_tan_samusa3_1 =\
 		/set RE_OPFER $$(/re_genitiv_loeschen %%P1)%%;\
 		/set RE_WAFFE Samusa%%;\
-		/set RE_ART ...@{%%RE_FARBE_15}Tanjian@{%%RE_FARBE_35}%%;\
+		/set RE_ART %RE_PT3@{%%RE_FARBE_15}Tanjian@{%%RE_FARBE_35}%%;\
 		/if (RE_TAN_TMP !~ '') \
 			/set RE_ANGREIFER %%RE_TAN_TMP%%;\
 		/else \
@@ -2493,7 +2580,7 @@
 
 /def re_tan_kout=\
 	/set RE_WAFFE Kshira%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/if (RE_TAN_TMP !~ '') \
 		/set RE_ANGREIFER %RE_TAN_TMP%;\
 	/else \
@@ -2591,7 +2678,7 @@
 		/set RE_OPFER ???%;\
 	/endif%;\
 	/set RE_WAFFE Kami.Feuer%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/set RE_TAN_OPFER=%;\
 	/set RE_TAN_ANGREIFER=%;\
 	/purge -mglob re_tan_kami_feuerschaden_*%;\
@@ -2658,7 +2745,7 @@
 		/set RE_OPFER ???%;\
 	/endif%;\
 	/set RE_WAFFE Kami.Saeure%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/set RE_TAN_OPFER=%;\
 	/set RE_TAN_ANGREIFER=%;\
 	/purge -mglob re_tan_kami_saeureschaden_*%;\
@@ -2720,7 +2807,7 @@
 		/set RE_OPFER ???%;\
 	/endif%;\
 	/set RE_WAFFE Kami.Eis%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/set RE_TAN_OPFER=%;\
 	/set RE_TAN_ANGREIFER=%;\
 	/purge -mglob re_tan_kami_eisschaden_*%;\
@@ -2793,7 +2880,7 @@
 		/set RE_OPFER ???%;\
 	/endif%;\
 	/set RE_WAFFE Kami.Gift%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/set RE_TAN_OPFER=%;\
 	/set RE_TAN_ANGREIFER=%;\
 	/purge -mglob re_tan_kami_giftschaden_*%;\
@@ -2868,7 +2955,7 @@
 		/set RE_OPFER ???%;\
 	/endif%;\
 	/set RE_WAFFE Kami.Blitz%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/set RE_TAN_OPFER=%;\
 	/set RE_TAN_ANGREIFER=%;\
 	/purge -mglob re_tan_kami_blitzschaden_*%;\
@@ -2936,7 +3023,7 @@
 		/set RE_OPFER ???%;\
 	/endif%;\
 	/set RE_WAFFE Kami.Wasser%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/set RE_TAN_OPFER=%;\
 	/set RE_TAN_ANGREIFER=%;\
 	/purge -mglob re_tan_kami_wasserschaden_*%;\
@@ -3011,7 +3098,7 @@
 		/set RE_OPFER ???%;\
 	/endif%;\
 	/set RE_WAFFE Kami.Wind%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/set RE_TAN_OPFER=%;\
 	/set RE_TAN_ANGREIFER=%;\
 	/purge -mglob re_tan_kami_windschaden_*%;\
@@ -3047,11 +3134,11 @@
 		/set RE_SCHADEN 8%%;\
 		/re_ausgabe%%;\
 		/purge -mglob re_tan_kami_windschaden_*%;\
-	/def -1 -p2 -agCblue -q -w -mregexp -t'^  Eine (maechtige|\
-		unglaubliche|) Druckwelle (schleudert .+ zu Boden|zerfetzt .+|\
+	/def -1 -p2 -agCblue -q -w -mregexp -t'^  Eine (maechtige |\
+		unglaubliche |)Druckwelle (schleudert .+ zu Boden|zerfetzt .+|\
 		zermatscht .+)\\\\.$$' re_tan_kami_windschaden_5 = \
 		/if ({P2} =/ 'schleudert * zu Boden') \
-			/if ({P1} =~ 'maechtige') \
+			/if ({P1} =~ 'maechtige ') \
 				/set RE_SCHADEN 10%%;\
 			/else \
 				/set RE_SCHADEN 9%%;\
@@ -3083,7 +3170,7 @@
 		/set RE_OPFER ???%;\
 	/endif%;\
 	/set RE_WAFFE Kami.Magie%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/set RE_TAN_OPFER=%;\
 	/set RE_TAN_ANGREIFER=%;\
 	/purge -mglob re_tan_kami_magieschaden_*%;\
@@ -3158,7 +3245,7 @@
 		/set RE_OPFER ???%;\
 	/endif%;\
 	/set RE_WAFFE Kami.Krach%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/set RE_TAN_OPFER=%;\
 	/set RE_TAN_ANGREIFER=%;\
 	/purge -mglob re_tan_kami_krachschaden_*%;\
@@ -3237,7 +3324,7 @@
 		/set RE_OPFER ???%;\
 	/endif%;\
 	/set RE_WAFFE Kami.Terror%;\
-	/set RE_ART ...@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
 	/set RE_TAN_OPFER=%;\
 	/set RE_TAN_ANGREIFER=%;\
 	/purge -mglob re_tan_kami_terrorschaden_*%;\
@@ -3300,7 +3387,7 @@
 		/def -p50 -F -n1 -agCblue -mglob -t'*.' re_tan_tsume_g%;\
 	/endif%;\
 	/set RE_WAFFE Tsume%;\
-	/set RE_ART .....@{%RE_FARBE_16}extra@{%RE_FARBE_35}
+	/set RE_ART %RE_PT5@{%RE_FARBE_16}extra@{%RE_FARBE_35}
 
 
 ;;; KLERIKER
@@ -3314,7 +3401,7 @@
 		/def -p1 -agCblue -q -1 -mglob -t'*herab.' re_klerus_blitz_0%;\
 	/endif%;\
 	/set RE_WAFFE Blitz%;\
-	/set RE_ART ....@{%RE_FARBE_21}Klerus@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Klerus@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER %P1%;\
 	/re_str_can_break%;\
 	/def -1 -p5 -agCblue -q -mregexp -t'^  ((Der Blitz verfehlt|Du \
@@ -3371,8 +3458,8 @@
 	re_klerus_donner = \
 	/set RE_FLAECHE_WAFFE Donner%;\
 	/set RE_WAFFE Donner%;\
-	/set RE_FLAECHE_ART ....@{%RE_FARBE_21}Klerus@{%RE_FARBE_35}%;\
-	/set RE_ART ....@{%RE_FARBE_21}Klerus@{%RE_FARBE_35}%;\
+	/set RE_FLAECHE_ART %RE_PT4@{%RE_FARBE_21}Klerus@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Klerus@{%RE_FARBE_35}%;\
 	/if ({P3} =~ '') \
 		/set RE_FLAECHE_ANGREIFER $(/re_namekuerzen 13 \
 			$(/re_genitiv_loeschen $(/re_artikelkuerzen %P2)))%;\
@@ -3408,7 +3495,7 @@
 		re_klerus_laeutern_1 = \
 		/set RE_SCHADEN %%P2%%;\
 		/set RE_WAFFE Laeutern%%;\
-		/set RE_ART ....@{%%RE_FARBE_21}Klerus@{%%RE_FARBE_35}%%;\
+		/set RE_ART %RE_PT4@{%%RE_FARBE_21}Klerus@{%%RE_FARBE_35}%%;\
 		/set RE_OPFER %%P1%%;\
 		/if ((RE_OPFER =~ 'Es') | (RE_OPFER =~ 'Dir') | \
 		    (RE_OPFER =~ 'Du')) \
@@ -3444,7 +3531,7 @@
 	/set RE_ANGREIFER %PL%;\
 	/set RE_OPFER %P2%;\
 	/set RE_WAFFE Erloese%;\
-	/set RE_ART ....@{%RE_FARBE_21}Klerus@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Klerus@{%RE_FARBE_35}%;\
 	/purge -mglob re_klerus_erloese_*%;\
 	/def -p2 -1 -agCblue -q -msimple -t'  Die Erloesung geht voll \
 		daneben.' re_klerus_erloese_1 = \
@@ -3524,7 +3611,7 @@
 		/re_ausgabe%%;\
 		/purge -mglob re_klerus_erloese_*
 
-;;; der Messerkreis trifft...
+;;; der Messerkreis trifft%RE_PT2.
 
 /def -p1 -mglob -agCmagenta -F -t'* wird ein wenig tranchiert.' \
 	re_klerus_mk = \
@@ -3539,7 +3626,7 @@
 	/set RE_ANGREIFER %PL%;\
 	/set RE_OPFER %P1%;\
 	/set RE_WAFFE Goetterzorn%;\
-	/set RE_ART ....@{%RE_FARBE_21}Klerus@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Klerus@{%RE_FARBE_35}%;\
 	/purge -mglob re_klerus_goetterzorn_*%;\
 	/if (RE_ANGREIFER =~ 'Du') \
 		/def -p31 -1 -agCblue -q -msimple -t'Kandri steht Dir bei \
@@ -3591,7 +3678,8 @@
 
 ;;; Feuerlanze (vorerst nur aktiv)
 
-/def -p3 -F -t"  *[^.] Feuerlanze *[^.]" -mglob re_broken_trig=\
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -Fp3 -t"  *[^.] \
+	Feuerlanze *[^.]" -mglob re_broken_trig=\
 	/set RE_BROKEN_BUFFER=%*%;\
 	/substitute -ag%;\
 	/def -p4 -ag -F -t"*" -mglob re_broken_trig2 =\
@@ -3603,61 +3691,67 @@
 		/substitute -ag%%;\
 	/endif
 
-/def -p2 -ag -mglob -t"Du konzentrierst Dich auf * und ploetzlich schiesst*" \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p2 -ag -mglob \
+	-t"Du konzentrierst Dich auf * und ploetzlich schiesst*" \
 	re_feuerlanze_prepare = \
 	/set RE_TRIG_FEUERLANZE=1%;\
 	/def -p1 -ag -t'*lanze auf {ihn.|sie.|es.}' re_feuer_lanze_gag = \
 		/undef re_feuer_lanze_gag
 
-/def -p1 -agCblue -E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
+	-E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze \
 	schwaerzt die Haut *." re_feuerlanze_1 = \
 	/shift 5%;\
 	/set RE_WAFFE Feuerlanze%;\
-	/set RE_ART ....@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER Du%;\
 	/set RE_OPFER %*%;\
 	/set RE_SCHADEN 1%;\
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
 
-/def -p1 -agCblue -E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze fuegt \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
+	-E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze fuegt \
 	* einige leichte Verbrennungen zu." re_feuerlanze_2 = \
 	/shift 3%;\
 	/set RE_WAFFE Feuerlanze%;\
-	/set RE_ART ....@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER Du%;\
 	/set RE_OPFER %-L4%;\
 	/set RE_SCHADEN 5%;\
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
  
-/def -p1 -agCblue -E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
+	-E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze \
 	versengt * die Haut." re_feuerlanze_3 = \
 	/shift 3%;\
 	/set RE_WAFFE Feuerlanze%;\
-	/set RE_ART ....@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER Du%;\
 	/set RE_OPFER %-L2%;\
 	/set RE_SCHADEN 6%;\
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
  
-/def -p1 -agCblue -E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze fuegt \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
+	-E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze fuegt \
 	* schwere Verbrennungen zu." re_feuerlanze_4 = \
 	/shift 3%;\
 	/set RE_WAFFE Feuerlanze%;\
-	/set RE_ART ....@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER Du%;\
 	/set RE_OPFER %-L3%;\
 	/set RE_SCHADEN 7%;\
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
 
-/def -p3 -agCblue -E(RE_TRIG_FEUERLANZE) -mglob -t'  Deine Feuerlanze \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p3 -agCblue \
+	-E(RE_TRIG_FEUERLANZE) -mglob -t'  Deine Feuerlanze \
 	schlaegt mit voller Wucht in * ein.' re_feuerlanze_5a = \
 	/shift 7%;\
 	/set RE_WAFFE Feuerlanze%;\
-	/set RE_ART ....@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER Du%;\
 	/set RE_OPFER %-L1%;\
 	/set RE_SCHADEN 8%;\
@@ -3665,11 +3759,12 @@
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
  
-/def -p1 -agCblue -E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
+	-E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze \
 	roestet * bei lebendigem Leibe." re_feuerlanze_5b = \
 	/shift 3%;\
 	/set RE_WAFFE Feuerlanze%;\
-	/set RE_ART ....@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER Du%;\
 	/set RE_OPFER %-L3%;\
 	/set RE_SCHADEN 8%;\
@@ -3677,60 +3772,87 @@
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
  
-/def -p1 -agCblue -E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
+	-E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze \
 	verbrennt * bei lebendigem Leibe." re_feuerlanze_6 = \
-	/shift 7%;\
+	/shift 3%;\
 	/set RE_WAFFE Feuerlanze%;\
-	/set RE_ART ....@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER Du%;\
 	/set RE_OPFER %-L3%;\
 	/set RE_SCHADEN 9%;\
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
 
-/def -p1 -agCblue -E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze laesst \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
+	-E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze laesst \
 	* einen Raub der Flammen werden." re_feuerlanze_7 = \
 	/shift 3%;\
 	/set RE_WAFFE Feuerlanze%;\
-	/set RE_ART ....@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER Du%;\
 	/set RE_OPFER %-L5%;\
 	/set RE_SCHADEN 10%;\
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
 
-/def -p1 -agCblue -E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
+	-E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze \
 	verwandelt * in Russ und Asche." re_feuerlanze_8 = \
 	/shift 3%;\
 	/set RE_WAFFE Feuerlanze%;\
-	/set RE_ART ....@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER Du%;\
 	/set RE_OPFER %-L3%;\
 	/set RE_SCHADEN 11%;\
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
  
-/def -p1 -agCblue -E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze laesst \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
+	-E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze laesst \
 	* den Flammentod sterben." re_feuerlanze_9 = \
 	/shift 3%;\
 	/set RE_WAFFE Feuerlanze%;\
-	/set RE_ART ....@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER Du%;\
 	/set RE_OPFER $(/re_namekuerzen 13 $(/re_artikelkuerzen %-L3))%;\
 	/set RE_SCHADEN 12%;\
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
 
-/def -p1 -agCblue -E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze \
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
+	-E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze \
 	verbannt * aus diesem Raum-Zeitkontinuum." re_feuerlanze_10 = \
 	/shift 3%;\
 	/set RE_WAFFE Feuerlanze%;\
-	/set RE_ART ....@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}%;\
 	/set RE_ANGREIFER Du%;\
 	/set RE_OPFER $(/re_namekuerzen 13 $(/re_artikelkuerzen %-L4))%;\
 	/set RE_SCHADEN 13%;\
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
+
+;;; Aura
+
+/def -p1 -agCblue -mglob -t'* Aura leuchtet {hellrot|rot|orange|gelb} auf.' \
+	re_dunkelelfen_aura = /re_set_esp A
+
+;;; Entziehe
+
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
+	-mglob -t'Du entziehst * einen Teil {seiner|ihrer} Lebensenergie.' \
+	re_delfen_entziehe = \
+	/set RE_WAFFE Entziehe%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}
+
+/def -p1 -agCblue -mglob -t'* legt zwei Finger an * Schlaefe, worauf \
+	{er|sie|es}*' re_delfen_entziehe_passiv = \
+	/if ({L1}!~"fuehlt.") \
+		/def -1 -p1 -agCblue -mregexp -t'fuehlt\\\\. ?$$' \
+			re_delfen_entziehe_gag%;\
+	/endif%;\
+	/set RE_WAFFE Entziehe%;\
+	/set RE_ART %RE_PT4@{%RE_FARBE_21}Delfen@{%RE_FARBE_35}
 
 
 ;;; WERWOELFE
@@ -3739,38 +3861,38 @@
 
 /def -p1 -agCblue -mglob -t'* schlaegt * mit einem maechtigen Krallenschlag.' \
 	re_wwolf_klaue = \
-	/set RE_ART ...@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Kralle
 
 /def -p1 -agCblue -mglob -t'Du verpasst * einen {deftigen|kraeftigen} \
 	Krallenschlag.' re_wwolf_klaue2 = \
-	/set RE_ART ...@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Kralle
 
 ;;; Fellgriff 
 
 /def -p1 -agCblue -mglob -t'* greifst * mit vollen Krallen ins Fleisch.' \
 	re_wwolf_fellgriff_1 = \
-	/set RE_ART ...@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Fellgriff
 
 /def -p1 -agCblue -mglob -t'* schlaegt * mit einer maechtigen Kralle ins \
 	Fleisch.' re_wwolf_fellgriff_2 = \
-	/set RE_ART ...@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Fellgriff
 
 ;;; Ansturm 
 
 /def -p1 -agCblue -mglob -t'* schmeisst {sich|dich} auf *' \
 	re_wwolf_ansturm = \
-	/set RE_ART ...@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Ansturm
 
 ;;; Wuergekralle
 
 /def -p1 -agCblue -mregexp -t' wuergs?t .+ mit (Deinen )?Krallen\\.$' \
 	re_wwolf_wuergekralle = \
-	/set RE_ART ...@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Wuergekralle 
 
 ;;; Wasserstrahl
@@ -3778,12 +3900,12 @@
 /def -p1 -agCblue -mregexp -t' erzeugs?t einen (kleinen |grossen |\
 	ordentlichen |gigantischen |)Wasserschwall gegen (.*)\\.$' \
 	re_wwolf_wasserstrahl = \
-	/set RE_ART ...@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Wasserstrahl
 
 /def -p1 -agCblue -mglob -t'* scheint * mit einem {Wasserstrahl|Wasserschwall} \
 	hinwegzuspuelen.' re_wwolf_wasserstrahl_2 = \
-	/set RE_ART ...@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Wasserstrahl
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -4038,13 +4160,22 @@
 	/set RE_TMP_TRENNER_OPFER=$(/re_namekuerzen 13 \
 		$(/re_artikelkuerzen %-L7))
 
-;/re_set_esp S
-
 ;;; Zauberschild
 
-/def -p1 -q -agCmagenta -msimple -t'Dein Zauberschild reflektiert den \
-	Angriff.' re_zschild = /re_set_esp Z
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"zauberer") -p1 -q -agCmagenta \
+	-msimple -t'Dein Zauberschild reflektiert den Angriff.' re_zschild = \
+	/re_set_esp Z
 
+;;; Schutzschild der Dunkelelfen
+
+/def -p1 -q -agCmagenta -mregexp  -t' Schutzschild blitzt einmal kurz \
+	(heftig |kraeftig |leicht |)auf\\.$' re_delfenschild = \
+	/set RE_KARATE_ABWEHR DeSch%;\
+	/if ({P1}=~'' | {P1}=~'leicht') \
+		/set RE_KARATE 2%;\
+	/else \
+		/set RE_KARATE 4%;\
+	/endif
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;				Waffenfunktionen
@@ -4061,11 +4192,23 @@
 
 /def -p1 -q -agCblue -mglob -t'Ein kleiner Blitz schiesst aus der Spitze von \
 	Zynh auf *' re_zynh = \
-	/if ({PR} =/ '*.') \
+	/if ({L1} !/ '*.') \
 		/def -1 -q -agCblue -mglob -t'*.' re_zynh_gag%;\
 	/endif%;\
 	/set RE_WAFFE Zynh%;\
 	/set RE_WFUNC @{%RE_FARBE_37}Waffen-Fkt@{%RE_FARBE_37}
+
+;;; Kriegshamster
+
+/def -p1 -q -agCblue -msimple -t'Der Hamster stuerzt sich auf Deinen Gegner.' \
+	re_kriegshamster1 = \
+	/set RE_WAFFE Kriegshamster%;\
+	/set RE_WFUNC @{%RE_FARBE_37}.stuerzend@{%RE_FARBE_37}
+
+/def -p1 -q -agCblue -msimple -t'Der Hamster beisst Deinen Gegner mit Genuss.' \
+	re_kriegshamster2 = \
+	/set RE_WAFFE Kriegshamster%;\
+	/set RE_WFUNC @{%RE_FARBE_37}%RE_PT2beissend@{%RE_FARBE_37}
 
 ;;; Vollstrecker
 
@@ -4127,9 +4270,19 @@
 
 ;;; Zombiering
 
-/def -p1 -q -agCblue -mregexp -t'^(Der|[^ ].*) Ring( an .* Hand)?( funkelt \
-	kurz und)? schiesst( dann)? einen feurigen Blitz auf .*\\.$' \
-	re_zring = \
+/def -p1 -q -agCblue -mglob -t'Der Ring an * Hand schiesst einen feurigen \
+	Blitz auf*' re_zombring_passiv = \
+	/purge re_zombring_2%;\
+	/if ({L1} !/ '*.') \
+		/def -1 -p1 -q -agCblue -mglob -t'*.' re_zombring_2%;\
+	/endif%;\
+	/set RE_WFUNC @{%RE_FARBE_37}Waffen-Fkt@{%RE_FARBE_37}%;\
+	/set RE_WAFFE Zombiering
+
+/def -p1 -q -agCblue -msimple -t'Der Ring an Deiner Hand funkelt kurz und \
+	schiesst dann einen feurigen Blitz' re_zombring_aktiv = \
+	/purge re_zombring_2%;\
+	/def -1 -p1 -q -agCblue -mglob -t'auf *.' re_zombring_2%;\
 	/set RE_WFUNC @{%RE_FARBE_37}Waffen-Fkt@{%RE_FARBE_37}%;\
 	/set RE_WAFFE Zombiering
 
@@ -4145,17 +4298,17 @@
  
 /def -p1 -q -agCblue -E(RE_TRIG_MJOELNIR) -msimple -t'Du hoerst ein lautes \
 	Knirschen.' re_mjoelnir_sub2 = \
-	/set RE_WFUNC ......laut%;\
+	/set RE_WFUNC %RE_PT6laut%;\
 	/set RE_TRIG_MJOELNIR 0
  
 /def -p1 -q -agCblue -E(RE_TRIG_MJOELNIR) -msimple -t'Du hoerst ein \
 	Knirschen.' re_mjoelnir_sub3 = \
-	/set RE_WFUNC ....normal%;\
+	/set RE_WFUNC %RE_PT4normal%;\
 	/set RE_TRIG_MJOELNIR 0
  
 /def -p1 -q -agCblue -E(RE_TRIG_MJOELNIR) -msimple -t'Du hoerst ein leises \
 	Knirschen.' re_mjoelnir_sub4 = \
-	/set RE_WFUNC .....leise%;\
+	/set RE_WFUNC %RE_PT5leise%;\
 	/set RE_TRIG_MJOELNIR 0
 
 /def -p1 -q -agCblue -E(RE_TRIG_MJOELNIR) -msimple -t'Du hoerst ein sehr \
@@ -4165,7 +4318,7 @@
  
 /def -p1 -q -agCblue -E(RE_TRIG_MJOELNIR) -msimple -t'Der Hammer gaehnt \
 	gelangweilt.' re_mjoelnir_sub6 = \
-	/set RE_WFUNC ...Gaehnen%;\
+	/set RE_WFUNC %RE_PT3Gaehnen%;\
 	/set RE_TRIG_MJOELNIR 0
 
 ;;; WBPD-Abzeichen
@@ -4407,10 +4560,10 @@
 
 ;;; Armitages Armbrust
 
-/def -p2 -q -agCblue -mregexp -t'Du zielst sorgsam auf .* und laesst den \
-	Bolzenpfeil von der Sehne' re_aarmbrust = \
+/def -p2 -q -agCblue -mglob -t'Du zielst sorgsam auf * und laesst den \
+	Bolzenpfeil von der Sehne*' re_aarmbrust = \
 	/purge re_aarmbrust_1%;\
-	/if ({PR} !/ '*.') \
+	/if ({L1} !~ 'schnellen.') \
 		/def -1 -q -p32 -agCblue -mglob -t'*schnellen.' \
 			re_aarmbrust_1%;\
 	/endif%;\
@@ -4541,7 +4694,7 @@
 				RE_AUSGABE_STRING, 0, -3),  ' und .')]%;\
 		/endif%;\
 		/let RE_AUSGABE_STRING $[strcat(substr(RE_AUSGABE_STRING, 0, \
-			-1), substr(RE_IGNORIERE_PUFFER, 1), '.')]%;\
+			-1), substr(RE_IGNORIERE_PUFFER, 1), RE_PT)]%;\
 	/endif%;\
 	/let RE_AUSGABE_P1 $[RE_IGNORIERE_AKTIV ? 'aktive' : 'inaktive']%;\
 	/let RE_AUSGABE_P2 $[RE_IGNORIERE_POSITIV ? 'Ignoriere' : 'Anzeige']%;\
