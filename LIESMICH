@@ -52,6 +52,19 @@ Zum Teil gibt es auch mudspezifische Configdateien (dann stehen die zusaetzlich 
 
 -------------------------------------------------------
 
+vorsicht.tf (Fluchtsystem)
+
+Das Paket vorsicht.tf sichert Vorsicht und Fluchtrichtung, wenn es er-
+kennt, dass daran manipuliert wurde, setzt es beides automatisch wieder um,
+wenn also eine neue VS oder eine neue FR eingestellt werden sollen, muessen die
+von tf verwendeten Variablen mit umgesetzt werden. Dies kann zB. mit
+einem TFAlias gemacht werden:
+
+/alias vs /v %*
+/alias fl /fl %*
+
+-------------------------------------------------------
+
 way.tf (Wegesystem)
 
 An einem ersten Startknoten /addnode knotenname
@@ -74,6 +87,8 @@ untroom.tf (Untersuchehilfe)
 /untroom startet das Untersuchen eines Raumes. Es wird immer das naechste zu untersuchende Detail markiert und in die Eingabezeile gelegt
 /unt <detail> untersucht das jeweilige Detail im Raum und analysiert desssen Beschreibung.
 Es gibt diverse Makros zum Eingeben von Typos, Ideen, wiederholtes Untersuchen, Zeile loeschen usw. Diese werden standardmaessig auf die Funktionstasten (siehe world_host/keys.cfg - Mode 3 Untroom) gebunden.
+
+Zum Untersuchen von Objekten und zum Ausfragen von NPCs stehen die Makros /untitem und ask_npc zur Verfuegung
 
 -------------------------------------------------------
 
