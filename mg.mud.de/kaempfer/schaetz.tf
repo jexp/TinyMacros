@@ -1,12 +1,29 @@
 ; $Log: schaetz.tf,v $
+; Revision 1.6  2004/09/05 09:48:11  thufhnik
+; erste Version der Kampfstockskills, ist aber gildenseitig noch
+; verbesserungswuerdig, so dass bald eine neue Version zu erwarten ist
+;
+; Revision 1.5  2004/03/14 10:16:50  thufhnik
+; Ausgabe der Waffenskills formatiert
+;
+; Revision 1.4  2004/03/14 10:00:29  thufhnik
+; hoffentlich alle Meldungen zu den Waffenskills
+;
+; Revision 1.3  2004/03/14 08:29:33  thufhnik
+; Angefangen die nowmalen Waffenskills einzubauen
+;
 ; Revision 1.2  2002/09/09 12:05:40  thufhnik
 ; Log
 ;
 
-/set schaetz_tf_version=$Id: schaetz.tf,v 1.2 2002/09/09 12:05:40 thufhnik Exp $
+/set schaetz_tf_version=$Id: schaetz.tf,v 1.6 2004/09/05 09:48:11 thufhnik Exp $
 /set schaetz_tf_author=Eldaron@MorgenGrauen
 /set schaetz_tf_requires=break_string.tf
 /set schaetz_tf_desc=Schaetzen der Kaempfer schoener
+
+;;; Skillangaben dem geschaetzen direkt mitteilen?
+
+/set_var schaetz_tm_skills 0
 
 ;;; Das leidige Problem mit Inline Formatierungen beim Break_string
 
@@ -302,6 +319,7 @@
 	/set bs_attr=-p%;\
 	/set bs_cmd=%;\
 	/test set('bs_indent=@{Ccyan}Body$[{schaetz_high_body}]@{n}%body_qual@{Ccyan})@{n}: ')%;\
+;;----------------------------------------------------------------------------
 ;; Sachen, die nur scrollen, einen aber nicht interessieren (ToDo: Schalter 
 ;; einbauen)
 	/set schaetz_armour=$[replace(', ,',',',\
@@ -366,3 +384,116 @@
 	/unset schaetz_weak_anf%;\
 	/unset schaetz_max_anf%;\
 	/unset schaetz_max_res
+
+;; Waffenskills to % 
+
+; praktisch ueberhaupt nicht
+; ein bisschen
+; leicht unterdurchschnittlich
+; leicht ueberdurchschnittlich
+; recht gut
+; fuer seine Verhaeltnisse perfekt
+
+/def trves_schaetz_skill2per = \
+	/if ({*}=~"praktisch ueberhaupt nicht") \
+		/let schaetz_spercent= 0-19%;\
+	/elseif ({*}=~"ein bisschen") \
+		/let schaetz_spercent=20-39%;\
+	/elseif ({*}=~"leicht unterdurchschnittlich") \
+		/let schaetz_spercent=40-59%;\
+	/elseif ({*}=~"leicht ueberdurchschnittlich") \
+		/let schaetz_spercent=60-79%;\
+	/elseif ({*}=~"recht gut") \
+		/let schaetz_spercent=80-99%;\
+	/elseif ({*}=~"fuer seine Verhaeltnisse perfekt") \
+		/let schaetz_spercent=  100%;\
+	/else \
+		/let schaetz_spercent=???%;\
+	/endif%;\
+	/echo -- $[pad({*},-32)] (%{schaetz_spercent}\%)%;\
+
+;; Skills von anderen Gilden (by Madness)
+/def -ag -p1 -mregexp -q -t'([A-Za-z0-9]+) beherrscht den Umgang mit stumpfen Hiebwaffen' trves_schaetz_skills = \
+		/set speicher=%*%; \
+		/set target=%P1%;\
+	        /def -ag -p1 -mglob -q -t'*' schaetz_collect = \
+         	                /set speicher=%%speicher %%*%%; \
+         	                /if (substr(speicher, -1 , 1) =~ '.') \
+         	                        /undef schaetz_collect%%; \
+         	                        /schaetz_ausgabe_skill%%; \
+         			/endif
+
+;; Und dann natuerlich schoener ausgeben.
+/def schaetz_ausgabe_skill = \
+;;----------------------------------------------------------------------------
+;; Keule
+	/if (regmatch("den Umgang mit stumpfen Hiebwaffen ([^,]+)", speicher)) \
+		/set skill_keule=$(/trves_schaetz_skill2per %P1)%;\
+	/else \
+		/set skill_keule=%;\
+	/endif%;\
+;; Aexte
+	/if (regmatch("den Umgang mit Aexten ([^,]+)", speicher)) \
+		/set skill_aexte=$(/trves_schaetz_skill2per %P1)%;\
+	/else \
+		/set skill_aexte=%;\
+	/endif%;\
+;; Schwerter
+	/if (regmatch("den Umgang mit Schwertern ([^,]+)", speicher)) \
+		/set skill_schwerter=$(/trves_schaetz_skill2per %P1)%;\
+	/else \
+		/set skill_schwerter=%;\
+	/endif%;\
+;; Speere
+	/if (regmatch("den Umgang mit Speeren ([^,]+)", speicher)) \
+		/set skill_speere=$(/trves_schaetz_skill2per %P1)%;\
+	/else \
+		/set skill_speere=%;\
+	/endif%;\
+;; Kampfstock
+	/if (regmatch("den Umgang mit Staeben ([^,]+)", speicher)) \
+		/set skill_kampfstock=$(/trves_schaetz_skill2per %P1)%;\
+	/else \
+		/set skill_kampfstock=%;\
+	/endif%;\
+;; Messer
+	/if (regmatch("den Umgang mit Messern ([A-Za-z ]+) und ", speicher)) \
+		/set skill_messer=$(/trves_schaetz_skill2per %P1)%;\
+	/else \
+		/set skill_messer=%;\
+	/endif%;\
+;; Peitschen
+	/if (regmatch("den Umgang mit Peitschen ([^.]+)", speicher)) \
+		/set skill_peitschen=$(/trves_schaetz_skill2per %P1)%;\
+	/else \
+		/set skill_peitschen=%;\
+	/endif%;\
+;;----------------------------------------------------------------------------
+;; Skills ausgeben
+	/echo -p @{xCyellow}Skill (@{xCwhite}Keule     @{xCyellow})@{n}: %skill_keule%;\
+	/echo -p @{xCyellow}Skill (@{xCwhite}Aexte     @{xCyellow})@{n}: %skill_aexte%;\
+	/echo -p @{xCyellow}Skill (@{xCwhite}Schwerter @{xCyellow})@{n}: %skill_schwerter%;\
+	/echo -p @{xCyellow}Skill (@{xCwhite}Speere    @{xCyellow})@{n}: %skill_speere%;\
+	/echo -p @{xCyellow}Skill (@{xCwhite}Kampfstock@{xCyellow})@{n}: %skill_kampfstock%;\
+	/echo -p @{xCyellow}Skill (@{xCwhite}Messer    @{xCyellow})@{n}: %skill_messer%;\
+	/echo -p @{xCyellow}Skill (@{xCwhite}Peitschen @{xCyellow})@{n}: %skill_peitschen%;\
+;; Wer moechte kann dem Spieler seine Skills direkt mitteilen
+	/if ({schaetz_tm_skills} == 1) \
+		/eval teile %target mit Skill (Keule     ): %skill_keule%;\
+		/eval teile %target mit Skill (Aexte     ): %skill_aexte%;\
+		/eval teile %target mit Skill (Schwerter ): %skill_schwerter%;\
+		/eval teile %target mit Skill (Speere    ): %skill_kampfstock%;\
+		/eval teile %target mit Skill (Kampfstock): %skill_speere%;\
+		/eval teile %target mit Skill (Messer    ): %skill_messer%;\
+		/eval teile %target mit Skill (Peitschen ): %skill_peitschen%;\
+	/endif%;\
+;; Und den ganzen spass wieder reseten...
+	/unset skill_keule%;\
+	/unset skill_aexte%;\
+	/unset skill_schwerter%;\
+	/unset skill_speere%;\
+	/unset skill_kampfstock%;\
+	/unset skill_messer%;\
+	/unset skill_peitschen
+
+
