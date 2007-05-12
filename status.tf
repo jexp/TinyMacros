@@ -173,8 +173,8 @@
 /addtolist magie_colors {saeure*|aetzen*} S xBCgreen
 /addtolist magie_colors {schreien*|kampfschreie|krach*} K xBCcyan
 /addtolist magie_colors {waessrig*|fluessig*|wasser*} W xBCblue
-/addtolist magie_colors {terror*} T xBr
-/addtolist magie_colors {heilig*} H xBCwhite,Cwhite
+/addtolist magie_colors {terror*|grauen*} T xBr
+/addtolist magie_colors {heilig*|gut*} H xBCwhite,Cwhite
 /addtolist magie_colors {luft*|stuerm*|sturm*} L xrBCbgblue
 /addtolist magie_colors {magische*|magie*} M xBCyellow,Cbgred
 
