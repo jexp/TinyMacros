@@ -1,4 +1,16 @@
 ; $Log: user_config.def,v $
+; Revision 1.20  2004/01/21 18:10:19  thufhnik
+; util.namestr.tf eingefuegt
+;
+; Revision 1.19  2003/10/20 19:27:08  thufhnik
+; querylines.tf eingefuegt
+;
+; Revision 1.18  2003/09/25 08:26:42  thufhnik
+; Rassenabhaengiges File laden
+;
+; Revision 1.17  2003/06/17 14:18:53  thufhnik
+; plakette.tf eingefuegt
+;
 ; Revision 1.16  2002/11/27 10:58:39  mh14
 ; trennung von mg_properties.tf von den statuszeilensettings
 ;
@@ -57,6 +69,12 @@
 ;  Log eingefuegt
 ;
 
+; mg-spezifische utilities
+
+/mload -c util.namestr.tf
+
+;
+
 /cfg_info status mg all		Generelles
 /cfg_info status mg chaos	Chaos
 /cfg_info status mg tanjian	Tanjian
@@ -69,6 +87,7 @@
 ; sind aber noch nicht umgestellt
 /cfg_info USE mg_mud_de Morgengrauen
 
+/mload -U"Terminalzeilen_ermitteln" -c querylines.tf
 /mload -U"Kommunikationsfarben_und_log" -c comm.tf
 /mload -U"Hydraanzeige" -c hydra.tf
 /mload -U"Punkteanzeige_umformatieren" -c info.tf
@@ -79,6 +98,7 @@
 /mload -U"Statustrigger" -c status_ext.tf
 /mload -U"Kneipen" -c uselists.tf
 /mload -U"Gagen_nervender_Ausgaben" -c gag.tf
+/mload -U"Duesterwaldplakette" -c plakette.tf
 
 ;------------- Kampf ---------------------------------------
 /cfg_info USE MG_MUD_DE kampf Kampfmakros
@@ -116,5 +136,9 @@
 
 ; Gilde laden
 
+/eval /echo /mload -U -c -vp_guild %p_guild.tf
 /eval /mload -U -c -vp_guild %p_guild.tf
 
+; Rassenamhaengige Sachen laden
+/eval /echo /mload -U -c r_%{p_race}.tf
+/eval /mload -U -c r_%{p_race}.tf
