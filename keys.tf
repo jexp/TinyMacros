@@ -452,7 +452,7 @@ Funktion die bei Tastendruck aufgerufen wird, wenn Display Modus (%keys_dmode) e
 	/endif%;\
 	/set_binding f%i /key_press %i%;\
      /done%;\
-;     /keys_set_keypad%;\
+     /keys_set_keypad%;\
 
 
 
