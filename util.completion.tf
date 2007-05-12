@@ -97,7 +97,7 @@ Vervollstaendigt den bisher eingegebenen Text automatisch. Dabei werden die Vors
 ;	  /if (off!=-1) \
 ;	  /let res=$[substr(res,off)] %;\
 ;	  /let res%;\
-	  /if (regmatch(pat2,res)==1) \
+	  /if (regmatch(pat2,res)) \
 ;	     /echo P1 %P1 %;\
 	     /if (strstr(completion_list,strcat(",",{P1},","))==-1) \
 	       /set completion_list=$[strcat(",",{P1},completion_list)]%;\
