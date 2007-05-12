@@ -1,4 +1,10 @@
 ; $Log: status_klerus.tf,v $
+; Revision 1.10  2003/10/08 09:58:33  thufhnik
+; Talismantrigger sauberer
+;
+; Revision 1.9  2003/06/28 09:34:28  thufhnik
+; Lernen einfaerben
+;
 ; Revision 1.8  2002/09/10 13:14:34  thufhnik
 ; Nutzung von repeat_once fuer GM.
 ;
@@ -25,12 +31,19 @@
 ; Scratch
 ;
 
-/set status_klerus_tf_version $Id: status_klerus.tf,v 1.8 2002/09/10 13:14:34 thufhnik Exp $
+/set status_klerus_tf_version $Id: status_klerus.tf,v 1.10 2003/10/08 09:58:33 thufhnik Exp $
 /set status_klerus_tf_author=Thufhir@mg.mud.de
-/set status_klerus_tf_requires=util.repeat.tf
+/set status_klerus_tf_requires=util.repeat.tf config.tf(1.16)
 /set status_klerus_tf_desc=Statuszeile fuer die Klerikergilde
 
-; Variablen initialisieren
+;;; Konfigurierbares
+
+/set_var CFG_ECHO_GAG_LEVEL 2
+
+; Lernen
+/set_var CFG_MG_KLERUS_LEARN_ECHO_ATTR Cbggreen,Cwhite
+
+;;; Variablen initialisieren
 
 /set klerus_busy 0
 /set klerus_quiet 0
@@ -44,7 +57,7 @@
 /set klerus_ep=
 /set klerus_es_type=erde
 
-; Statuszeilenmodule
+;;; Statuszeilenmodule
 
 /set sl_klerus_gs_doc=Glaubensstaerke (0-12, gelb unterlegt wenn mit Scheisse beschmierter Talisman, rot hinterlegt beim Beten)
 /def sl_klerus_gs = \
@@ -87,6 +100,8 @@
 /def sl_klerus_ep = \
 	/init_var klerus_ep%;\
 	/return status_var("klerus_ep",1)
+
+;;; Makros & Trigger
 
 ; Heiligenschein
 
@@ -445,8 +460,8 @@
 		/set klerus_quiet 0%;\
 	/endif
 
-/def -p10 -mregexp -q -agCblue -t' Ein (kotverschmierter |)([a-z ]+) Talisman\
-	( \\(angezogen\\)|)\\.' klerus_tali_inv = \
+/def -p10 -mregexp -q -agCblue -t'^ Ein (kotverschmierter |)([a-z ]+) Talisman\
+	( \\(angezogen\\)|)\\.$' klerus_tali_inv = \
 	/if ({P1} !~ "") \
 		/set klerus_scheisse 1%;\
 	/else \
@@ -464,6 +479,11 @@
 		/send !\\inv +a +r -f -1%;\
 	/endif
 
+; Lernen
+
+/def -p0 -q -w -agCblue -msimple -t'Die Goetter schenken Dir eine \
+	Erleuchtung.' klerus_learn = /cfg_echocolor MG_KLERUS_LEARN %*
+
 ; beim Start:
 
 /def klerus_start = \
@@ -473,4 +493,4 @@
 	/klerus_tali_check%;\
 	/config_status
 
-/klerus_start
+/add_to_hook loadsaved /klerus_start
