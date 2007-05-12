@@ -1,4 +1,10 @@
 ; $Log: mg_properties.tf,v $
+; Revision 1.50  2003/09/13 08:48:45  thufhnik
+; p_wizlevel fuer Magier
+;
+; Revision 1.49  2003/09/13 08:41:02  thufhnik
+; p_state wird jetzt auf magier gesetzt fuer ebensolche
+;
 ; Revision 1.48  2002/12/03 03:54:36  mh14
 ; jetzt hoffentlich richtiges alias-escape
 ;
@@ -138,7 +144,7 @@
 ;  Log eingefuegt
 ;
 
-/set mg_properties_tf_version $Id: mg_properties.tf,v 1.48 2002/12/03 03:54:36 mh14 Exp $
+/set mg_properties_tf_version $Id: mg_properties.tf,v 1.50 2003/09/13 08:48:45 thufhnik Exp $
 /set mg_properties_tf_author=Mesirii@mg.mud.de
 /set mg_properties_tf_requires=properties.tf(1.12) lists.tf util.tf util.hooks.tf util.trigger.tf util.sfunc.tf
 /set mg_properties_tf_desc Auslesen der Spielerproperties mittels catch-trigger und Liste
@@ -161,12 +167,20 @@
 /set_var CFG_MUD_HIT_POINTS_ECHO_ATTR B
 
 /addh info Steuert die Ausgabe der Hitpoints
+/addh update /add_hit_points_to_hook
 /addh CFG_MUD_DO_ECHO_HIT_POINTS cfg
 
 /cfg_info MUD PROPERTIES DO_ECHO_HIT_POINTS Hitpointausgabeflag:2
 /cfg_set MUD DO_ECHO_HIT_POINTS 1
 
-/ifdo CFG_MUD_DO_ECHO_HIT_POINTS /add_to_hook points /echo_hit_points
+/def add_hit_points_to_hook = \
+  /if (CFG_MUD_DO_ECHO_HIT_POINTS) \
+	 /add_to_hook points /echo_hit_points%;\
+  /else /remove_from_hook points /echo_hit_points%;\
+  /endif
+
+/set CFG_MUD_DO_ECHO_HIT_POINTS
+/add_hit_points_to_hook
 
 /add_to_hook property_update /mg_properties_check_level
 
@@ -231,7 +245,8 @@ Taub oder nicht taub?
 Faengt die LP/MP-Meldung ab, setzt die Properties p_lp und p_mp und die Differenz p_m_lp und p_m_mp und ruft dann den Hook points auf.
 /addh var p_mp, p_lp, p_m_lp, p_m_mp
 /addh t_lpmp trig
-/def -t"^(>* )?Du hast jetzt ([0-9]*) Lebenspunkte und ([0-9]*) Konzentrationspunkte\\.$" -mregexp -ag -Fp9999 t_lpmp = \
+
+/def -t"^(>* )?Du hast jetzt ([0-9]*) Lebenspunkte und ([0-9]*) Konzentrationspunkte\\.$" -mregexp -agCblue -Fp9999 t_lpmp = \
 	/eval_hook points %P2 %P3
 
 ; fuer nicht statusreporttoolbesitzer:
@@ -353,7 +368,7 @@ Wenn _pf gesetzt ist und keine Kontrolle-Zaubern laeuft und keine Sperrzeit bis 
         /else /let check_props3=1%; /endif%;\
 	/if ({2}=/"keep_case") /let keep_case=1%; /shift%;\
 	/else /let keep_case=0%;/endif%;\
-	/if (regmatch({-1},fulldetail)==1) \
+	/if (regmatch({-1},fulldetail)) \
 ;	   /echo %{prop} == %P1%;\
 	   /if (!keep_case) \
 	   /test check_props3:=tolower(\{P%{check_props3}\})%;\
@@ -397,6 +412,8 @@ Wenn _pf gesetzt ist und keine Kontrolle-Zaubern laeuft und keine Sperrzeit bis 
 /addtolist finger_props full_name keep_case Voller Name: ([^#]+)#
 /addtolist finger_props sub_guild 3 Rasse: .+,  Gilde: [^(]+( [(](Zweig |Clan )?([^)]+)[)])?,  Geschlecht:
 /addtolist finger_props state Spielerlevel: [0-9]+ [(]([^)]+)[)]
+/addtolist finger_props state (Magier)level: [1-9][0-9]+
+/addtolist finger_props wizlevel Magierlevel: ([1-9][0-9]+)
 /addtolist finger_props short_age Alter: ([^,]+)
 /addtolist finger_props first_login keep_case Datum des ersten Login: ([^#]+)#
 /addtolist finger_props zweitie ist (Zweitspieler)[.]
