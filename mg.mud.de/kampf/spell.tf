@@ -58,11 +58,8 @@
       /if (p_mp>=spell_mp) \
         /if (spell!~"") \
 	  /set spell_next_time=$[time()+spell_busy_sek] %;\
-	  /weapon_unwear %spell_hands %;\
-	  /debug spell %spell %;\
-	  /eval %spell %;\
+	  /weapon_action %spell_hands %spell%;\
 	  /spell_countdown_busy %;\
-	  /weapon_wear%;\
 	/endif%;\
       /endif%;\
       /else \
