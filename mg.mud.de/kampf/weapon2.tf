@@ -1,4 +1,13 @@
 ; $Log: weapon2.tf,v $
+; Revision 1.20  2003/08/25 07:31:38  thufhnik
+; in letzter version war natuerlich noch ein kleiner bug
+;
+; Revision 1.19  2003/08/25 07:24:20  thufhnik
+; ein paar Triggerbeschleunigungen
+;
+; Revision 1.18  2003/08/25 07:14:33  thufhnik
+; bei der weapon_id sind jetzt auch mehrwortige zugelassen
+;
 ; Revision 1.17  2002/08/27 08:08:38  mh14
 ; /set_var Falschanwendungen debuggt
 ;
@@ -55,10 +64,29 @@
 ; Scratch
 ;
 
-/set weapon2_tf_version $Id: weapon2.tf,v 1.17 2002/08/27 08:08:38 mh14 Exp $
+/set weapon2_tf_version $Id: weapon2.tf,v 1.20 2003/08/25 07:31:38 thufhnik Exp $
 /set weapon2_tf_author=Thufhir@mg.mud.de
 /set weapon2_tf_requires=lists.tf worldconnect.tf(1.18)
 /set weapon2_tf_desc Waffen- und Schildverwaltung (Ersatz fuer die weapon.tf)
+
+
+/cfg_info mud fight Kampf
+/cfg_info mud fight weapon2 Waffenfunktionen
+
+/addh info Farbe fuer Hitpointausgabe
+/addh CFG_MUD_HIT_POINTS_ECHO_ATTR cfg
+
+/cfg_info MUD FIGHT WEAPON2 AUTO_INPUT unbekannte_Waffe_eingeben:2
+/addh info Unbekannte Waffen werden beim Zuecken in der Eingabezeile angeboten
+/addh CFG_MUD_WEAPON2_AUTO_INPUT cfg
+
+/cfg_set MUD WEAPON2 AUTO_INPUT 0
+
+/cfg_info MUD FIGHT WEAPON2 NO_CONTAINER Waffen_nicht_in_Container:2
+/addh info Welche Waffen sollen/können nicht in den Container gesteckt werden, Liste der Kürzel durch Leerzeichen getrennt
+/addh CFG_MUD_WEAPON2_NO_CONTAINER cfg
+
+/cfg_set MUD WEAPON2 NO_CONTAINER
 
 
 ; Konfigurierbares
@@ -98,6 +126,9 @@
 /def shield_no_sl = /set shield_sl="%shield":%shield_status_size
 ;;; die Macros
 
+/def weapon_put_container = !\\stecke %* in %weapon_container in mir
+/def weapon_get_container = !\\nimm %* aus %weapon_container in mir
+
 /def weapon_action = \
 	/if ({1}=/"[012]") \
 		/let weapon_command=%-1%;\
@@ -132,13 +163,19 @@
      /if (weapon_drawn) /weapon_unwear%; \
      /else /weapon_draw%; /endif
 
+/def shield_toggle = \
+     /if (shield_drawn) /shield_unwear%; \
+     /else /shield_wear%; /endif
+
+
+/def check_container = \
+     /return weapon_container !~ "" & CFG_MUD_WEAPON2_NO_CONTAINER!/strcat("*{",weapon,"}*")
 
 /def weapon_unwear = \
 	/if (weapon !~ "" & weapon_id !~ "" & weapon_drawn) \
-		/if (weapon_container !~ "") \
+		/if (check_container()) \
 			/set weapon_gag 1%;\
-			/send !\\stecke %weapon_id in %weapon_container in \
-				mir%;\
+			/weapon_put_container %weapon_id%;\
 		/else \
 			/send !\\stecke %weapon_id weg%;\
 		/endif%;\
@@ -152,9 +189,9 @@
 		    & shield_worn) \
 			/send !\\ziehe %shield_id aus%;\
 		/endif%;\
-		/if (weapon_container !~ "") \
+		/if (check_container()) \
 			/set weapon_gag 1%;\
-			/send !\\nimm %weapon_id aus %weapon_container in mir%;\
+			/weapon_get_container %weapon_id%;\
 		/endif%;\
 		/send !\\zuecke %weapon_id%;\
 	/endif
@@ -211,7 +248,11 @@
 		/if (value =~ error) \
 			/echo -aCred *** Waffe nicht gefunden!%;\
 		/else \
-			/set weapon %1%;\
+	                /if (check_container()) \
+			     /set weapon_gag 1%;\
+			     /weapon_put_container %weapon_id%;\
+	                /endif%;\
+		   	/set weapon %1%;\
 			/weapon_set2 %value%;\
 			/weapon_draw%;\
 		/endif%;\
@@ -224,7 +265,11 @@
 
 /def weapon_set2 = \
 	/set weapon_hands %1%;\
-	/set weapon_id %2%;\
+	/if ({2}!/"stempel_*") \
+	  /set weapon_id=$[replace("_"," ",{2})]%;\
+	/else \
+	  /set weapon_id=%{2}%;\
+	/endif%;\
 	/set weapon_damage %3%;\
 	/set weapon_long %-3%;\
 	/set weapon_hitfunc=$[weapon_damage=/"*+*"]%;\
@@ -390,8 +435,8 @@
 	/endif%;\
 ;	/else \
 		/weapon_guess %*%;\
-		/set weapon_id=$[ext_read("Id (mit der man die Waffe im Mud \
-			ansprechen kann): ", weapon_id)]%;\
+		/set weapon_id=$[replace(" ","_",ext_read("Id (mit der man \
+			die Waffe im Mud ansprechen kann): ", weapon_id))]%;\
 		/set weapon_hands=$[ext_read("Benoetigte Haende: ", \
 			weapon_hands)]%;\
 		/set weapon_long=$[ext_read("Langbeschreibung: ", \
@@ -452,15 +497,17 @@
 		/set p_free_hands 0%;\
 	/endif
 
-/def -Fp100 -q -w -mregexp -agCblue -t'^Du zueckst (den|die|das|ein(en?)? )?(.+)\\.$' weapon_zuecken = \
+/def -Fp100 -q -w -mregexp -agCblue -t'^Du zueckst (d(en|ie|as)|ein(en?)? )?(.+)\\.$' weapon_zuecken = \
 	/if (!weapon_quiet) \
 		/echo -a%weapon_draw_color %*%;\
 	/else \
 		/set weapon_quiet 0%;\
 	/endif%;\
-	/let weapon_tmp %P3%;\
-	/if (weapon_find(weapon_tmp) =~ "") \
-		/input /weapon_add_new %weapon_tmp%;\
+	/if (CFG_MUD_WEAPON2_AUTO_INPUT) \
+	  /let weapon_tmp %P4%;\
+	  /if (weapon_find(weapon_tmp) =~ "") \
+		  /input /weapon_add_new %weapon_tmp%;\
+	  /endif%;\
 	/endif%;\
 	/set weapon_drawn 1%;\
 ;	/set weapon_sl=%weapon_sl%;\
@@ -468,7 +515,7 @@
 	/weapon_eval_hands%;\
 	/set weapon_gag 0
 
-/def -Fp100 -q -w -mregexp -agCblue -t'^Du steckst (.+) zurueck\\.$' \
+/def -Fp100 -q -w -mglob -agCblue -t'Du steckst * zurueck.' \
 	weapon_wegstecken = \
 	/if (!weapon_quiet) \
 		/echo -a%weapon_draw_color %*%;\
@@ -503,7 +550,7 @@
 	/endif%;\
 	/weapon_eval_hands
 
-/def -agCblue -Fp1 -mregexp -E(weapon_gag) -w -q -t'^Du steckst .+ in .+\\.$' \
+/def -agCblue -Fp1 -mglob -E(weapon_gag) -w -q -t'Du steckst * in *.' \
 	weapon_gag_stecken = /set weapon_gag 0
 
 /def -agCblue -Fp1 -mglob -E(weapon_gag) -w -q -t'Du nimmst *.' \
@@ -541,6 +588,3 @@
 
 /add_to_hook loadsaved /weapon_eval
 /weapon_init_lists
-
-
-
