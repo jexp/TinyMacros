@@ -15,11 +15,12 @@
 ;  Log eingefuegt
 ;
 
-/set util_sfunc_tf_version $Id: util.sfunc.tf,v 1.8 2002/09/08 17:26:37 mh14 Exp $
+/set util_sfunc_tf_version $Id$
 /set util_sfunc_tf_author=Mesirii@mg.mud.de
 /set util_sfunc_tf_requires=
 /set util_sfunc_tf_desc Stringfunktionen, Aufspalten, Hashcode, Sprintf
 
+/set MAX_INT=2147483647
 /addh info \
 Spaltet Strings entsprechend der angegebenen Begrenzer auf.
 /addh syn $[tokenize("begrenzer z.b. space Komma usw.","string")]
@@ -110,29 +111,60 @@ Wenn der String weniger als 10 Zeichen beinhaltet, wird der Hashcode nach folgen
 /def hash = \
 	/let param=%*%;\
 	/let hash_len=$[strlen(param)]%;\
-;/let hash_len%;\
+	/let tmp=%;\
 	/if (hash_len>10) \
 	/let hash_hcount=$[mod(hash_len,1000)]%;\
-;/let hash_hcount%;\
 	/let hash_pcount=$[mod(hash_hcount,100)]%;\
 	/let hash_pos=$[(hash_len-1)*(hash_pcount)/100]%;\
-;/let hash_pos%;\
 	/let hash_pos2=$[hash_len-1-hash_pos]%;\
-;/let hash_pos2%;\
 	/result replace(" ","0",pad(hash_hcount,3,ascii(substr(param,hash_pos,1)),3,ascii(substr(param,hash_pos2,1)),3))%;\
 	/else \
 	  /let hash_hcount=0%;\
 	  /while (--hash_len>-1) \
-	    /let hash_hcount=$[8*hash_hcount+ascii(param)]%;\
+; problem overflow wird zu real zahl bei tf5
+	    /let tmp=$[8*hash_hcount+ascii(param)]%;\
+	    /if (tmp>MAX_INT) \
+		/test hash_hcount:=overmult(hash_hcount,8)+ascii(param)%;\
+	    /else /test hash_hcount:=tmp%;\
+	    /endif%;\
 	    /let param=$[substr(param,1)]%;\
 	  /done%;\
 	  /if (hash_hcount<0) /let hash_hcount=$[-hash_hcount]%; /endif%;\
-	  /result replace(" ","0",pad(hash_hcount,9))%;\
+	  /result replace(".","",replace(" ","0",pad(hash_hcount,9)))%;\
 	/endif%;
 
-/if (have_ext("MD5")) \
-   /def hash=/return md5({*})%;\
-/endif
+
+/def overmult = \
+     /let number=%1%;\
+     /let mult=%2%;\
+     /let result=%number%;\
+     /let over=%;\
+     /while (--mult>0) \
+	 /if (result+number>MAX_INT) \
+	     /test over:=number-1-(MAX_INT-result)%;\
+;/echo -- %mult over %over = %number -1 - ( %MAX_INT - %result [$[MAX_INT-result]])%;\
+	     /test result:=-MAX_INT-1 + over %;\
+;/echo -- res %result = -%MAX_INT -1 + %over%;\
+	 /else \
+	     /test result:=result+number%;\
+         /endif%;\
+     /done%;\
+     /return result
+
+/def overflow = \
+     /if ({1}>MAX_INT) \
+	 /let overflow=%;\
+	  /test overflow:={1}-MAX_INT*trunc({1}/MAX_INT)%;\
+	  /test overflow:=-MAX_INT-1+overflow%;\
+	  /return overflow%;\
+     /endif%;\
+     /return {1}%;
+
+;/if (have_ext("MD5")) \
+;   /def hash=/return md5({*})%;\
+;/else \
+;   /def hash=${hash1}%;\
+;/endif
 
 
 ;;;; /qsort by Ken Keys
