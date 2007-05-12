@@ -12,3 +12,11 @@
 
 ; Piepts? on/off
 /set_var erwarte_beep on
+
+;; Wenn die Liste erwarte_beep_whitelist mind. ein Element
+;; enthaelt, piepts nur bei diesen Spielern. Spielernamen
+;; bitte in Kleinbuchstaben!
+;;
+;; /createlist erwarte_beep_whitelist
+;; /addtolist erwarte_beep_whitelist olli
+
