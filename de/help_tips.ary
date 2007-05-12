@@ -1,0 +1,44 @@
+; way.tf
+/wo zeigt Dir wo Du bist (Knotenerkennung)
+/nodes_geb, /nodes_info finden vergessene Knoten
+/hilfe makro hilft Dir weiter!
+Der Statuszeile den Schrecken nehmen: /config_status {node}_{arzt}_{lp}:{mp}_{vorsicht}:{flucht}_{kampf}_{weapon}{shield}_{world}_{modes}_{clock}
+Fuer die Reparatur von Wege(index)listen ist /wayindex verantwortlich
+Nie wieder Snoop Probleme mit crypt.tf
+/vorwaerts huepfe norden oder /rueckwaerts verlasse schiff
+/showway from to; /showway from *;/showway * to;/showways from verraten jeden Weg
+Knoten suchen & finden: /shownode name, /shownode *, /shownode Ab*
+Weg damit: /delnode knoten
+Hmm Rueckweg vergessen zu speichern?: /reverseway from to
+Knotennamen wie krz03/25 muessen nicht sein: /setali krz03/25 Elfen 
+Ping-Pong mit way.tf ? /bgo bringt euch zurueck zum Start.
+Bloede Blocker kann man mit /npc oder /npcc beruecksichtigen
+Ran ans Ziel und gleich was tun? /ago Kimbiss /tanke_dich_voll
+Fuer die, die ganz sicher sein wollen! /wgo Ziel
+Portale, wasn das?: /port, /noport, 
+Dimensionen jetzt 10fach? Einfach setzen mit /wpara [np0-9], oder wechseln per /gpara [np0-9] (p32_name setzen!)
+Wege testen ohne Tode? Is ja langweilig, geht aber mit /testway!
+Makros in Wegen? Klar /hilfe wegmakros (/wait,/stop,/npc,/cw)
+Wege mit Kaffeepausen? Mit /c gehts weiter.
+Was will das Mud mir sagen? Trigger in Wegen braucht man auch (/tri,/do_tri,/utri,/break_tri,/dir_tri)
+Den Weg mag ich aber jetzt nicht gehen! Temporaer mit /disable from to sperren
+Du Du! Oder was darf ein Weg? Einschraenkungen: properties,tf-expressions,dimensionen,laenge(gewicht)
+Speedwalk gegen RSI: ,5n,3o,5huepfe ueber graben,ob
+Mit team folge kann man auch Wege bauen!
+Hmm Wegesystem aufraeumen kann man wirklich: mit /splitway(s),/renamenode und /editway
+Next Stop Kreuzung! Mit /rush schnell wie nix zur naechsten Kreuzung/Sackgasse
+Knoteninfos nachtraeglich aendern? Ja das geht mit /addnodeinfo!
+Kurzer Ausflug zum Metzelopfer: /add_trip und tgo lassen Gruessen!
+;
+; Allgemein
+;
+Die Hydra meint: Ohne way.tf wuerde ich mich im Lupinental glatt verlaufen.
+Selbst Wurzel-NPCs schwoeren auf /untroom.
+Die Listen des listigen Kampfzwerges sind nichts gegen die von lists.tf
+Ein neues Monster gebastelt, das keinen interessiert? Ein neues Gebiet angeschlossen und niemand geht dorthin? Hier ist der ideale Werbeplatz fuer solche Situationen.
+He, Du idelst ja schon wieder! Geh forschen!
+;Vom 5.-7. April findet die 10-Jahres-Party in Muenster statt!
+Mit reduce.tf verliert Kampfscroll seinen Schrecken.
+Forschen macht mit untroom.tf richtig Spass.
+keys.tf laesst die Tastatur wachsen.
+Ueber die Werwolfinsel kann nur laufen, wer die Hasen dort kann kaufen!
