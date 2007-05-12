@@ -73,7 +73,9 @@ Dieser Send-Hook faengt die Abkuerzungen ab und ersetzt sie wie bei /def_abbrev 
 	/if (value=~error) \
 	  /msend -w %*%;\
 	/else \
-	  /test tokenize(" ",value)%;\
+	  /let delim=%;\
+	  /test delim:=(value=/"*,*")? "," : " "%;\
+	  /test tokenize(delim,value)%;\
 	  /let tcount=$[T0+1]%;\
 	  /let tcountmin=1%;\
 	  /if (regmatch("\\*([0-9]+)",T1)) \
