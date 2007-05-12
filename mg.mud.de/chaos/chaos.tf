@@ -72,7 +72,7 @@ liefert einen Eintrag aus der Liste %demon_list_name zurueck
 
 /def -ag -t"Die naechsten ([0-9]+) Chaosbaelle sind: " -mregexp t_rep_chaosball = /set p_num_chaosball=%P1%;\
     /set p_schaden_chaosball=%{PR}%;\
-    /status_get_schaden_string %{PR}%;\
+    /status_get_schaden_string %{PR} 2%;\
     /set status_chaosball=%status_schaden_attr%;\
 
 /set sl_chaos_schutz_doc=Schutzanzeige: schwach s, start S in Chaoshautschutzfarbe (siehe chaosball)
@@ -87,6 +87,17 @@ liefert einen Eintrag aus der Liste %demon_list_name zurueck
 	/set chaos_schutz_attr=%status_schaden_attr_only%;\
 	/echo -aCred -p %-L2 @{%chaos_schutz_attr}%6@{x} %-6
 
+/def -t"Der magische Schutz Deiner Chaoshaut wird gleich verschwinden!" -aBCyellow -msimple t_schutz_warnung = /nop
+
+/def -p1 -msimple -t'Wie wild schmeisst Du alles von Dir!' t_haut_weg = \
+nimm alles%;trage alles
+
+/def -p1 -msimple -t'Dir wird einfach zu heiss! Du reisst Dir die Kleidung vom Leibe.' t_haut_aus = trage alles
+
+/def -t"Cool. Du hast eine leichte Vergiftung." -ag -msimple t_chaos_light_poison = /t_light_poison
+
+	
+	
 /addh info \
 ruft verbannen mit dem aktuellen Daemoen auf
 /addh var demon
@@ -168,7 +179,9 @@ ruft verbannen mit dem aktuellen Daemoen auf
 /addh var demon
 /addh syn /bdt [monster]
 /addh bdt comm
-/defh bdt = befehle %demon toete $[(!{#})?{*}:%monster] 
+/defh bdt = befehle %demon toete $[(!{#})?{*}:%opfer] 
+
+/def ngdd = nimm %*%;gib %demon %*
 
 /def gd = gib %demon %*
 
@@ -183,13 +196,13 @@ ruft verbannen mit dem aktuellen Daemoen auf
 ;/addz sw 2 25 2 schutz schwach
 ;/addz bz 1 10 4 bannzauber
 ;/addz b 1 40 12 binde %demon
-;/addz fi 0 100 6 finsternis %monster
+;/addz fi 0 100 6 finsternis %opfer
 ;/addz nsi 0 10 2 nachtsicht
 ;/addz ch 2 95 52 chaosruestung
 ;/addz k 2 20 22 kontrolle
-;/addz cm 0 20 2 chaosball %monster
+;/addz cm 0 20 2 chaosball %opfer
 ;/addz c 0 20 2 chaosball
-;/addz vm 0 30 2 verbanne %monster
+;/addz vm 0 30 2 verbanne %opfer
 ;/addz v 0 30 2 verbanne
 ;/addz ib 1 5 6 intarbir
 ;/addz kr 1 10 6 kruftur
@@ -305,23 +318,30 @@ enthaelt Einstellungen, Listen mit Abkuerzungen, Hilfsmakros fuer die Chaosgilde
 /addtolist chaosschaeden p peitsche
 /addtolist chaosschaeden D boese
 
-/def ck = \
-    /getvalueof chaosschaeden $[substr({1},0,1)]%;\
-    /if (value!~error) /set chaosschaden=%value%;\
-    /else \
-    /set chaosschaden=%;\
+/def get_schaden = \
+    /getvalueof chaosschaeden %1%;\
+    /let tmp=%?%;\
+    /if (tmp!~error) \
+	/return tmp%;\
     /endif%;\
-    /getvalueof chaosschaeden $[substr({1},1,2)]%;\
-    /if (value!~error) \
-       /if (chaosschaden=~"") \
-         /set chaosschaden=%value%;\
-	 /spell_set_and_cast sd%;\
-       /else \
-         /set chaosschaden=%chaosschaden %value%;\
-	 /spell_set_and_cast ck%;\
+    /info ERROR Keinen Schaden für %1%;\
+    /return error%;
+
+/def ck = \
+    /let tmp=$[get_schaden(substr({1},0,1))]%;\
+    /if (tmp!~error) \
+	/set chaosschaden=%tmp%;\
+       /if (strlen({1})==2) \
+	   /let tmp=$[get_schaden(substr({1},1,1))]%;\
+	   /if (tmp!~"") \
+	     /set chaosschaden=%chaosschaden %tmp%;\
+	     /z ck%;\
+	   /endif%;\
+	/else \
+	   /z sd%;\
        /endif%;\
     /endif%;\
-
+    /info INFO Chaosschaden: %chaosschaden
 
 /config_status
 
