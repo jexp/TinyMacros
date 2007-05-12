@@ -63,7 +63,7 @@
 ;  Log eingefuegt
 ;
 
-/set util_trigger_tf_version $Id: util.trigger.tf,v 1.24 2002/10/19 17:24:40 thufhnik Exp $
+/set util_trigger_tf_version $Id$
 /set util_trigger_tf_author=Mesirii@mg.mud.de
 /set util_trigger_tf_requires=
 /set util_trigger_tf_desc verschiedene Trigger, die mehrere Zeilen grabben
@@ -83,7 +83,7 @@ Zum Erkennen, ob das Mud eine Reihe von Kommandos ausgefuehrt hat, wird das Komm
 /addh ex /test tf_prompt("Das ist ein Test","/echo Test erfolgreich")
 /addh tf_prompt mak
 
-/set_var mud_custom_prompt=alias tf_prompt %1
+/set_var mud_custom_prompt=!alias tf_prompt %1
 /set_var mud_custom_prompt_response=Neues Alias: tf_prompt  = %1
 /set tf_prompt_counter=0
 
@@ -503,7 +503,20 @@ C Kommando fuers Mud
      /elseif (regmatch("(\\*|[{}])",{*})) /return "glob"%;\
      /else /return "simple"%;\
      /endif
-     
+
+/def del_trig = \
+    /list -s -t"*%{*}*"%;\
+    /if ({?} >0) \
+    /let tmp=$[ext_read("Makronummer/name (Nichts fuer Abbruch):")]%;\
+    /if (tmp=~"") /return%; /endif%;\
+    /if (tmp=/"[0-9]*") \
+	/undefn %tmp%; \
+    /else \
+	/undef %tmp%; \
+    /endif%;\
+    /else /info ERROR keine Trigger, die "%*" enthalten gefunden!%;\
+    /endif
+
 /addh info removes the triggers defined with trig_grab, whose number was returned by trig_grab
 /addh syn /trig_purge number returned by trig_grab
 /addh trig_purge mak
