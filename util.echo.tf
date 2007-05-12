@@ -101,9 +101,9 @@ Erweitert die Funktionalitaet des '-p'-Parameters von /echo um das Attribut \
 /defh echo2 = \
 	/let param=%*%;\
 	/let reg=$[strcat("(^ *(-((p|e)|((a|w)[^ -]+)) )+)")] %;\
-	/if ((regmatch(reg,param)==1) & (strstr({P0},"-p")!=-1)) \
+	/if ((regmatch(reg,param)) & (strstr({P0},"-p")!=-1)) \
 	  /let part1=%P0%;\
-	  /let part2=$[substr(param,strlen(part1)+1)]%;\
+	  /let part2=$[substr(param,strlen(part1))]%;\
 	  /let off=$[strstr(part2,"@{N}")] %;\
 	  /while (off!=-1) \
 	     /let temp=$[strcat(substr(part2,0,off))]%;\
@@ -323,6 +323,19 @@ erzeugt als Ausgabe@{N}\
     /let res=$(/echo -p - %*)%;\
     /result res
 
-     
+/addh info Faerbt die als Parameter angegebenen Worte mit den als ersten Parameter vorgegebenen Attributen ein.\
+Gross-/Kleinschreibung beachten! Es werden Trigger mit -mregexp dafuer erzeugt, der Name ist t_highlight_%2
+/addh ex /highlight BCred Mekare Maharet
+/addh highlight mak
+
+/def highlight  = \
+  /def -t"($[replace(' ','|',{-1})])" -P0%1 -p1000000 -F t_highlight_%2 = /test 0     
+
+/addh info Faerbt die ganze Zeile entsprechend des glob Triggers und der als ersten Parameter uebergebenen Attribute ein
+/addh ex /color_line BCwhite \* MPA
+/addh color_line mak
+
+/def color_line = /def -p100000 -F -a%1 -mglob -t"*%-1*" t_color_line_$[hash({*})] = /test 0
+
 /addh_fileinfo
 
