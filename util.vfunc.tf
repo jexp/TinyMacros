@@ -1,4 +1,7 @@
 ; $Log: util.vfunc.tf,v $
+; Revision 1.26  2004/01/22 07:00:10  thufhnik
+; Variablen nur noch regexp-vorcompilieren wenn sie es nicht bereits sind
+;
 ; Revision 1.25  2002/08/28 13:13:49  thufhnik
 ; im free die warning auch raus
 ;
@@ -66,7 +69,7 @@
 ;  Log eingefuegt
 ;
 
-/set util_vfunc_tf_version $Id: util.vfunc.tf,v 1.25 2002/08/28 13:13:49 thufhnik Exp $
+/set util_vfunc_tf_version $Id$
 /set util_vfunc_tf_author=Mesirii@mg.mud.de
 /set util_vfunc_tf_requires=
 /set util_vfunc_tf_desc Variablenfunktionen, isVar, purge_vars, World lokal Variablen
@@ -310,7 +313,10 @@ Falls die Erweiterung 'REGCOMP' vorhanden ist, wird die uebergebene Variable, di
 	/endif
 
 /def compile_single_regexp = \
-	/test %1:=regcomp(%1)
+	/test %{1}=/'reg_precomp_*'%;\
+	/if (!{?}) \
+		/test %1:=regcomp(%1)%;\
+	/endif
 
 /addh info \
 Falls die Erweiterung 'REGCOMP' vorhanden ist, wird die uebergebene Regexp wieder freigegeben.
@@ -328,6 +334,9 @@ Falls die Erweiterung 'REGCOMP' vorhanden ist, wird die uebergebene Regexp wiede
 	/endif
 
 /def free_single_regexp = \
-	/test regfree(%1)
+	/test %{1}=/'reg_precomp_*'%;\
+	/if ({?}) \
+		/test regfree(%1)%;\
+	/endif
 
 /addh_fileinfo
