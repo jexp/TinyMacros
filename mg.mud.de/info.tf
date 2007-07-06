@@ -68,16 +68,29 @@
 	/echo -paCred >>> Entferne Paket: @{Cyellow}info.tf%;\
 	/echo%;\
 	/purge InfoTrigger%;\
+	/purge InfoTriggerStart%;\
+	/purge InfoTriggerCh%;\
 	/purge InfoOut%;\
 	/purge InfoKurz%;\
 	/purge -mglob Info_*%;\
-	/quote -S /unset `"/listvar -mglob -s INFO_*%;\
-;"
+	/purge_vars INFO_*%;\
 	/purge remove_info
 
 ;;; Ab hier gehts eigentlich los
 
-/def -p10 -q -ag -mregexp -t'^- (\\(?.*(\\.|\\) )) -*$' InfoTrigger=\
+/def -p10 -q -ag -mregexp -t'^- (\\(?.+(\\.|\\) ))( -+|)' InfoTrigger=\
+     /if ({*}=/"*[.-]") \
+     	  /def -1 -F -p21 -t"*" InfoTriggerCheck = \
+	       /if ({*}!/"*........*") \
+     	           /echo -- %*%%;\
+	           /purge -mglob Info_*%%;\
+                /endif%;\
+          /InfoTriggerStart%;\
+     /else \
+	   /substitute -ax -- %*%;\
+     /endif
+
+/def InfoTriggerStart = \
 	/set p_full_name %P1%;\
 	/set INFO_Ende ja%;\
 	/set INFO_WMeldung keine%;\
