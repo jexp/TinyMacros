@@ -64,6 +64,15 @@
 /set vorsicht_tf_requires=lists.tf
 /set vorsicht_tf_desc=beliebige Fluchtrichtung und Festsetzen der Vorsicht
 
+; ********************* BEGIN CONFIG ********************
+/cfg_info mud fight vorsicht Vorsicht
+/cfg_info mud fight vorsicht TF_VORSICHT_RESTORE MUD_Vorsicht_zuruecksetzen:tf_vorsicht_restore
+/cfg_info mud fight vorsicht TF_VORSICHT TF_steuert_Vorsicht:tf_vorsicht
+/cfg_info mud fight vorsicht VORSICHT_NULL Fluchtvorsicht_temporaer_runtersetzen:vorsicht_null
+/cfg_info mud fight vorsicht FR_VORSICHT_NULL Fluchtrichtung_temporaer_runtersetzen:fr_vorsicht_null
+
+; ********************* END CONFIG ********************
+
 /set sl_vorsicht_doc=Vorsicht/Fluchtvorsicht, ! wenn TF gesteuerte Vorsicht, Farben prozentuale Lebenspunkte
 /def sl_vorsicht = \
   /init_var p_whimpie%;\
@@ -96,18 +105,25 @@ Trigger, der die Vorsicht und Fluchtrichtung vom Teddy abfaengt und auf Ueberein
 	    /let temp_whimpie=%{1}%;\
 	/endif%;\
 	/if (temp_whimpie!~p_whimpie) \
+	    /if (tf_vorsicht_restore==1) \
 	    /if (tf_vorsicht!=1 | (tf_vorsicht==1 & temp_whimpie!~tf_min_vorsicht)) \
 	        /echo -p @{Cred}Vorsicht geaendert auf: %temp_whimpie @{n}, zuruecksetzen auf %p_whimpie%;\
 ;	        /echo vorsicht $[(tf_vorsicht==1)?tf_min_vorsicht:p_whimpie]%;\
 	        /v %p_whimpie%;\
 	    /endif%;\
+	    /else \
+	    	 /set p_whimpie=%temp_whimpie%;\
+	    /endif%;\
 	/endif%;\
 	/let temp_escape=$[({2}=~"keine")?"":{-1}]%;\
 	/if (temp_escape!~p_escape) \
-	    /echo -p @{Cred}Fluchtrichtung geaendert auf: %temp_escape @{n}, zuruecksetzen auf %p_escape%;\
-; 08.12.2003 madness
-; ein %%; hinzugefueg, da sonst der erste + zweite befehl als ein befehl erkannt wird
-	    /fl %p_escape%%;%p_escape_tf%;\
+	    /if (tf_vorsicht_restore==1) \
+	    /echo -p @{Cred}Fluchtrichtung geaendert auf: %temp_escape @{n}, zuruecksetzen auf %p_escape\%;%p_escape_tf%;\
+	    /fl %p_escape\%;%p_escape_tf%;\
+	    /else \
+	    	 /set p_escape=%temp_escape%;\
+                 /set p_escape_tf=%;\
+	    /endif%;\
 	/endif%;
 
 /def -F -t"Vorsicht: ([0-9]+|keine)[.] Fluchtrichtung: (.+) $" -mregexp -agCyellow -p110 t_whimpie = \

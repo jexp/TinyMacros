@@ -17,6 +17,12 @@ steuert, ob die Vorsicht beim Fliehen für 10 Sekunden auf 0 gesetzt wird.
 /set_var vorsicht_null=1
 
 /addh info \
+Steuert, ob TF vom Mud empfangene Vorsicht und Fluchtrichtung uebernimmt oder auf die gespeicherten Wert zuruecksetzt
+/addh see tf_vorsicht
+/addh tf_vorsicht_restore var
+/set_var tf_vorsicht_restore=0
+
+/addh info \
 steuert, ob eine Fluchtrichtung aus mehr als einem Befehl, das Setzen der Vorsicht beim Fliehen für 10 Sekunden auf 0 aufhebt. Bei Fluchtrichtungen aus nur einem Befehl wird wenn dieses Flag gesetzt ist, trotzdem die Vorsicht auf 0 gesetzt.
 /addh see testvorsicht, exec_vorsicht
 /addh fr_vorsicht_null var
