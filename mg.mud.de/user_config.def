@@ -136,9 +136,7 @@
 
 ; Gilde laden
 
-/eval /echo /mload -U -c -vp_guild %p_guild.tf
-/eval /mload -U -c -vp_guild %p_guild.tf
+/eval /mload -U -c -g %{p_guild}.tf
 
 ; Rassenamhaengige Sachen laden
-/eval /echo /mload -U -c r_%{p_race}.tf
 /eval /mload -U -c r_%{p_race}.tf
