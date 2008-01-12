@@ -903,6 +903,7 @@ Trigger, der eigene femotes einfaerbt. Leider funktioniert dies bei mehrzeiligen
 /add_to_hook connect \
     /edit -mglob -t"%p_name * der Ferne." comm_t_femote1%;
 
+/add_to_hook connect /comm_update_living
 
 /addh info \
 Trigger, der femotes von den Freunden einfaerbt.
@@ -982,7 +983,7 @@ Trigger, der remotes von anderen einfaerbt.
 	/let pre=1%;\
     /endif%;\
     /if (!liv) \
-; Mit dem Genitiv muessen wir auch noch fertig werden.
+;; Mit dem Genitiv muessen wir auch noch fertig werden.
         /if (substr({1},-1) =/ "{\\'|s}") \
 	    /let liv=$[iskey("comm_living", tolower(substr({1},0,-1))) \
 	        != error]%;\
@@ -1242,9 +1243,9 @@ Ueberprueft durch Scan der Listen ?comm_living und ?comm_non_living, ob der als 
 	    /let comm_pos=$[strstr({*}," ")]%;\
 	    /set comm_last_partner_living=$[comm_check_living2(\
 	        tolower(substr({*},comm_pos+1)))]%;\
-	    /if (comm_last_partner_living > 1) \
-	        /repeat -0 1 /comm_update_living%;\
-	    /endif%;\
+;	    /if (comm_last_partner_living > 1) \
+;	        /repeat -0 1 /comm_update_living%;\
+;	    /endif%;\
 	/endif%;\
     /endif%;\
     /set comm_last_partner=$[tolower({*})]%;\
