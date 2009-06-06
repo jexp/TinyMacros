@@ -3,7 +3,7 @@
 ; Scratch
 ;
 
-/set kaempfer_tf_version $Id: kaempfer.tf,v 1.1 2002/11/20 12:29:23 thufhnik Exp $
+/set kaempfer_tf_version $Id$
 /set kaempfer_tf_author=Thufhir@mg.mud.de
 /set kaempfer_tf_requires=
 /set kaempfer_tf_desc=Loader der Kaempfergilde

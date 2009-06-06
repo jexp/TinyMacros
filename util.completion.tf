@@ -12,7 +12,7 @@
 ;  Log eingefuegt
 ;
 
-/set util_completion_tf_version $Id: util.completion.tf,v 1.6 2001/11/27 21:33:49 mh14 Exp $
+/set util_completion_tf_version $Id$
 /set util_completion_tf_author=Mesirii@mg.mud.de
 /set util_completion_tf_requires util.trigger.tf
 /set util_completion_tf_desc Erweiterte Vervollstaendigung (Completion)

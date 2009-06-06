@@ -3,7 +3,7 @@
 ; Erste Version
 ;
 
-/set mesg_repeat_tf_version $Id: mesg_repeat.tf,v 1.1 2002/04/23 10:49:26 lje Exp $
+/set mesg_repeat_tf_version $Id$
 /set mesg_repeat_tf_author=Vardion@mg.mud.de
 /set mesg_repeat_tf_requires=
 /set mesg_repeat_tf_desc=Zusammenfassen identischer Ausgaben vom Mud

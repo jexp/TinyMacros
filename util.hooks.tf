@@ -18,7 +18,7 @@
 ;  Log eingefuegt
 ;
 
-/set util_hooks_tf_version $Id: util.hooks.tf,v 1.9 2002/04/16 12:20:21 mh14 Exp $
+/set util_hooks_tf_version $Id$
 /set util_hooks_tf_author=Mesirii@mg.mud.de
 /set util_hooks_tf_requires=
 /set util_hooks_tf_desc Hooks=einfach erweiterbare Makrolisten, die bei bestimmten Gelegenheiten aufgerufen werden koennen

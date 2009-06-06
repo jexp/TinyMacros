@@ -51,7 +51,7 @@
 	/exit%;\
 /endif
 
-/set weapon_tf_version $Id: weapon.tf,v 1.15 2002/05/31 07:31:39 thufhnik Exp $
+/set weapon_tf_version $Id$
 /set weapon_tf_author=Mesirii@mg.mud.de
 /set weapon_tf_requires=lists.tf mg_properties.tf
 /set weapon_tf_desc Waffen-,Schildverwaltung mit Zuecken,Wegstecken,Check auf freie Haende

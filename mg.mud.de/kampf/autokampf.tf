@@ -12,7 +12,7 @@
 ; Scratch
 ;
 
-/set autokampf_tf_version $Id: autokampf.tf,v 1.4 2002/09/10 15:10:28 thufhnik Exp $
+/set autokampf_tf_version $Id$
 /set autokampf_tf_author=Thufhir@mg.mud.de
 /set autokampf_tf_requires=
 /set autokampf_tf_desc=Automatisches Wiedererstellen von Zaubern etc.

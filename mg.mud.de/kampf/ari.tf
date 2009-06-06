@@ -15,7 +15,7 @@
 ; Log eingefuegt
 ;
 
-/set ari_tf_version $Id: ari.tf,v 1.6 2002/02/10 22:36:40 mh14 Exp $
+/set ari_tf_version $Id$
 /set ari_tf_author=Mesirii@mg.mud.de
 /set ari_tf_requires=lists.tf
 /set ari_tf_desc Makros fuer Ari (Fernwaffen)

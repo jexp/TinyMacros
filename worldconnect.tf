@@ -71,7 +71,7 @@
 ;
 ;
 
-/set worldconnect_tf_version $Id: worldconnect.tf,v 1.23 2002/12/03 03:46:34 mh14 Exp $
+/set worldconnect_tf_version $Id$
 /set worldconnect_tf_author=Mesirii@mg.mud.de
 /set worldconnect_tf_requires lists.tf util.hooks.tf util.prompts.tf util.tf(1.21)
 /set worldconnect_tf_desc Speichern und Laden von Variablen, Connection mit automatischen Laden von Files

@@ -65,7 +65,7 @@
 ;; Halbkaraeter zaehlen auch nur halb
 ;; --------------------------------------------------------------------
 
-/set koma_tf_version=$Id: koma.tf,v 1.17 2004/10/16 09:47:25 thufhnik Exp $
+/set koma_tf_version=$Id$
 /set koma_tf_author=Olli@mg.mud.de
 /set koma_tf_requires=lists.tf
 /set koma_tf_desc=Komponenten-Anzeige der Zauberer

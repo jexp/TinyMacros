@@ -6,7 +6,7 @@
 ; Scratch
 ;
 
-/set tanjian_okami_tf_version $Id: tanjian_okami.tf,v 1.2 2002/03/31 12:51:06 thufhnik Exp $
+/set tanjian_okami_tf_version $Id$
 /set tanjian_okami_tf_author=Thufhir@mg.mud.de
 /set tanjian_okami_tf_requires=
 /set tanjian_okami_tf_desc=Tanjian Clanerweiterung

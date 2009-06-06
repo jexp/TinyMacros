@@ -15,7 +15,7 @@
 ;  Log eingefuegt
 ;
 
-/set util_abbrev_tf_version $Id: util.abbrev.tf,v 1.8 2001/11/27 21:34:06 mh14 Exp $
+/set util_abbrev_tf_version $Id$
 /set util_abbrev_tf_author=Mesirii@mg.mud.de
 /set util_abbrev_tf_requires lists.tf util.sfuncs.tf
 /set util_abbrev_tf_desc Abkuerzungen, die in multiple Mud-Kommandos expandiert werden

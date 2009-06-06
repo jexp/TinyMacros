@@ -1,4 +1,4 @@
-/set klerus_lembold_tf_version $Id: klerus_lembold.tf,v 1.3 2004/12/29 14:14:42 thufhnik Exp $
+/set klerus_lembold_tf_version $Id$
 /set klerus_lembold_tf_author=Deepblue@mg.mud.de
 /set klerus_lembold_tf_requires=util.repeat.tf config.tf
 /set klerus_lembold_tf_desc=Statuserweiterung der Lembold-Erleuchteten

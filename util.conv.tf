@@ -3,7 +3,7 @@
 ; Scratch
 ;
 
-/set util_conv_tf_version $Id: util.conv.tf,v 1.1 2002/05/12 09:11:07 thufhnik Exp $
+/set util_conv_tf_version $Id$
 /set util_conv_tf_author=Thufhir@mg.mud.de
 /set util_conv_tf_requires=
 /set util_conv_tf_desc Verschiedene Konvertierungen

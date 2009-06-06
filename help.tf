@@ -88,7 +88,7 @@
 ;  Log eingefuegt
 ;
 
-/set help_tf_version $Id: help.tf,v 1.30 2002/12/05 10:34:33 mh14 Exp $
+/set help_tf_version $Id$
 /set help_tf_author=Mesirii@mg.mud.de
 /set help_tf_requires=!lists.tf(1.28) util.sfunc.tf util.echo.tf util.hooks.tf
 /set help_tf_desc=Hilfesystem mit Hilfegenerierung (Listen+Html)

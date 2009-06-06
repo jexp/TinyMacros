@@ -9,7 +9,7 @@
 ; fileinfo,log,config sektion
 ;
 
-/set break_string_tf_version $Id: break_string.tf,v 1.4 2001/12/09 17:52:07 lje Exp $
+/set break_string_tf_version $Id$
 /set break_string_tf_author=Vardion@mg.mud.de
 /set break_string_tf_requires=
 /set break_string_tf_desc=break_string, stretch_string zum Formatieren von Texten
@@ -18,7 +18,7 @@
 ;;;
 ;;; (c) Vardion@MorgenGrauen
 ;;;
-;;; $Id: break_string.tf,v 1.4 2001/12/09 17:52:07 lje Exp $
+;;; $Id$
 ;;;
 ;;; break_string ist an die efun break_string() angelehnt und arbeitet auch
 ;;; fast so

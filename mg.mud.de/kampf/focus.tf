@@ -25,7 +25,7 @@
 ; Changelog fehlte
 ;
 
-/set focus_tf_version=$Id: focus.tf,v 1.12 2004/03/15 12:41:09 thufhnik Exp $
+/set focus_tf_version=$Id$
 /set focus_tf_author=Thufhir@mg.mud.de
 /set focus_tf_requires=reduce.tf util.vfunc.tf util.hooks.tf util.namestr.tf
 /set focus_tf_desc=Automatisches Setzen eines Opfers in der Variable %opfer

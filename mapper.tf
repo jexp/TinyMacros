@@ -13,7 +13,7 @@
 ;
 ;
 
-/set mapper_tf_version $Id: mapper.tf,v 1.5 2002/05/03 14:09:25 mh14 Exp $
+/set mapper_tf_version $Id$
 /set mapper_tf_author=Mesirii@mg.mud.de
 /set mapper_tf_requires=!lists.tf way.tf util.trigger.tf(1.22)
 /set mapper_tf_desc=Makros fuer das Zusammenspiel mit dem Mapper

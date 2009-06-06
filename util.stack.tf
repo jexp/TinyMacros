@@ -9,7 +9,7 @@
 ;  Log eingefuegt
 ;
 
-/set util_stack_tf_version $Id: util.stack.tf,v 1.6 2001/11/30 13:44:12 mh14 Exp $
+/set util_stack_tf_version $Id$
 /set util_stack_tf_author=Mesirii@mg.mud.de
 /set util_stack_tf_requires=
 /set util_stack_tf_desc Diverse Stackfunktionen

@@ -15,7 +15,7 @@
 ; loginfo
 ;
 
-/set chaos_tf_version $Id: chaos.tf,v 1.6 2002/09/28 12:53:13 mh14 Exp $
+/set chaos_tf_version $Id$
 /set chaos_tf_author=Mesirii@mg.mud.de
 /set chaos_tf_requires lists.tf 
 /set chaos_tf_desc=Diverse Hilfsmakros fuer die Chaosgilde
@@ -129,7 +129,7 @@ ruft verbannen mit dem aktuellen Daemoen auf
 /addh info beschwoert den angegebenen Daemonen, und setzt diesen als aktuellen Daemonen (natuerlich nur wenn Bedingungen stimmen (?zauber))
 /addh var demon
 /addh list %demon_list_name
-/addh see zauber, sd, spell_set_and_cast
+/addh see zauber, sd, spell_t_and_cast
 /addh d comm
 /defh d = /sd %* %; /spell_set_and_cast %d %;
 

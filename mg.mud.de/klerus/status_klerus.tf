@@ -31,7 +31,7 @@
 ; Scratch
 ;
 
-/set status_klerus_tf_version $Id: status_klerus.tf,v 1.10 2003/10/08 09:58:33 thufhnik Exp $
+/set status_klerus_tf_version $Id$
 /set status_klerus_tf_author=Thufhir@mg.mud.de
 /set status_klerus_tf_requires=util.repeat.tf config.tf(1.16)
 /set status_klerus_tf_desc=Statuszeile fuer die Klerikergilde

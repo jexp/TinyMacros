@@ -146,7 +146,7 @@
 ;  Log eingefuegt
 ;
 
-/set way_tf_version $Id: way.tf,v 1.49 2003/08/20 12:53:06 nieten Exp $
+/set way_tf_version $Id$
 /set way_tf_author=Mesirii@mg.mud.de
 /set way_tf_requires=!lists.tf util.sfunc.tf util.prompts.tf util.hooks.tf util.trigger.tf(1.18) util.vfunc(1.21)
 /set way_tf_desc Wegesystem

@@ -97,7 +97,7 @@
 ; Scratch
 ;
 
-/set inventory_tf_version=$Id: inventory.tf,v 1.30 2004/04/14 07:41:55 thufhnik Exp $
+/set inventory_tf_version=$Id$
 /set inventory_tf_author=Thufhir@mg.mud.de
 /set inventory_tf_requires=util.hooks.tf util.trigger.tf
 /set inventory_tf_desc=Pruefen ob gewisse Gegenstaende im Inv vorhanden sind

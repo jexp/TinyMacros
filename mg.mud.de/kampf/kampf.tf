@@ -24,7 +24,7 @@
 ; Log eingefuegt
 ;
 
-/set kampf_tf_version $Id: kampf.tf,v 1.9 2002/05/16 16:42:45 nieten Exp $
+/set kampf_tf_version $Id$
 /set kampf_tf_author=Mesirii@mg.mud.de
 /set kampf_tf_requires=lists.tf spells.tf weapon.tf mg_properties.tf ari.tf
 /set kampf_tf_desc Kampfrunden, Arinutzung, Spellwaffenspells, Kampf-Hooks

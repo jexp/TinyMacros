@@ -118,7 +118,7 @@
 ;  Log eingefuegt
 ;
 
-/set loading_tf_version $Id: loading.tf,v 1.43 2002/12/06 15:33:54 mh14 Exp $
+/set loading_tf_version $Id$
 /set loading_tf_author=Mesirii@mg.mud.de
 /set loading_tf_requires lists.tf util.hooks.tf util.prompts.tf
 /set loading_tf_desc /mload, /setos, Speichern und Laden von Variablen
@@ -309,6 +309,7 @@ Wenn ein Makro dateiname_tf_init definiert ist, wird dieses nach dem Laden ausge
 	   /break%;\
 	/endif%;\
         /eval_hook pre_load %mload_file %fullparam%;\
+	/echo /load %load_dir%mload_base_file.cfg%;\
 	/load %load_dir%mload_base_file.cfg%;\
 	/load %load_dir%mload_base_file.def%;\
 	/try_load %{load_dir-.} %mload_file %file_suffixes%;\

@@ -6,7 +6,7 @@
 ;  Log eingefuegt
 ;
 
-/set uselists_tf_version $Id: uselists.tf,v 1.5 2001/10/07 18:29:53 mh14 Exp $
+/set uselists_tf_version $Id$
 /set uselists_tf_author=Mesirii@mg.mud.de
 /set uselists_tf_requires=lists.tf util.tf
 /set uselists_tf_desc Anwendungen der Listen z.b. Tanken, Spells, Waffen

@@ -3,7 +3,7 @@
 ; Scratch
 ;
 
-/set status_abenteurer_tf_version $Id: status_abenteurer.tf,v 1.1 2002/09/12 08:54:36 thufhnik Exp $
+/set status_abenteurer_tf_version $Id$
 /set status_abenteurer_tf_author=Ahab@mg.mud.de
 /set status_abenteurer_tf_requires=util.hooks.tf config.tf(1.16)
 /set status_abenteurer_tf_desc=Statuszeile und Report fuer die Abenteurergilde

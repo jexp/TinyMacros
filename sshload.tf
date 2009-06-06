@@ -7,7 +7,7 @@
 ;
 ;
 
-/set sshload_tf_version $Id: sshload.tf,v 1.3 2001/10/02 13:55:37 lje Exp $
+/set sshload_tf_version $Id$
 /set sshload_tf_author=Vardion@mg.mud.de
 /set sshload_tf_requires=
 /set sshload_tf_desc remote load per ssh

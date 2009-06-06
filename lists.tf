@@ -147,7 +147,7 @@
 ;  Log eingefuegt
 ;
 
-/set lists_tf_version $Id: lists.tf,v 1.49 2003/01/07 17:03:36 nieten Exp $
+/set lists_tf_version $Id$
 /set lists_tf_author=Mesirii@mg.mud.de
 /set lists_tf_requires=util.tf loading.tf util.echo.tf(1.21)
 /set lists_tf_desc Key-Value Listen, Arrays, Sortierfunktionen, Iteratoren ...

@@ -144,7 +144,7 @@
 ;  Log eingefuegt
 ;
 
-/set mg_properties_tf_version $Id: mg_properties.tf,v 1.50 2003/09/13 08:48:45 thufhnik Exp $
+/set mg_properties_tf_version $Id$
 /set mg_properties_tf_author=Mesirii@mg.mud.de
 /set mg_properties_tf_requires=properties.tf(1.12) lists.tf util.tf util.hooks.tf util.trigger.tf util.sfunc.tf
 /set mg_properties_tf_desc Auslesen der Spielerproperties mittels catch-trigger und Liste

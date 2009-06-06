@@ -21,7 +21,7 @@
 ; Scratch
 ;
  
-/set karate_tf_version $Id: karate.tf,v 1.7 2003/06/22 08:36:22 rumburuk Exp $
+/set karate_tf_version $Id$
 /set karate_tf_author=Thufhir@mg.mud.de
 /set karate_tf_requires=status_ext.tf hydra.tf
 /set karate_tf_desc=Loader der Karategilde

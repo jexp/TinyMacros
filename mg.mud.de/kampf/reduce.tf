@@ -1,7 +1,7 @@
 
 ;;; reduce.tf - der Nachfolger von Ringors legendaerem kampfmeldungen.tf
 
-/set reduce_tf_version $Id: reduce.tf,v 2.22 2004/07/16 08:27:32 thufhnik Exp $
+/set reduce_tf_version $Id$
 /set reduce_tf_author=Thufhir@mg.mud.de
 /set reduce_tf_requires=util.vfunc.tf util.hooks.tf
 /set reduce_tf_desc=Kampfscrollreduzierer
@@ -3943,6 +3943,16 @@
 		/set RE_SMS @{%RE_FARBE_27}S@{%RE_FARBE_35}%;\
 	/else \
 		/set RE_SMS @{%RE_FARBE_27}2@{%RE_FARBE_35}%;\
+	/endif
+
+;;; Skillschild
+
+/def -p1 -q -agCmagenta -mregexp -t'Dein Schild faengt .+ Angriff (.+) ab.' re_skillschild = \
+        /let qual=$[list_idx({P1}, "kaum","ein wenig","etwas","gut","sehr gut","genial")]%;\
+	/if (RE_SMS =~ 'S') \
+		/set RE_SMS @{%RE_FARBE_27}2@{%RE_FARBE_35}%;\
+	/else \
+		/set RE_SMS @{%RE_FARBE_27}%qual@{%RE_FARBE_35}%;\
 	/endif
 
 ;;; Kieferknochen

@@ -18,7 +18,7 @@
 ; erste Version
 ;
 
-/set util_xref_tf_version=$Id: util.xref.tf,v 1.6 2001/10/18 18:18:21 nieten Exp $
+/set util_xref_tf_version=$Id$
 /set util_xref_tf_author=Dotz@mg.mud.de
 /set util_xref_tf_requires=util.tf(1.10)
 /set util_xref_tf_desc=Erstellt zu einer TF-Datei eine Liste aller benoetigten Makros incl. Files

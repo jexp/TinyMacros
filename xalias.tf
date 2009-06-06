@@ -15,7 +15,7 @@
 ; erweiterte aliasnamen (?,*,..) fileinfo,log,umbenannt,config list location
 ;
 
-/set xalias_tf_version $Id: xalias.tf,v 1.4 2003/08/04 10:01:51 lje Exp $
+/set xalias_tf_version $Id$
 /set xalias_tf_author=Vardion@mg.mud.de
 /set xalias_tf_requires=functions.tf lists.tf
 /set xalias_tf_desc=Erstellung von Aliases auf Client-Basis

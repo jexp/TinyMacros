@@ -12,7 +12,7 @@
 ; Scratch
 ;
  
-/set zauberer_tf_version $Id: zauberer.tf,v 1.4 2002/09/03 12:30:31 thufhnik Exp $
+/set zauberer_tf_version $Id$
 /set zauberer_tf_author=Thufhir@mg.mud.de
 /set zauberer_tf_requires=util.tf util.sfunc.tf
 /set zauberer_tf_desc=Loader der Zauberergilde

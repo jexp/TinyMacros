@@ -64,7 +64,7 @@
 ; Scratch
 ;
 
-/set status_tanjian_tf_version $Id: status_tanjian.tf,v 1.21 2004/05/06 15:27:03 thufhnik Exp $
+/set status_tanjian_tf_version $Id$
 /set status_tanjian_tf_author=Thufhir@mg.mud.de
 /set status_tanjian_tf_requires=status.tf(1.24) util.vfunc(1.18)
 /set status_tanjian_tf_desc=Statuszeile und Report fuer die Tanjiangilde

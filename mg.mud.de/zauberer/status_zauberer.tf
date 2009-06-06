@@ -104,7 +104,7 @@
 ; Scratch
 ;
 
-/set status_zauberer_tf_version $Id: status_zauberer.tf,v 1.33 2004/01/10 15:24:16 thufhnik Exp $
+/set status_zauberer_tf_version $Id$
 /set status_zauberer_tf_author=Thufhir@mg.mud.de
 /set status_zauberer_tf_requires=util.hooks.tf config.tf(1.16)
 /set status_zauberer_tf_desc=Statuszeile und Report fuer die Zauberergilde

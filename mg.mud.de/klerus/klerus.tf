@@ -53,7 +53,7 @@
 ; Scratch
 ;
  
-/set klerus_tf_version $Id: klerus.tf,v 1.17 2003/10/31 10:32:21 rumburuk Exp $
+/set klerus_tf_version $Id$
 /set klerus_tf_author=Thufhir@mg.mud.de
 /set klerus_tf_requires=util.tf
 /set klerus_tf_desc=Loader der Klerusgilde

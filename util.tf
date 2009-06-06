@@ -817,14 +817,27 @@ ist ein Beispiel fuer eine Option mit Leerzeichen.
 /def edit_macros = \
     /let new_opt=%1%;\
     /shift%;\
+    /set edit_macros=%;\
     /while ({#}) \
-	/quote -S /edit_macros2 %new_opt `/list -s %1%;\
+	/quote -S /edit_macros3 `/list -s %1%;\
+;	/quote -S /edit_macros2 %new_opt `/list -s %1%;\
 	/shift%;\
-    /done
+    /done%;\
+    /edit_macros_by_number %new_opt %edit_macros
+
+/def edit_macros_by_number = \
+    /let new_opt=%1%;\
+    /shift%;\
+    /while ({#}) \
+        /edit %new_opt #%1%;\
+	/shift%;\
+    /done%;\
 
 /def edit_macros2 = \
     /edit %1 #$[substr({3},0,-1)]
 
+/def edit_macros3 = \
+     /set edit_macros=%edit_macros $[substr({2},0,-1)]
 
 
 /addh info \

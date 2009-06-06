@@ -59,7 +59,7 @@
 ;  Log eingefuegt
 ;
 
-/set util_echo_tf_version $Id: util.echo.tf,v 1.21 2002/10/09 22:38:12 mh14 Exp $
+/set util_echo_tf_version $Id$
 /set util_echo_tf_author=Mesirii@mg.mud.de
 /set util_echo_tf_requires=util.vfunc.tf
 /set util_echo_tf_desc Echo-Erweiterungen (Spalten, bedingt, Zeilenumbruch)

@@ -3,7 +3,7 @@
 ; Inventar begutachten
 ;
 
-/set inventory2_tf_version=$Id: inventory2.tf,v 1.1 2002/10/18 12:22:22 mh14 Exp $
+/set inventory2_tf_version=$Id$
 /set inventory2_tf_author=Mesirii@morgengrauen
 /set inventory2_tf_requires=util.hooks.tf util.trigger.tf
 /set inventory2_tf_desc=Pruefen ob gewisse Gegenstaende im Inv vorhanden sind

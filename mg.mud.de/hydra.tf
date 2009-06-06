@@ -27,7 +27,7 @@
 ; Scratch
 ;
 
-/set hydra_tf_version $Id: hydra.tf,v 1.8 2003/03/27 12:47:56 thufhnik Exp $
+/set hydra_tf_version $Id$
 /set hydra_tf_author=Thufhir@mg.mud.de
 /set hydra_tf_requires=util.hooks.tf util.conv.tf
 /set hydra_tf_desc=Utilities rund um die Hydra

@@ -15,7 +15,7 @@
 ; Scratch
 ;
 
-/set tanjian_kagekitsune_tf_version $Id: tanjian_kagekitsune.tf,v 1.5 2002/05/31 08:24:52 thufhnik Exp $
+/set tanjian_kagekitsune_tf_version $Id$
 /set tanjian_kagekitsune_tf_author=Thufhir@mg.mud.de
 /set tanjian_kagekitsune_tf_requires=
 /set tanjian_kagekitsune_tf_desc=Tanjian Clanerweiterung

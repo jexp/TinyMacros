@@ -3,7 +3,7 @@
 ;; (c) 2001 olm@uni.de, Olli@mg.mud.de
 ;;
 
-/set erwarte_tf_version=$Id: erwarte.tf,v 1.9 2004/10/07 15:50:52 chbr Exp $
+/set erwarte_tf_version=$Id$
 /set erwarte_tf_author=Olli@mg.mud.de
 /set erwarte_tf_desc=erweiterte Erwarte-Anzeige
 

@@ -69,7 +69,7 @@
 ;  Log eingefuegt
 ;
 
-/set untroom_tf_version $Id: untroom.tf,v 1.21 2004/04/17 15:24:58 chbr Exp $
+/set untroom_tf_version $Id$
 /set untroom_tf_author=Mesirii@mg.mud.de
 /set untroom_tf_requires=!lists.tf
 /set untroom_tf_desc Hilfsprogramm zum manuellen Untersuchen von Raeumen, Ausfragen von Npcs usw.

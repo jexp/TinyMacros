@@ -3,7 +3,7 @@
 ; Neue Statuszeile fuer Kaempfer, Danke Madness!
 ;
 
-/set status_kaempfer_tf_version $Id: status_kaempfer.tf,v 1.2 2004/03/14 08:49:06 thufhnik Exp $
+/set status_kaempfer_tf_version $Id$
 /set status_kaempfer_tf_author=Madness@mg.mud.de
 /set status_kaempfer_tf_requires=status_ext.tf hydra.tf
 /set status_kaempfer_tf_desc=Statuszeile fuer die Kaempfergilde

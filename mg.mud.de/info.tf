@@ -31,7 +31,7 @@
 ; Scratch
 ;
 
-/set info_tf_version=$Id: info.tf,v 1.10 2003/10/16 19:26:11 thufhnik Exp $
+/set info_tf_version=$Id$
 /set info_tf_author=Thufhir@mg.mud.de
 /set info_tf_requires=mg_properties.tf util.vfunc.tf
 /set info_tf_desc=Info schoener anzeigen

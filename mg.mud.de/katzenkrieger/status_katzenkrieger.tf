@@ -6,7 +6,7 @@
 ; Scratch (zum Testen des neuen cfg_echo erstmal nur das Katzenauge...)
 ;
 
-/set status_katzenkrieger_tf_version $Id: status_katzenkrieger.tf,v 1.2 2002/05/21 13:43:03 thufhnik Exp $
+/set status_katzenkrieger_tf_version $Id$
 /set status_katzenkrieger_tf_author=Thufhir@mg.mud.de
 /set status_katzenkrieger_tf_requires=config.tf(1.15) status.tf
 /set status_katzenkrieger_tf_desc=Statuszeile die Katzenkriegergilde

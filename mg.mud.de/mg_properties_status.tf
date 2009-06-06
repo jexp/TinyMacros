@@ -8,7 +8,7 @@
 ;
 ;
 
-/set mg_properties_status_tf_version $Id: mg_properties_status.tf,v 1.2 2003/12/19 16:04:43 thufhnik Exp $
+/set mg_properties_status_tf_version $Id$
 /set mg_properties_status_tf_author=Mesirii@mg.mud.de
 /set mg_properties_status_tf_requires=lists.tf util.tf util.hooks.tf util.trigger.tf util.sfunc.tf status.tf(1.19) mg_properties.tf(1.46)
 /set mg_properties_status_tf_desc Statuszeilendefinitionen für Morgengrauen Properties

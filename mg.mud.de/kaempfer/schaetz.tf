@@ -16,7 +16,7 @@
 ; Log
 ;
 
-/set schaetz_tf_version=$Id: schaetz.tf,v 1.6 2004/09/05 09:48:11 thufhnik Exp $
+/set schaetz_tf_version=$Id$
 /set schaetz_tf_author=Eldaron@MorgenGrauen
 /set schaetz_tf_requires=break_string.tf
 /set schaetz_tf_desc=Schaetzen der Kaempfer schoener

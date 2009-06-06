@@ -98,7 +98,7 @@
 ;;; Basis: Ringors gag.tf 
 ;;;
 
-/set gag_tf_version $Id: gag.tf,v 1.30 2004/03/15 08:36:55 thufhnik Exp $
+/set gag_tf_version $Id$
 /set gag_tf_author=Deepblue@mg.mud.de
 /set gag_tf_desc=Gager gegen nervende Ausgaben
 /set gag_tf_requires=util.vfunc.tf util.tf

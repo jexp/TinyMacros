@@ -6,7 +6,7 @@
 ;
 ;
 
-/set querylines_tf_version $Id: querylines.tf,v 1.1 2002/12/13 12:00:20 lje Exp $
+/set querylines_tf_version $Id$
 /set querylines_tf_author=Vardion@mg.mud.de
 /set querylines_tf_requires=
 /set querylines_tf_desc=Ermittlung der Zeileneinstellung eines Spielers

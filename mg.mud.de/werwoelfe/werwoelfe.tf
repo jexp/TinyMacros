@@ -13,7 +13,7 @@
 ; Scratch
 ;
  
-/set werwoelfe_tf_version $Id: werwoelfe.tf,v 1.4 2002/09/19 10:11:19 thufhnik Exp $
+/set werwoelfe_tf_version $Id$
 /set werwoelfe_tf_author=Thufhir@mg.mud.de
 /set werwoelfe_tf_requires=util.tf loading.tf
 /set werwoelfe_tf_desc=Loader der Werwolfgilde

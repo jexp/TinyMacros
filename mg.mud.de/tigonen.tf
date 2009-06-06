@@ -4,7 +4,7 @@
 ;
 ;
 
-/set tigonen_tf_version $Id: tigonen.tf,v 1.1 2002/05/12 10:15:58 thufhnik Exp $
+/set tigonen_tf_version $Id$
 /set tigonen_tf_author=Thufhir@mg.mud.de
 /set tigonen_tf_requires=util.conv.tf
 /set tigonen_tf_desc=Utility fuer das Tigonenamulett

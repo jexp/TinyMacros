@@ -305,7 +305,7 @@
 ; erste Version
 ;
 
-/set comm_tf_version=$Id: comm.tf,v 1.93 2003/08/25 13:03:28 nieten Exp $
+/set comm_tf_version=$Id$
 /set comm_tf_author=Dotz@mg.mud.de
 /set comm_tf_requires=!help.tf !config.tf util.tf(1.18) util.sfunc.tf(1.8) util.trigger.tf(1.11) util.windows.tf lists.tf loading.tf(1.33) util.completion.def, util.echo.tf(1.13)
 /set comm_tf_desc=Einfaerbung und Formatierung der Kommunikation, Logging und einfache History

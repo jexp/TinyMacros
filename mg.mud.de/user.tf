@@ -12,7 +12,7 @@
 ;  Log eingefuegt
 ;
 
-/set user_tf_version $Id: user.tf,v 1.6 2001/12/20 22:38:33 mh14 Exp $
+/set user_tf_version $Id$
 /set user_tf_author=Mesirii@mg.mud.de
 /set user_tf_requires=lists.tf customize.tf
 /set user_tf_desc Beispieldatei fuer Spieler "user" mit Einstellungen wie Keybindings

@@ -15,7 +15,7 @@
 ; Scratch
 ;
 
-/set status_ext_tf_version $Id: status_ext.tf,v 1.5 2002/10/05 16:04:06 thufhnik Exp $
+/set status_ext_tf_version $Id$
 /set status_ext_tf_author=Thufhir@mg.mud.de
 /set status_ext_tf_requires=way.tf(1.28)
 /set status_ext_tf_desc zusaetzliche Statusmodule

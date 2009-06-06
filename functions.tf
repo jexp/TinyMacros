@@ -3,7 +3,7 @@
 ; fileinfo,log,escape_macro_name
 ;
 
-/set functions_tf_version $Id: functions.tf,v 1.2 2001/12/08 22:38:13 mh14 Exp $
+/set functions_tf_version $Id$
 /set functions_tf_author=Vardion@mg.mud.de
 /set functions_tf_requires=
 /set functions_tf_desc=kleine Funktionssammlung
@@ -12,7 +12,7 @@
 
 ;;; (c) Vardion@MorgenGrauen
 
-;;; $Id: functions.tf,v 1.2 2001/12/08 22:38:13 mh14 Exp $
+;;; $Id$
 
 /def cap = /result strcat(toupper(substr({1}, 0, 1)), substr({*}, 1))
 

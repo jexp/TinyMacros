@@ -5,7 +5,7 @@
 ; Revision 1.1  2002/09/04 17:25:29  chbr
 ; Clan Nekekami (kiri)
 
-/set tanjian_nekekami_tf_version=$Id: tanjian_nekekami.tf,v 1.2 2002/09/04 17:47:16 thufhnik Exp $
+/set tanjian_nekekami_tf_version=$Id$
 /set tanjian_nekekami_tf_author=Asuka@mg.mud.de
 /set tanjian_nekekami_tf_requires=
 /set tanjian_nekekami_tf_desc=Tanjian Clanerweiterung

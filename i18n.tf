@@ -32,7 +32,7 @@
 ; Revision 1.1  2001/09/12 08:03:52  mh14
 ; Internationalisierung
 ;
-/set i18n_tf_version $Id: i18n.tf,v 1.11 2002/12/06 16:17:15 mh14 Exp $
+/set i18n_tf_version $Id$
 /set i18n_tf_author=Mesirii@mg.mud.de
 /set i18n_tf_requires=lists.tf
 /set i18n_tf_desc Internationalisierung

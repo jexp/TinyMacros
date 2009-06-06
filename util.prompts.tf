@@ -24,7 +24,7 @@
 ;  Log eingefuegt
 ;
 
-/set util_prompts_tf_version $Id: util.prompts.tf,v 1.11 2003/12/11 10:35:49 mh14 Exp $
+/set util_prompts_tf_version $Id$
 /set util_prompts_tf_author=Mesirii@mg.mud.de
 /set util_prompts_tf_requires lists.tf util.hooks.tf
 /set util_prompts_tf_desc Makros zum Nutzen der Prompts, des Muds um Makros auszufuehren

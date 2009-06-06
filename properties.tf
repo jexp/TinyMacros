@@ -34,7 +34,7 @@
 ;  Log eingefuegt
 ;
 
-/set properties_tf_version $Id: properties.tf,v 1.14 2002/12/02 11:56:48 mh14 Exp $
+/set properties_tf_version $Id$
 /set properties_tf_author=Mesirii@mg.mud.de
 /set properties_tf_requires=!lists.tf util.sfunc.tf util.trigger.tf
 /set properties_tf_desc Makros fuer das Verwalten von Spielereigenschaften

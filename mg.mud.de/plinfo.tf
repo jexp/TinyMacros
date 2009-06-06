@@ -43,7 +43,7 @@
 ;
 ;
 
-/set plinfo_tf_version $Id: plinfo.tf,v 1.10 2003/02/27 14:46:21 lje Exp $
+/set plinfo_tf_version $Id$
 /set plinfo_tf_author=Vardion@mg.mud.de
 /set plinfo_tf_requires=
 /set plinfo_tf_desc=TF-Teilersatz fuer Patryns Scoreamulett

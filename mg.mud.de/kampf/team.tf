@@ -47,7 +47,7 @@
 ; Team-Makros und Trigger
 ;
 
-/set team_tf_version $Id: team.tf,v 1.13 2002/11/19 17:20:11 nieten Exp $
+/set team_tf_version $Id$
 /set team_tf_author Mesirii@mg.mud.de
 /set team_tf_requires=way.tf util(1.38)
 /set team_tf_desc=Team-Makros 

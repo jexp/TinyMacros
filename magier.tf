@@ -34,7 +34,7 @@
 ; hilfmakros fuer xtool, filename und objektnamen completion per tab
 ;
 
-/set magier_tf_version $Id: magier.tf,v 1.6 2002/10/04 19:33:53 mh14 Exp $
+/set magier_tf_version $Id$
 /set magier_tf_author=Mesirii@mg.mud.de
 /set magier_tf_requires=
 /set magier_tf_desc=Magierhilfsmittel vor allem Completion fuer Filenamen und Objekte

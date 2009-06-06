@@ -19,7 +19,7 @@
 ; Scratch
 ;
 
-/set skills_tf_version $Id: skills.tf,v 1.6 2004/03/14 07:55:22 thufhnik Exp $
+/set skills_tf_version $Id$
 /set skills_tf_author=Thufhir@mg.mud.de
 /set skills_tf_requires=
 /set skills_tf_desc Skills der Trves in %

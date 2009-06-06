@@ -9,7 +9,7 @@
 ; Scratch
 ;
  
-/set abenteurer_tf_version $Id: abenteurer.tf,v 1.3 2002/09/12 12:32:35 thufhnik Exp $
+/set abenteurer_tf_version $Id$
 /set abenteurer_tf_author=Ahab@mg.mud.de
 /set abenteurer_tf_requires=util.tf util.sfunc.tf
 /set abenteurer_tf_desc=Loader der Abenteurergilde

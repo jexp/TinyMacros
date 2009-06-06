@@ -167,6 +167,18 @@ Wenn der String weniger als 10 Zeichen beinhaltet, wird der Hashcode nach folgen
 ;/endif
 
 
+/def list_idx =\
+         /let tmp=%1%;\
+         /shift%;\
+         /let result=0%;\
+         /while ({#}) \
+         /test ++result%;\
+         /if (tmp=~{1}) /result result%;/endif%;\
+	 /shift%;\
+         /done%;\
+         /result 0%;
+
+
 ;;;; /qsort by Ken Keys
 ;;; usage:  /qsort comparison-function item...
 ;;; Echoes the sorted items.

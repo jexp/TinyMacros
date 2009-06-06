@@ -12,7 +12,7 @@
 ;  Log eingefuegt
 ;
 
-/set util_timer_tf_version $Id: util.timer.tf,v 1.7 2002/03/29 22:28:03 mh14 Exp $
+/set util_timer_tf_version $Id$
 /set util_timer_tf_author=Mesirii@mg.mud.de
 /set util_timer_tf_requires=
 /set util_timer_tf_desc Timer in Sekunden und Millisekunden (patched tf)

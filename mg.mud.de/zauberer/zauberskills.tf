@@ -1,7 +1,7 @@
 ;;; 'zauberskills.tf' - Zauberer-Info anpassen
 ;;;
 
-/set zauberskills_tf_version $Id: zauberskills.tf,v 1.2 2003/05/07 22:19:33 olm Exp $
+/set zauberskills_tf_version $Id$
 /set zauberskills_tf_author=Vardion@mg.mud.de
 /set zauberskills_tf_requires=
 /set zauberskills_tf_desc=Anpassung der Zauberer-Einschaetzung
@@ -10,7 +10,7 @@
 ;;; Version: 1.19
 ;;; Letzte Aenderung: 05.08.2002  (c) Vardion@MorgenGrauen
 ;;;
-;;; $Id: zauberskills.tf,v 1.2 2003/05/07 22:19:33 olm Exp $
+;;; $Id$
 ;;;
 ;;; History:
 ;;;

@@ -12,7 +12,7 @@
 ; Spells in Listen, mit Check auf freie Haende,Magiepunkte,Waffenwegstecken,Statusmodul fuer spell_busy,spell
 ;
 ;
-/set spell_tf_version $Id: spell.tf,v 1.4 2002/02/10 22:36:40 mh14 Exp $
+/set spell_tf_version $Id$
 /set spell_tf_author=Mesirii@mg.mud.de
 /set spell_tf_requires=lists.tf mg_properties.tf weapon.tf
 /set spell_tf_desc Spellverwaltung mit Casting,Check auf freie Haende, Kosten,Sperrzeiten, Wiederholung

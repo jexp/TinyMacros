@@ -72,7 +72,7 @@
 ; /cfg_echo fuer bedingte Alternativausgaben von Triggern, CFG_ECHO_GAG_LEVEL auch dafuer
 ;
 
-/set config_tf_version $Id: config.tf,v 1.24 2002/12/06 16:20:34 mh14 Exp $
+/set config_tf_version $Id$
 /set config_tf_author=Mesirii@mg.mud.de
 /set config_tf_requires=!lists.tf util.echo.tf(1.20) util.sfunc.tf(1.7)
 /set config_tf_desc=Konfigurationssystem
@@ -122,6 +122,8 @@ Speichert die als letzten Parameter uebergebene Variable in dem user_config.cfg-
      /let cfg_file=%{load_dir}user_config.cfg%;\
      /let cfg_cmp_line=/set %cfg_var*%;\
      /cfg_mod_file%;
+
+; TODO ggf verzeichnisse anlegen !!
 
 /def cfg_mod_file = \
 ;/let cfg_file=%{cfg_file}.test%;\

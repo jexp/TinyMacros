@@ -59,7 +59,7 @@
 ; Log eingefuegt, Hilfetexte korrigiert
 ;
 
-/set vorsicht_tf_version $Id: vorsicht.tf,v 1.20 2003/12/09 16:24:07 thufhnik Exp $
+/set vorsicht_tf_version $Id$
 /set vorsicht_tf_author Dotz@mg.mud.de, Mesirii@mg.mud.de
 /set vorsicht_tf_requires=lists.tf
 /set vorsicht_tf_desc=beliebige Fluchtrichtung und Festsetzen der Vorsicht

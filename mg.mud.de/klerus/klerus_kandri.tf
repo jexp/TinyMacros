@@ -1,4 +1,4 @@
-/set klerus_kandri_tf_version $Id: klerus_kandri.tf,v 1.5 2002/09/04 11:40:36 thufhnik Exp $
+/set klerus_kandri_tf_version $Id$
 /set klerus_kandri_tf_author=Thufhir@mg.mud.de
 /set klerus_kandri_tf_requires=weapon2.tf
 /set klerus_kandri_tf_desc=Alles fuer Kandri-Geweihte

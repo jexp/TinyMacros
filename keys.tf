@@ -55,7 +55,7 @@
 ; Revision 1.1  2001/09/12 11:38:44  olm
 ; Mehrfach-Tastenbelegung
 
-/set keys_tf_version $Id: keys.tf,v 1.17 2002/12/06 15:50:31 mh14 Exp $
+/set keys_tf_version $Id$
 /set keys_tf_author=Olli@mg.mud.de
 /set keys_tf_requires=lists.tf
 /set keys_tf_desc Mehrfach-Tastenbelegungen

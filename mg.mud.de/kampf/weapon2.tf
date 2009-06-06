@@ -64,7 +64,7 @@
 ; Scratch
 ;
 
-/set weapon2_tf_version $Id: weapon2.tf,v 1.20 2003/08/25 07:31:38 thufhnik Exp $
+/set weapon2_tf_version $Id$
 /set weapon2_tf_author=Thufhir@mg.mud.de
 /set weapon2_tf_requires=lists.tf worldconnect.tf(1.18)
 /set weapon2_tf_desc Waffen- und Schildverwaltung (Ersatz fuer die weapon.tf)

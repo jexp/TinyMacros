@@ -6,7 +6,7 @@
 ; Ueberarbeitetes File von Ringor
 ;
 
-/set fehlschlaege_tf_version $Id: fehlschlaege.tf,v 1.2 2002/06/16 09:04:29 thufhnik Exp $
+/set fehlschlaege_tf_version $Id$
 /set fehlschlaege_tf_author=Thufhir@mg.mud.de
 /set fehlschlaege_tf_requires=
 /set fehlschlaege_tf_desc Fehlschlaege mitzaehlen fuer Trves

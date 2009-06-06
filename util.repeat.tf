@@ -18,7 +18,7 @@
 ;  Log eingefuegt
 ;
 
-/set util_repeat_tf_version $Id: util.repeat.tf,v 1.9 2002/09/10 14:45:23 thufhnik Exp $
+/set util_repeat_tf_version $Id$
 /set util_repeat_tf_author=Mesirii@mg.mud.de
 /set util_repeat_tf_requires util.hooks.tf
 /set util_repeat_tf_desc Countdown,Heartbeats,Kommando-Counter

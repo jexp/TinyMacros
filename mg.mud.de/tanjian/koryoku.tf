@@ -3,7 +3,7 @@
 ; Uebernahme von Eldaron ins CVS
 ;
 
-/set koryoku_tf_version=$Id: koryoku.tf,v 1.1 2002/09/09 14:07:11 thufhnik Exp $
+/set koryoku_tf_version=$Id$
 /set koryoku_tf_author=Eldaron@MorgenGrauen
 /set koryoku_tf_requires=break_string.tf
 /set koryoku_tf_desc=Ausgabe von Koryoku schoener

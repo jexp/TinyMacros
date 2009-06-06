@@ -15,7 +15,7 @@
 ;  Log eingefuegt
 ;
 
-/set util_debug_tf_version $Id: util.debug.tf,v 1.8 2002/03/27 01:33:19 mh14 Exp $
+/set util_debug_tf_version $Id$
 /set util_debug_tf_author=Mesirii@mg.mud.de
 /set util_debug_tf_requires=lists.tf
 /set util_debug_tf_desc=Debug-Funktionen, Variablenueberwachung

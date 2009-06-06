@@ -18,7 +18,7 @@
 ; Scratch
 ;
 
-/set status_werwoelfe_tf_version=$Id: status_werwoelfe.tf,v 1.6 2002/09/10 13:26:47 thufhnik Exp $
+/set status_werwoelfe_tf_version=$Id$
 /set status_werwoelfe_tf_author=Asuka@mg.mud.de,Thufhir@mg.mud.de
 /set status_werwoelfe_tf_requires=config.tf status.tf
 /set status_werwoelfe_tf_desc=Statuszeile fuer die Werwolfgilde

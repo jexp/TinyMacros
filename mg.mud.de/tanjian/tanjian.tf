@@ -21,7 +21,7 @@
 ; Scratch
 ;
  
-/set tanjian_tf_version $Id: tanjian.tf,v 1.7 2004/03/14 09:22:15 thufhnik Exp $
+/set tanjian_tf_version $Id$
 /set tanjian_tf_author=Thufhir@mg.mud.de
 /set tanjian_tf_requires=
 /set tanjian_tf_desc=Loader der Tanjiangilde

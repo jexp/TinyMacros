@@ -116,7 +116,7 @@
 ;  Log eingefuegt
 ;
 
-/set status_tf_version $Id: status.tf,v 1.36 2002/12/06 16:17:59 mh14 Exp $
+/set status_tf_version $Id$
 /set status_tf_author=Mesirii@mg.mud.de
 /set status_tf_requires=
 /set status_tf_desc Statuszeile, die ihre Attribute selbst aendern kann
