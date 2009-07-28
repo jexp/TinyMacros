@@ -10,6 +10,8 @@
    /foreach notes k /note_triggers2%;\
    /if (note_triggers!~"") \
        /def -mregexp -t\"^($[escape("",escape(".?*+()",note_triggers))])\$\" -p0 t_note_trigger = /test note_trigger({*})%;\
+   /else \
+       /purge t_note_trigger%;\
    /endif%;
 
 /def note_triggers2 = \
