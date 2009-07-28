@@ -2825,7 +2825,7 @@ Vergleicht die aktuelle Raumbeschreibung mit der Liste 'lastpoints' und liefert 
       /endif%;\
       /let off=$[strstr(value,strcat(">I<",new_fulldetail))] %;\
      /done%;\
-     /if (char_count>0) /set value=%res_key%;\
+     /if (char_count>strlen(new_fulldetail)) /set value=%res_key%;\
      /else /set value=%error%; /endif%;
 
 /def getpoint2 = \
