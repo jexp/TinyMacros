@@ -282,4 +282,30 @@ Wenn der String weniger als 10 Zeichen beinhaltet, wird der Hashcode nach folgen
 
 /def reval = /eval /let tmp_eval=%*\%;/return tmp_eval
 
+/addh info Vergleicht Strings und liefert die Anzahl der Zeichen bis zu der die Strings gleich sind
+/addh syn /strcmpn string1 string2
+/addh return Anzahl gleicher Zeichen
+/addh strcmpn mak
+
+/def strcmpn = \
+   /let _maxlen=0%;\
+   /let _first=%;\
+   /let _second=%;\
+   /test _first:={1},_second:={2}%;\
+   /test _maxlen:=strlen(_first) < strlen(_second) ? strlen(_first) : strlen(_second)%;\
+   /let _start=0%;\
+   /let _len=%_maxlen%;\
+;   /let _count=0%;\
+   /while (_len > 0) \
+   /while (_len > 0 & strncmp(_first,_second,_start + _len)!=0) \
+;         /test ++_count%;\
+   	 /test _len:=_len/2%;\
+   /done%;\
+;   /echo -e %_count %_start %_len%;\
+   /if (_len==0 | _start + _len >= _maxlen) /result _start + _len%;/endif%;\
+   /test _start:=_start + _len%;\
+   /test _maxlen:=_start + _len%;\
+   /done%;\
+   /result _start + _len%;
+
 /addh_fileinfo

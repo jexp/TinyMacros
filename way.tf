@@ -2786,22 +2786,18 @@ Vergleicht die aktuelle Raumbeschreibung mit der Liste 'lastpoints' und liefert 
      /set nextmakro=/test getpoint2("%{1}","%{-1}")%;\
      %mud_look_command %;
 
-/def getpoint2 = \
-;/echo %*%;\
+/def lookup_lastpoints = \
       /if (getpoint=~"") \
         /set value=%lastpoints%;\
       /else \
         /test value:=\{%getpoint\}%;\
-;/vdebug value%;\
       /endif%;\
-      /test fulldetail:=strcat("@{N}",fulldetail)%;\
-      /restricttoexit noexits%;\
-;      /test fulldetail:=strcat(fulldetail,room_exits)%;\
       /let char_count=0%;\
       /let res_key=%;\
       /let new_fulldetail=%;\
       /let old_fulldetail=$[substr(fulldetail,4)]%;\
       /let off=$[strstr(old_fulldetail,"@{N}")]%;\
+;
 	/if (off>-1) \
 	  /let new_fulldetail=$[strcat(new_fulldetail,"@{N}",substr(old_fulldetail,0,off))]%;\
 	  /let old_fulldetail=$[substr(old_fulldetail,off+4)]%;\
@@ -2809,17 +2805,15 @@ Vergleicht die aktuelle Raumbeschreibung mit der Liste 'lastpoints' und liefert 
 	  /let new_fulldetail=$[strcat(new_fulldetail,old_fulldetail)]%;\
 	  /let old_fulldetail=%;\
 	/endif%;\
-;/let new_fulldetail%; /let old_fulldetail%;\
+;
       /let off=$[strstr(value,strcat(">I<",new_fulldetail))] %;\
       /while (off>-1) \
       /let reg=$[substr(value,0,off)]%;\
       /set value=$[substr(value,off+3)]%;\
       /let off=$[strstr(value,"<I>")]%;\
-;      /let off%;\
-;      /echo $[substr(fulldetail,0,off)]%;\
-;      /echo $[substr(value,0,off)]%;\
-      /if (strncmp(fulldetail,value,off)==0 & off>char_count) \
-        /let char_count=%off%;\
+      /let _new_count=$[strcmpn(fulldetail,value)]%;\
+      /if (_new_count>0 & _new_count>char_count) \
+        /let char_count=%_new_count%;\
 	   /let off=$[strrchr(reg,"<")] %;\
 	   /while (substr(reg,off,3)!~"<I>") \
 	     /let res_key=$[strcat(substr(reg,off),res_key)]%;\
@@ -2832,13 +2826,15 @@ Vergleicht die aktuelle Raumbeschreibung mit der Liste 'lastpoints' und liefert 
       /let off=$[strstr(value,strcat(">I<",new_fulldetail))] %;\
      /done%;\
      /if (char_count>0) /set value=%res_key%;\
-     /else /set value=%error%; /endif%;\
-;     /set value%;\
+     /else /set value=%error%; /endif%;
+
+/def getpoint2 = \
+      /test fulldetail:=strcat("@{N}",fulldetail)%;\
+      /restricttoexit noexits%;\
+;      /test fulldetail:=strcat(fulldetail,room_exits)%;\
+     /lookup_lastpoints%;\
      /if (value!~error & value!/"keys_*" & {#}>0) /eval -s0 %1 %value %; \
      /elseif ({#}>1) /eval -s0 %-1 %; /endif %;
-
-;     /restricttoexit %;\
-;     /getkeyofvalue lastpoints %fulldetail %;
 
 /addh info \
 Die Nummer des Triggers, der beim Grabben der Raumbeschreibung von ?/getpoint verwendet wird.@{N}\
