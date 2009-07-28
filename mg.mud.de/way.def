@@ -121,6 +121,13 @@ Kommando zum Anschauen des Raumes.
 /cfg_info mud commands LOOK_COMMAND Schaue-Kommando:mud_look_command
 
 /addh info \
+Kommando zum Anschauen der Kurzbeschreibung des Raumes.
+/addh see way.tf, untroom.tf, notes.tf
+/addh mud_look_short_command var
+/set_var mud_look_short_command schaue -k
+/cfg_info mud commands LOOK_SHORT_COMMAND Schaue-Kurz-Kommando:mud_look_short_command
+
+/addh info \
 Kommando zur Anzeige der Ausgaenge.
 /addh mud_show_exits_command var
 
