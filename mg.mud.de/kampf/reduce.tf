@@ -3394,7 +3394,7 @@
 
 ;;; Blitz
 
-/def -p1 -agCblue -q -mregexp -t'^([^ ].+) (hebt|erhebst) die Haende gen \
+/def -p1 -agCblue -q -mregexp -t'^([^ ].+) (hebt|erhebst) (eine Hand|die Haende) gen \
 	Himmel und beschwoers?t ' re_klerus_blitz = \
 	/purge re_klerus_blitz_1%;\
 	/if ({PR} !/ '*.') \
