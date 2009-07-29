@@ -810,7 +810,7 @@ Behandelt auch special tm's d.h. Trenner ungleich ":".@{N}\
 /addh comm_t_teilemit2 trig
 
 /def -p5 -E(!comm_mpa_mail) -ag -mregexp \
-    -t"^Du teilst( [Dd]einen)? ([A-Za-z ]+(@[A-Za-z0-9'._:@& -]+)?) \
+    -t"^Du teilst( [Dd]einen)? ([A-Za-z0-9 ]+(@[A-Za-z0-9'._:@& -]+)?) \
     mit([:;]) " comm_t_teilemit2 = \
     /let comm_name=%P2%;\
     /let comm_special=$[{P4}!~":"]%;\

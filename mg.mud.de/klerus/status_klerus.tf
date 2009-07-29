@@ -1,4 +1,7 @@
 ; $Log: status_klerus.tf,v $
+; Revision 1.11  2009/02/16 10:58:05  xutelius
+; Elementarschild Saeure
+;
 ; Revision 1.10  2003/10/08 09:58:33  thufhnik
 ; Talismantrigger sauberer
 ;
@@ -31,7 +34,7 @@
 ; Scratch
 ;
 
-/set status_klerus_tf_version $Id$
+/set status_klerus_tf_version $Id: status_klerus.tf,v 1.10 2003/10/08 09:58:33 thufhnik Exp $
 /set status_klerus_tf_author=Thufhir@mg.mud.de
 /set status_klerus_tf_requires=util.repeat.tf config.tf(1.16)
 /set status_klerus_tf_desc=Statuszeile fuer die Klerikergilde
@@ -89,7 +92,7 @@
 	/init_var klerus_gm%;\
 	/return status_var("klerus_gm",1)
 
-/set sl_klerus_es_doc=Elementarschild (E: Erde, F: Feuer, W: Wasser, L: Luft \
+/set sl_klerus_es_doc=Elementarschild (E: Erde, F: Feuer, W: Wasser, L: Luft S: Saeure \
 	K: Kaelte)
 /def sl_klerus_es = \
 	/init_var klerus_es%;\
@@ -255,6 +258,20 @@
 	/set klerus_es=L%;\
 	/set klerus_es_type=luft%;\
 	/echo -aCgreen Elementarschild Luft
+
+; Elementarschild Saeure
+
+/def -Fp20 -agCblue -msimple -t'Eine Wolke aus Saeuregasen bildet sich um \
+	Dich herum. Einige Blitze erden sich' klerus_ess = \
+	/purge -mglob klerus_ess_g*%;\
+	/def -1 -Fp20 -agCblue -msimple -t'durch die leitfaehigen gruenen \
+	Schwaden ab, einer haette Dich beinahe in den' klerus_ess_g1 = \
+/def -1 -Fp20 -agCblue -msimple -t'Fuss getroffen!' klerus_ess_g2 = \
+		/set status_attr_klerus_es=%KLERUS_ESW_F%%;\
+		/set klerus_es=S%%;\
+		/set klerus_es_type=saeure%%;\
+		/echo -aCgreen Elementarschild Saeure
+
 
 ; Elementarschild Kaelte
 
