@@ -3998,6 +3998,14 @@ Durchforstet die Liste der Knoteninfos nach Knoten, die in dem uebergebenen Attr
 	  /set output=$[strcat(output," (",value,")@{N}")]%;\
 	/endif%;\
 
+/def clean_lastpoints = \
+     /createlist lastpoints2%;\
+     /def _clean_lastpoints=/test fulldetail:={-1},restricttoexit(),addtolist("lastpoints2",{1},fulldetail)%;\
+     /foreach lastpoints kv /_clean_lastpoints%;\
+     /test lastpoints:=lastpoints2%;\
+     /savenodes%;\
+     /unset lastpoints2%;
+
 ;;; Regexps setzen und ggf. vorkompilieren
 
 /set way_regexp_find6=([bpn0-9]) ([^ ]+) ([0-9]+)
