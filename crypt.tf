@@ -129,19 +129,29 @@
 
 /set ctm_regexp=
 
-/def rc4encrypt = \
-	/setenv CTM_KEY=%cryptkey%; \
-	/let rc4encrypt_res=$[shellpipe('openssl enc -e -base64 -rc4 -salt \
-		-pass env:CTM_KEY|tr \\\\n _', {*})]%; \
-	/setenv CTM_KEY=%; \
-	/result rc4encrypt_res
+/if (have_ext('RC4')) \
+        /def rc4encrypt = \
+                /result segment('_', 64, rc4enc(cryptkey, {*}))%; \
+/else \
+        /def rc4encrypt = \
+	        /setenv CTM_KEY=%%cryptkey%%; \
+	        /let rc4encrypt_res=$[shellpipe('openssl enc -e -base64 -rc4 \
+			-salt -pass env:CTM_KEY|tr \\\\\\\\n _', {*})]%%; \
+	        /setenv CTM_KEY=%%; \
+	        /result rc4encrypt_res%; \
+/endif
 
-/def rc4decrypt = \
-	/setenv CTM_KEY=%cryptkey%; \
-	/let rc4decrypt_res=$[shellpipe('tr _ \\\\n|openssl enc -d \
-		-base64 -rc4 -salt -pass env:CTM_KEY', {*})]%; \
-	/unset CTM_KEY%; \
-	/result rc4decrypt_res
+/if (have_ext('RC4')) \
+	/def rc4decrypt = \
+		/result rc4dec(cryptkey, replace('_', '', {*}))%; \
+/else \
+	/def rc4decrypt = \
+		/setenv CTM_KEY=%%cryptkey%%; \
+		/let rc4decrypt_res=$[shellpipe('tr _ \\\\\\\\n|openssl enc \
+			-d -base64 -rc4 -salt -pass env:CTM_KEY', {*})]%%; \
+		/unset CTM_KEY%%; \
+		/result rc4decrypt_res%; \
+/endif
 
 /if (!have_ext('MD5')) /def md5 = \
 	/return shellpipe('openssl md5', {*})%; \
