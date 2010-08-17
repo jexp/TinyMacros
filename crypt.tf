@@ -245,14 +245,15 @@
 /def -p100000 -mregexp -q -ag -t' CTM aus der Ferne: ?' \
 	decrypt_remote = \
 	/let rem_pos=%; \
-	/set crypttext=%PR%; \
 	/if ((rem_pos:=strstr({PL}, '->')) > -1) \
+		/set crypttext=%PR%; \
 		/set ctm_partner=$[tolower(substr({PL}, 0, rem_pos))]%; \
 		/if (!regmatch('^[A-Za-z]+$$', ctm_partner)) \
 			/set ctm_partner=$[tolower(crypt_receiver)]%; \
 		/endif%; \
 		/set ctm_direction=out%; \
 	/else \
+		/set crypttext=%; \
 		/set ctm_partner=%; \
 		/set ctm_direction=in%; \
 	/endif%; \
