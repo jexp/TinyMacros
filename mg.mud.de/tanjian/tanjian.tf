@@ -20,8 +20,8 @@
 ; Revision 1.1  2001/12/12 16:14:58  thufhnik
 ; Scratch
 ;
- 
-/set tanjian_tf_version $Id$
+
+/set tanjian_tf_version $Id: tanjian.tf,v 1.7 2004/03/14 09:22:15 thufhnik Exp $
 /set tanjian_tf_author=Thufhir@mg.mud.de
 /set tanjian_tf_requires=
 /set tanjian_tf_desc=Loader der Tanjiangilde
@@ -42,6 +42,8 @@
 	/mload -c -dtanjian tanjian_okami.tf%;\
 /elseif (p_sub_guild =~ 'nekekami') \
 	/mload -c -dtanjian tanjian_nekekami.tf%;\
+/elseif (p_sub_guild =~ 'ryu') \
+	/mload -c -dtanjian tanjian_ryu.tf%;\
 /endif
 
 ; Stufenkosten
@@ -79,11 +81,13 @@
 	Dich sein. Du hast Dich gegen Gut und Boese' \
 	tanjian_kosten5 = \
 	/def -agCblue -msimple -Fp99 -1 -t'durchgesetzt und das Ziel fast \
-		erreicht!' tanjian_kosten5a = /tanjian_kosten 80-99 
+		erreicht!' tanjian_kosten5a = /tanjian_kosten 80-99
 
 ; gehoert eigentlich ins cfg, ist aber wohl schon tradition:
 
 /remove_from_hook points /echo_hit_points
+
+/mload -c -dtanjian koryoku.tf
 
 ;;; Anfaelligkeiten/Resistenzen bei Koryoku einfaerben
 
