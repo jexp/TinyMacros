@@ -104,7 +104,7 @@
 ; Scratch
 ;
 
-/set status_zauberer_tf_version $Id$
+/set status_zauberer_tf_version $Id: status_zauberer.tf,v 1.33 2004/01/10 15:24:16 thufhnik Exp $
 /set status_zauberer_tf_author=Thufhir@mg.mud.de
 /set status_zauberer_tf_requires=util.hooks.tf config.tf(1.16)
 /set status_zauberer_tf_desc=Statuszeile und Report fuer die Zauberergilde
@@ -187,7 +187,7 @@
 /set_var CFG_MG_ZAUBERER_SCHATTEN_1_ECHO_ATTR Cgreen
 /set_var CFG_MG_ZAUBERER_SCHATTEN_2_ECHO_TEXT Schattenkaempfer kraeftig
 /set_var CFG_MG_ZAUBERER_SCHATTEN_2_ECHO_ATTR Cgreen
-/set_var CFG_MG_ZAUBERER_SCHATTEN_3_ECHO_TEXT Schattenkaempfer stark 
+/set_var CFG_MG_ZAUBERER_SCHATTEN_3_ECHO_TEXT Schattenkaempfer stark
 /set_var CFG_MG_ZAUBERER_SCHATTEN_3_ECHO_ATTR Cgreen
 /set_var CFG_MG_ZAUBERER_SCHATTEN_ALR_ECHO_TEXT Schattenkaempfer schon vorhanden
 /set_var CFG_MG_ZAUBERER_SCHATTEN_ALR_ECHO_ATTR Cyellow
@@ -310,7 +310,7 @@
 /set_var CFG_MG_ZAUBERER_LICHT_ECHO_ATTR Cgreen
 /set_var CFG_MG_ZAUBERER_LICHT_ECHO_TEXT Licht
 
-; Illusion 
+; Illusion
 /set_var CFG_MG_ZAUBERER_ILLUSION_ECHO_ATTR Cgreen
 /set_var CFG_MG_ZAUBERER_ILLUSION_ECHO_TEXT Illusion
 
@@ -359,6 +359,8 @@
 /set_var CFG_MG_ZAUBERER_SCHUTZZONE_ECHO_TEXT Schutzzone
 /set_var CFG_MG_ZAUBERER_SCHUTZZONE_AUS_ECHO_ATTR Cred
 /set_var CFG_MG_ZAUBERER_SCHUTZZONE_AUS_ECHO_TEXT Schutzzone aus
+/set_var CFG_MG_ZAUBERER_SCHUTZZONE_WIRKT_ATTR Cred
+/set_var CFG_MG_ZAUBERER_SCHUTZZONE_WIRKT_ATTR_TEXT Es wirkt doch schon eine Schutzzone!
 
 ; Wandlung
 /set_var CFG_MG_ZAUBERER_WANDLUNG_ECHO_ATTR Cgreen
@@ -453,7 +455,7 @@
 /def sl_zauberer_schutz = \
 	/set_status_var_count zauberer_schutz zauberer_schutz 1 4
 
-/set sl_zauberer_extrahand_doc=Extrahand $[status_doc_attr("ZAUBERER_EXTRAHAND_1")] 
+/set sl_zauberer_extrahand_doc=Extrahand $[status_doc_attr("ZAUBERER_EXTRAHAND_1")]
 /def sl_zauberer_extrahand = \
 	/set_status_var_flag zauberer_extrahand zauberer_extrahand 1
 
@@ -465,7 +467,7 @@
 /def sl_zauberer_hand = \
 	/set_status_var_count zauberer_hand zauberer_hand 1 3
 
-/set sl_zauberer_wille_doc=Wille $[status_doc_attr("ZAUBERER_WILLE_1")] 
+/set sl_zauberer_wille_doc=Wille $[status_doc_attr("ZAUBERER_WILLE_1")]
 /def sl_zauberer_wille = \
 	/set_status_var_flag zauberer_wille zauberer_wille 1
 
@@ -621,7 +623,7 @@
 
 /def -Fp8 -q -w -agCblue -mregexp -t'^Die (fahlblaue|blaeulich schimmernde|\
 	blau leuchtende|gleissend blaue) Schutzaura um Dich loest sich \
-	langsam auf\\.$' zauberer_schutz_aus = \
+	langsam auf\\.' zauberer_schutz_aus = \
 	/cfg_echo MG_ZAUBERER_SCHUTZ_AUS %*%;\
 	/set zauberer_schutz 0%;\
 	/if /ismacro autokampf_update%; /then \
@@ -661,7 +663,7 @@
 
 /def -Fp8 -q -w -agCblue -mregexp -t'^Die (schwarze A|(fahlgueldene|guelden \
 	schimmernde|golden leuchtende|gleissend goldene) Schutza)ura \
-	um Dich loest sich langsam auf\\.$' zauberer_schutzhuelle_aus = \
+	um Dich loest sich langsam auf\\.' zauberer_schutzhuelle_aus = \
 	/cfg_echo MG_ZAUBERER_SCHUTZHUELLE_AUS %*%;\
 	/set zauberer_schutz 0%;\
 	/if /ismacro autokampf_update%; /then \
@@ -894,7 +896,7 @@
 
 /ifdef p_sub_guild=~"abwehr" -p0 -mregexp -q -w -agCblue -t'^Die (gleissend \
 	rote|rot leuchtende|roetlich schimmernde|fahlroetliche) Schutzaura \
-	um Dich loest sich langsam auf\\.$' zauberer_zauberschild_aus = \
+	um Dich loest sich langsam auf\\.' zauberer_zauberschild_aus = \
 	/cfg_echo MG_ZAUBERER_ZSCHILD_AUS %*%;\
 	/if /ismacro autokampf_update%; /then \
 		/autokampf_update zauberschild%;\
@@ -1006,6 +1008,9 @@
 /def -Fp8 -msimple -q -agCblue -t'Eine Zone rotgluehender, wirbelnder \
 	Funken erfuellt den Raum.' zauberer_schutzzone_here = \
 	/cfg_echocolor MG_ZAUBERER_SCHUTZZONE %*
+
+/def -Fp8 -mglob -q -agCblue -t'Es wirkt doch schon eine Schutzzone*' \
+	zauberer_schutzzone_wirkt = /cfg_echo MG_ZAUBERER_SCHUTZZONE_WIRKT %*
 
 ; Wandlung
 

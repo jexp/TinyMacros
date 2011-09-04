@@ -64,7 +64,7 @@
 ; Scratch
 ;
 
-/set status_tanjian_tf_version $Id$
+/set status_tanjian_tf_version $Id: status_tanjian.tf,v 1.21 2004/05/06 15:27:03 thufhnik Exp $
 /set status_tanjian_tf_author=Thufhir@mg.mud.de
 /set status_tanjian_tf_requires=status.tf(1.24) util.vfunc(1.18)
 /set status_tanjian_tf_desc=Statuszeile und Report fuer die Tanjiangilde
@@ -551,10 +551,10 @@
 		/echo ??%;\
 	/endif
 
-/def -msimple -p200 -agCblue -t'Siamil teilt Dir mit: Dies sind Deine \
-	Faehigkeiten:' tanjian_sia_pro_tr1 = \
+/def -mregexp -p200 -agCblue -t'^Siamil teilt Dir mit: Dies sind Deine \
+	(Waffenf|F)aehigkeiten:$' tanjian_sia_pro_tr1 = \
 	/echo -ahCgreen Faehigkeiten:%;\
-	/def -p200 -mregexp -agCblue -t'^Siamil teilt Dir mit\\\\: ([a-z]+)\
+	/def -p200 -mregexp -agCblue -t'^Siamil teilt Dir mit\\\\: ([a-zA-Z]+)\
 		\\\\.+([a-z ]+)$$' tanjian_sia_pro_rep = \
 		/let TANJIAN_TMP_PRO=$$(/tanjian_str2percent %%P2)%%;\
 		/echo -aCgreen %%P1: %%TANJIAN_TMP_PRO\%%;\
