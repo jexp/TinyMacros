@@ -2462,6 +2462,17 @@
 
 ;;; Samusa
 
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"tanjian") -p1 -agCblue -q -w \
+	-msimple -t'Du konzentrierst Dich auf die Kaelte des Universums.' \
+	re_tan_samusa1 = \
+	/purge -mglob re_tan_samusa_*%;\
+	/set RE_ANGREIFER Du%;\
+	/set RE_WAFFE Samusa%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/def -1 -p2 -agCblue -q -w -msimple -t'Es wird ploetzlich kaelter.' \
+	    re_tan_samusa_1%;\
+	/re_tan_samusaschaden%;
+
 /def -p1 -q -w -agCblue -mregexp -t' lenks?t die Kaelte auf (.+)\\.$' \
 	re_tan_samusa = \
 	/set RE_ANGREIFER %PL%;\
