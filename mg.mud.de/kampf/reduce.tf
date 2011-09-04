@@ -7,21 +7,21 @@
 /set reduce_tf_desc=Kampfscrollreduzierer
 
 ; ALLGEMEINE SACHEN (WICHTIG!!!!)
-; Dieses File tut im Prinzip das gleiche wie Ringors kampfmeldungen.tf es 
+; Dieses File tut im Prinzip das gleiche wie Ringors kampfmeldungen.tf es
 ; getan haben. Leider laessen sich die kampfmeldungen an originaler Stelle
 ; nicht mehr finden.
 ;
-; Mit Ringors Einverstaendnis habe ich einige Aenderungen vorgenommen und 
+; Mit Ringors Einverstaendnis habe ich einige Aenderungen vorgenommen und
 ; dieses File entstehen lassen.
 ; Die Nutzung dieses Files setzt voraus, dass Ringor mit keinem, aber auch
-; absolut _keinem_ Fehler, der durch die Nutzung entsteht oder entstanden 
-; sein koennte, belaestigt wird. Das Debuggen und die eventuelle Hilfe zur 
-; Installation uebernehme ich, also belaestigt den Kampfzerg bitte nicht 
-; und beschert ihm unnoetige Arbeit, sondern wendet Euch vertrauensvoll an 
+; absolut _keinem_ Fehler, der durch die Nutzung entsteht oder entstanden
+; sein koennte, belaestigt wird. Das Debuggen und die eventuelle Hilfe zur
+; Installation uebernehme ich, also belaestigt den Kampfzerg bitte nicht
+; und beschert ihm unnoetige Arbeit, sondern wendet Euch vertrauensvoll an
 ; den Zauberzwerg also an mich (Thufhir!).
 ; Vielen Dank an die ausdauernden Betatester Ahab, Asuka und Eldaron!
-; 
-; HINWEISE 
+;
+; HINWEISE
 ; Wichtig: einmal tippen: "angriffsmeldung an"... das kurzinfo hat wenig
 ; Sinn...
 ; Nachdem die kampfmeldungen.tf vom author aus dem Netz genommen wurden
@@ -31,13 +31,13 @@
 ;
 ; Generell hat sich intern einiges geaendert, zB. habe ich einige Trigger -
 ; meiner Einschaetzung nach - sauberer gemacht und die meisten Trigger sind
-; nur aktiv, wenn sie wirklich gebraucht werden. Weiterhin sind einige 
-; Spells der Tanjian und neue Meldungen beim Verletze & Giftpfeil der Zauberer 
-; hinzugekommen. Die Treffermeldungen des Wasserstrahls der Katzenkrieger 
-; haben ein voellig falsches Bild geliefert (kein Wunder, dass die 
+; nur aktiv, wenn sie wirklich gebraucht werden. Weiterhin sind einige
+; Spells der Tanjian und neue Meldungen beim Verletze & Giftpfeil der Zauberer
+; hinzugekommen. Die Treffermeldungen des Wasserstrahls der Katzenkrieger
+; haben ein voellig falsches Bild geliefert (kein Wunder, dass die
 ; alle irgendwie deprimiert sind, voellig unterschaetzt der Spell). Auch sind
-; in reduce.tf bereits weitere kleinere Abwehrhelfer und die 
-; Karatekombinationen beruecksichtigt (auch wenn sie noch keine Auswirkungen 
+; in reduce.tf bereits weitere kleinere Abwehrhelfer und die
+; Karatekombinationen beruecksichtigt (auch wenn sie noch keine Auswirkungen
 ; haben).
 ;
 ; Kleinere Schaeden koennen jetzt ausgeblendet werden, das heisst sie werden
@@ -91,7 +91,7 @@
 ; *******S  der oktarine Ring aus Para-Moulokin saugt einem selbst Energie
 ; *Xxxxx**  Ziel hat mit einer Karatetechnik abgewehrt. Bei eigener Abwehr
 ;           bedeutet 'magenta' eine gelungene und 'rot' eine misslungene
-;           Abwehr. Analog dazu werden die Farben 'gelb' und 'blau' fuer 
+;           Abwehr. Analog dazu werden die Farben 'gelb' und 'blau' fuer
 ;           Karate-Abwehr von Gegnern benutzt.
 ; *Auswe**  ein Karateka oder Kaempfer weicht Magie aus
 ; *DeSch**  Schutzschild der Dunkelelfen
@@ -165,18 +165,18 @@
 ;
 ; Die Standard-Ausgabezeile hat folgendes Format:
 ;
-;                             Angreifer         Opfer     Abwehr   Pfeil      
-;                                 |               |          |     |     
+;                             Angreifer         Opfer     Abwehr   Pfeil
+;                                 |               |          |     |
 ;   ....normal/Schwert..... Du........... : Gegner....... ******** -> hart
 ;        |    |    |                      |                             |
 ;        Angriffsart                 Fuellzeichen            Trefferstaerke
 ;
 ; Die Reihenfolge der Ausgabe dieser Bloecke kann frei konfiguriert werden.
-; Lediglich der Block 'Angriffsart' ist eine feste Kombination von drei 
-; einzelnen Elementen, die innerhalb dieses Blockes nicht umsortiert werden 
-; koennen. 
+; Lediglich der Block 'Angriffsart' ist eine feste Kombination von drei
+; einzelnen Elementen, die innerhalb dieses Blockes nicht umsortiert werden
+; koennen.
 ;
-; Je nach gewuenschter Reihenfolge ist es vielleicht angebracht, das 
+; Je nach gewuenschter Reihenfolge ist es vielleicht angebracht, das
 ; Fuellzeichen umzudefinieren oder ganz zu loeschen. Wenn ein anderes Zeichen
 ; als der ':' ausgegeben werden soll, muss die Variable 'RE_FUELLZEICHEN' das
 ; gewuenschte Zeichen enthalten. Soll auf die Ausgabe des Fuellzeichens ganz
@@ -189,7 +189,7 @@
 ;
 ; Die eigentliche Definition der Ausgabezeile geschieht nun nach dem Schema
 ; "/set RE_ELEMENT_<nummer>=<blockname>". Es muss jede <nummer> von 1 bis 7
-; definiert werden. Fuer <blockname> sind die aus der obigen Skizze 
+; definiert werden. Fuer <blockname> sind die aus der obigen Skizze
 ; ersichtlichen Namen einzutragen.
 ;
 ; Die Standard-Ausgabezeile erhaelt man dann mit folgenden Zeilen:
@@ -210,8 +210,8 @@
 ; haben moechte oder lieber eigene Texte haette, der kann die Treffermeldungen
 ; frei konfigurieren.
 ;
-; Fuer die Treffermeldungen stehen zehn Zeichen zur Verfuegung. Werden 
-; laengere Texte angegeben, so werden diese entsprechend gekuerzt. 
+; Fuer die Treffermeldungen stehen zehn Zeichen zur Verfuegung. Werden
+; laengere Texte angegeben, so werden diese entsprechend gekuerzt.
 ;
 ; Fuer jeden zu aendernden Text muss ein Befehl nach dem Muster
 ; "/set RE_SCHADEN_<nummer>=<text>" im Konfigurationsfile angegeben werden.
@@ -221,7 +221,7 @@
 ;
 ;        Variablenname I   Meldung   II  Variablenname I  Meldung
 ;        ==============+=============++================+===========
-;        RE_SCHADEN_1  I verfehlt    II  RE_SCHADEN_9  I zu Brei    
+;        RE_SCHADEN_1  I verfehlt    II  RE_SCHADEN_9  I zu Brei
 ;        RE_SCHADEN_2  I gekitzelt   II  RE_SCHADEN_10 I Pulver
 ;        RE_SCHADEN_3  I gekratzt    II  RE_SCHADEN_11 I zerstaeubt
 ;        RE_SCHADEN_4  I getroffen   II  RE_SCHADEN_12 I atomisiert
@@ -381,7 +381,7 @@
 	Shuto-uke Shu \
 	Soto-sukui-uke Ssuu \
 	Uchi-sukui-uke Usuu \
-	STOP 
+	STOP
 /set_var RE_FARBLISTE n Cgreen Cgreen Cyellow Cyellow Cyellow Cmagenta \
 	Cmagenta Cred Cred Cbgred,Cwhite Cbgred,Cwhite Cbgmagenta,Cwhite \
 	Cgreen Cmagenta Cmagenta Cgreen Cred Cyellow Cyellow Cmagenta Cblue \
@@ -499,7 +499,7 @@
 
 
 ;;; Variablen, die jede Kampfrunde geloescht werden
- 
+
 /def re_loeschen=\
 	/set RE_SCHADEN_OUT=%;\
 	/set RE_SCHADEN_SUB 0%;\
@@ -526,11 +526,15 @@
 	/if ((time() - RE_TAN_ZEIT) > 9 & RE_TAN_TMP !~ '') \
 		/purge -mglob re_tan_kshira_s*%;\
 		/set RE_TAN_TMP=%;\
+	/endif%;\
+	/if ((time() - RE_TAN_KASAI_ZEIT) > 9 & RE_TAN_TMP !~'') \
+	     	/purge -mglob re_tan_kasai_s*%;\
+		/set RE_TAN_TMP=%;\
 	/endif
 
 
 ;;; Das Ausgabemakro frei konfiguriert zusammenbasteln
- 
+
 /def re_ausgabezeile_basteln=\
 	/let RE_ELEMENT 1%;\
 	/let RE_i 1%;\
@@ -585,7 +589,7 @@
 
 
 ;;; Die konfigurierten Treffermeldungstexte auf zehn Zeichen einruecken
- 
+
 /def re_treffer_einruecken=\
 	/if (RE_ELEMENT_7 =/ 'Trefferstaerke') \
 		/for RE_i 1 18 /set RE_MELDUNG_PRE_%%RE_i=%;\
@@ -643,7 +647,7 @@
 
 
 ;;; Nuetzliche Mini-Makros, die den Code etwas lesbarer machen
- 
+
 /def re_waffe_geraten=\
 	/set RE_SICHER @{%RE_FARBE_31}/@{%RE_FARBE_35}%;\
 
@@ -657,7 +661,7 @@
 
 ;;; Karate-Namen ordentlich kuerzen.
 ;;; Aus "Hau-drauf-wie-nix" wird ein handliches "Hdwn" - jetzt inkl. Ausnahmen.
- 
+
 /def re_karatekuerzen=\
 	/let RE_Karate %{*}%;\
 	/let RE_Zeiger $[strstr(RE_KARATE_AUSNAHMEN, strcat(RE_Karate, ' '))]%;\
@@ -678,7 +682,7 @@
 
 
 ;;; Artikel aus Namen rauskuerzen
- 
+
 /def re_artikelkuerzen=\
 	/if (regmatch(RE_REGEXP_ARTICLE, {*})) \
 		/set RE_ARTICLE 1%;\
@@ -721,7 +725,7 @@
 
 
 ;;; Namen mit Leerzeichen und/oder '-' kuerzen
- 
+
 /def re_leerzeichenkuerzen=\
 	/let RE_Puffer2 %{*}%;\
 	/while /let RE_i $[strchr(RE_Puffer2, '- .')]%; \
@@ -745,7 +749,7 @@
 		replace('.', '_', \
 		replace(',', '_', \
 		replace('-', '_', {*})))))))]
-	
+
 ;;; Die Abwehr-Anzeige zusammenbasteln
 
 /def re_abwehr=\
@@ -791,7 +795,7 @@
 
 
 ;;; Standard-Treffermeldungen aufbereiten
- 
+
 /def re_macro=\
 	/if (RE_SCHADEN_NACH =/ 'sehr*') \
 		/set RE_SCHADEN 6%;\
@@ -826,7 +830,7 @@
 
 
 ;;; aktuelle Waffe aus den gespeicherten Werten 'erraten'
- 
+
 /def re_waffe_restaurieren=\
 	/let RE_ANAME $(/re_namekorrigieren %RE_ANGREIFER)%;\
 	/test RE_WAFFE := RE_WAFFE_%{RE_ANAME}%;\
@@ -1010,7 +1014,7 @@
 	/set RE_WAFFE_%{RE_ANAME} %RE_WAFFE
 
 ;;; Die normalen Angriffe
- 
+
 /def -p1 -q -agCblue -mregexp -t'^  ([^ ].+) greifs?t ([a-z\'\\` ]*([A-Z].*) \
 	mit .*|(([a-z\'\\` ]*[A-Z][-A-Za-z\'\\`]* )+)([-A-Za-z\'\\` ]*)) \
 	an\\.$' re_angriff=\
@@ -1117,7 +1121,7 @@
 
 
 ;;; Abgewehrte Spells geben keine Treffermeldung
- 
+
 /def -p1 -q -mglob -t'* {wehrt|wehrst} {Deinen|den} {Spruch|Zauber} ab.' \
 	re_spell_abgew = /re_loeschen
 
@@ -1311,7 +1315,7 @@
 	re_ab_saeure2 = \
 	/set RE_ART %RE_PT5@{%RE_FARBE_21}Magie@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Saeure
-	
+
 
 ;;; KARATE
 
@@ -1529,7 +1533,7 @@
 	/endif
 
 ;;; Waffenschlag
- 
+
 /def -p2 -q -agCblue -mregexp -t'^[^ ].+ schlaegs?t .+ (fies mit|\
 	ploetzlich und) ' re_kaempfer_wschlag = \
 	/if ({PR} !/ '*.') \
@@ -1539,7 +1543,7 @@
 	/set RE_ART %RE_PT5@{%RE_FARBE_16}extra@{%RE_FARBE_35}
 
 ;;; Waffenwurf
- 
+
 /def -Fp1 -q -agCblue -mregexp -t'^([A-Z][-A-Za-z, \'\\`]+) wirfs?t (.+) \
 	nach (.+)\\.$' re_kaempfer_wwurf = \
 	/if (({P2} =/ '* Blick*')|({P2} =/ '* Wecker')|({P2} =/ '* Torte')|\
@@ -1560,7 +1564,7 @@
 	/endif
 
 ;;; Todesstoss
- 
+
 /def -p1 -q -agCblue -mregexp -t'^[^ ].+ setzt einen ([a-z]+ |)Todesstoss \
 	gegen ' re_kaempfer_todess=\
 	/purge re_kaempfer_todess2%;\
@@ -1764,7 +1768,7 @@
 	/set RE_ART %RE_PT5@{%RE_FARBE_21}Magie@{%RE_FARBE_35}
 
 ;;; Erdbeben
- 
+
 /def -p1 -agCblue -q -mregexp -t'^([^ ].+) knies?t kurz nieder und klatscht \
 	mit den Haenden auf den Boden\\.$' re_bier_eb=\
 	/set RE_FLAECHE_ANGREIFER $(/re_namekuerzen 13 \
@@ -2013,7 +2017,7 @@
 			/set RE_SCHADEN 15%%;\
 		/endif%%;\
 		/re_ausgabe
-	
+
 ;;; Verletze Eis
 
 /def -p1 -q -agCblue -mregexp -t' huells?t (.+) in einen Schneesturm \
@@ -2457,6 +2461,17 @@
 		/purge -mglob re_tan_arashischaden_*
 
 ;;; Samusa
+
+/ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"tanjian") -p1 -agCblue -q -w \
+	-msimple -t'Du konzentrierst Dich auf die Kaelte des Universums.' \
+	re_tan_samusa1 = \
+	/purge -mglob re_tan_samusa_*%;\
+	/set RE_ANGREIFER Du%;\
+	/set RE_WAFFE Samusa%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/def -1 -p2 -agCblue -q -w -msimple -t'Es wird ploetzlich kaelter.' \
+	    re_tan_samusa_1%;\
+	/re_tan_samusaschaden%;
 
 /def -p1 -q -w -agCblue -mregexp -t' lenks?t die Kaelte auf (.+)\\.$' \
 	re_tan_samusa = \
@@ -3389,6 +3404,107 @@
 	/set RE_WAFFE Tsume%;\
 	/set RE_ART %RE_PT5@{%RE_FARBE_16}extra@{%RE_FARBE_35}
 
+;;; Kasai (Clanspell)
+
+/def -p2 -q -w -agCblue -mregexp -t' formt mit seinen Haenden einen \
+	Hohlraum und konzentriert sich\\.$' re_tan_kasai_pregag = \
+	/set RE_TAN_KASAI_ANGREIFER %PL%;\
+	/set RE_TAN_KASAI_ZEIT $[time()]%;
+
+/def -Fp1 -q -w -agCblue -mregexp -t' schleuderst das Feuer auf (.+) \
+	Gegner\\.$' re_tan_kasai = \
+	/set RE_TAN_KASAI_ANGREIFER %PL%;\
+	/set RE_TAN_KASAI_ZEIT $[time()]%;\
+	/re_tan_kasaischaden
+
+/def -Fp1 -q -w -agCblue -mregexp -t'Eine gigantische Feuersbrunst \
+	breitet sich vor (.+) aus\\.$' re_tan_kasai1 = \
+	/set RE_TAN_ANGREIFER_KASAI %P1%;\
+	/set RE_TAN_KASAI_ZEIT $[time()]%;\
+	/re_tan_kasaischaden
+
+/def re_tan_kasaiout= \
+	/set RE_WAFFE Kasai%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Tanjian@{%RE_FARBE_35}%;\
+	/if (RE_TAN_KASAI_ANGREIFER !~ '') \
+		/set RE_ANGREIFER %RE_TAN_KASAI_ANGREIFER%;\
+	/else \
+		/set RE_ANGREIFER ???%;\
+	/endif%;\
+	/re_ausgabe
+
+/def re_tan_kasaischaden=\
+	/purge -mglob re_tan_kasai_s*%;\
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
+		waermt (.+) die Fuesse\\\\.$$' re_tan_kasai_s1 = \
+		/if ({P2} =~ 'Dir') \
+			/set RE_OPFER Dich%%;\
+			/set RE_SCHADEN 1%%;\
+		/else \
+			/set RE_OPFER %%P2%%;\
+			/set RE_SCHADEN 1%%;\
+		/endif%%;\
+		/re_tan_kasaiout%;\
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuerstbrunst \
+		bringt (.+) etwas zum Schwitzen\\\\.$$' re_tan_kasai_s2 = \
+		/set RE_OPFER %%P2%%;\
+		/set RE_SCHADEN 1%%;\
+		/re_tan_kasaiout%;\
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuerstbrunst \
+		bringt (.+) zum Schwitzen\\\\.$$' re_tan_kasai_s3 = \
+		/set RE_OPFER %%P2%%;\
+		/set RE_SCHADEN 2%%;\
+		/re_tan_kasaiout%;\
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
+		verschmort (.+) die Haare\\\\.$$' re_tan_kasai_s4 = \
+		/set RE_OPFER %%P2%%;\
+		/set RE_SCHADEN 3%%;\
+		/re_tan_kasaiout%;\
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
+		erfasst (.+)\\\\.$$' re_tan_kasai_s5 = \
+		/set RE_OPFER %%P2%;\
+		/set RE_SCHADEN 5%%;\
+		/re_tan_kasaiout%;\
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
+		erfasst (.+) voll\\\\.$$' re_tan_kasai_s6 = \
+		/set RE_OPFER %%P2%%;\
+		/set RE_SCHADEN 6%%;\
+		/re_tan_kasaiout%;\
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
+		verbrennt (.+) die Haut\\\\.$$' re_tan_kasai_s7 = \
+		/set RE_OPFER %%P2%%;\
+		/set RE_SCHADEN 7%%;\
+		/re_tan_kasaiout%;\
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
+		flambiert (.+)\\\\.$$' re_tan_kasai_s8 = \
+		/set RE_OPFER %%P2%%;\
+		/set RE_SCHADEN 8%%;\
+		/re_tan_kasaiout%;\
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
+		flambiert (.+) vollstaendig\\\\.$$' re_tan_kasai_s9 = \
+		/set RE_OPFER %%P2%%;\
+		/set RE_SCHADEN 9%%;\
+		/re_tan_kasaiout%;\
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
+		verwandelt (.+) in Asche\\\\.$$' re_tan_kasai_s10 = \
+		/set RE_OPFER %%P2%%;\
+		/set RE_SCHADEN 10%%;\
+		/re_tan_kasaiout%;\
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
+		zerstaeubt (.+)\\\\.$$' re_tan_kasai_sa11 = \
+		/set RE_OPFER %%P2%%;\
+		/set RE_SCHADEN 11%%;\
+		/re_tan_kasaiout%;\
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
+		atomisiert (.+)\\\\.$$' re_tan_kasai_sa12 = \
+		/set RE_OPFER %%P2%%;\
+		/set RE_SCHADEN 12%%;\
+		/re_tan_kasaiout%;\
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
+		vernichtet (.+)\\\\.$$' re_tan_kasai_sa13 = \
+		/set RE_OPFER %%P2%%;\
+		/set RE_SCHADEN 13%%;\
+		/re_tan_kasaiout%;
 
 ;;; KLERIKER
 
@@ -3618,7 +3734,7 @@
 	/set RE_TMP_TRENNER=MK%;\
 	/set RE_TMP_TRENNER_OPFER=$(/re_namekuerzen 13 \
 		$(/re_artikelkuerzen %-L4))%;
-	
+
 ;;; Goetterzorn
 
 /def -p1 -agCblue -F -q -mregexp -t' beschwoers?t den Zorn der Goetter \
@@ -3721,7 +3837,7 @@
 	/set RE_SCHADEN 5%;\
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
- 
+
 /ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
 	-E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze \
 	versengt * die Haut." re_feuerlanze_3 = \
@@ -3733,7 +3849,7 @@
 	/set RE_SCHADEN 6%;\
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
- 
+
 /ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
 	-E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze fuegt \
 	* schwere Verbrennungen zu." re_feuerlanze_4 = \
@@ -3758,7 +3874,7 @@
 	/set RE_SCHADEN_SUB -1%;\
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
- 
+
 /ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
 	-E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze \
 	roestet * bei lebendigem Leibe." re_feuerlanze_5b = \
@@ -3771,7 +3887,7 @@
 	/set RE_SCHADEN_SUB 1%;\
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
- 
+
 /ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
 	-E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze \
 	verbrennt * bei lebendigem Leibe." re_feuerlanze_6 = \
@@ -3807,7 +3923,7 @@
 	/set RE_SCHADEN 11%;\
 	/set RE_TRIG_FEUERLANZE=0%;\
 	/re_ausgabe
- 
+
 /ifdef (RE_MULTIPLAYER_TF|p_guild=~""|p_guild=~"dunkelelfen") -p1 -agCblue \
 	-E(RE_TRIG_FEUERLANZE) -mglob -t"  Deine Feuerlanze laesst \
 	* den Flammentod sterben." re_feuerlanze_9 = \
@@ -3869,7 +3985,7 @@
 	/set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Kralle
 
-;;; Fellgriff 
+;;; Fellgriff
 
 /def -p1 -agCblue -mglob -t'* greifst * mit vollen Krallen ins Fleisch.' \
 	re_wwolf_fellgriff_1 = \
@@ -3881,7 +3997,7 @@
 	/set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Fellgriff
 
-;;; Ansturm 
+;;; Ansturm
 
 /def -p1 -agCblue -mglob -t'* schmeisst {sich|dich} auf *' \
 	re_wwolf_ansturm = \
@@ -3893,7 +4009,7 @@
 /def -p1 -agCblue -mregexp -t' wuergs?t .+ mit (Deinen )?Krallen\\.$' \
 	re_wwolf_wuergekralle = \
 	/set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
-	/set RE_WAFFE Wuergekralle 
+	/set RE_WAFFE Wuergekralle
 
 ;;; Wasserstrahl
 
@@ -4305,17 +4421,17 @@
 	lautes Knirschen.' re_mjoelnir_sub1 = \
 	/set RE_WFUNC .sehr laut%;\
 	/set RE_TRIG_MJOELNIR 0
- 
+
 /def -p1 -q -agCblue -E(RE_TRIG_MJOELNIR) -msimple -t'Du hoerst ein lautes \
 	Knirschen.' re_mjoelnir_sub2 = \
 	/set RE_WFUNC %RE_PT6laut%;\
 	/set RE_TRIG_MJOELNIR 0
- 
+
 /def -p1 -q -agCblue -E(RE_TRIG_MJOELNIR) -msimple -t'Du hoerst ein \
 	Knirschen.' re_mjoelnir_sub3 = \
 	/set RE_WFUNC %RE_PT4normal%;\
 	/set RE_TRIG_MJOELNIR 0
- 
+
 /def -p1 -q -agCblue -E(RE_TRIG_MJOELNIR) -msimple -t'Du hoerst ein leises \
 	Knirschen.' re_mjoelnir_sub4 = \
 	/set RE_WFUNC %RE_PT5leise%;\
@@ -4325,7 +4441,7 @@
 	leises Knirschen.' re_mjoelnir_sub5 = \
 	/set RE_WFUNC sehr leise%;\
 	/set RE_TRIG_MJOELNIR 0
- 
+
 /def -p1 -q -agCblue -E(RE_TRIG_MJOELNIR) -msimple -t'Der Hammer gaehnt \
 	gelangweilt.' re_mjoelnir_sub6 = \
 	/set RE_WFUNC %RE_PT3Gaehnen%;\
@@ -4460,7 +4576,7 @@
 	/endif
 
 /def -p2 -q -mglob -t'* {faengt|faengst} den *Bumerang {geschickt.|ab.}' \
-	re_bumi1 = /re_bumi_aus 
+	re_bumi1 = /re_bumi_aus
 
 /def -p1 -q -agCblue -mglob -t'* faengt den *Bumerang geschickt.' re_bumi2
 
@@ -4747,7 +4863,7 @@
 /endif
 
 
-;;; Version und Datum aus dem cvs in die Variable schreiben & 
+;;; Version und Datum aus dem cvs in die Variable schreiben &
 ;;; regexpvars initialisieren
 
 /def re_init = \

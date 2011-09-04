@@ -1,0 +1,3 @@
+/createlist autokampf_spells
+/addtolist autokampf_spells /dunkelelfen_do_schutz (dunkelelfen_schutz) 3 10
+/addtolist autokampf_spells /dunkelelfen_do_aura (dunkelelfen_aura) 3 15
