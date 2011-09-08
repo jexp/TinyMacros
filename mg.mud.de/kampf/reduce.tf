@@ -3445,12 +3445,12 @@
 			/set RE_SCHADEN 1%%;\
 		/endif%%;\
 		/re_tan_kasaiout%;\
-	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuerstbrunst \
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
 		bringt (.+) etwas zum Schwitzen\\\\.$$' re_tan_kasai_s2 = \
 		/set RE_OPFER %%P2%%;\
 		/set RE_SCHADEN 1%%;\
 		/re_tan_kasaiout%;\
-	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuerstbrunst \
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
 		bringt (.+) zum Schwitzen\\\\.$$' re_tan_kasai_s3 = \
 		/set RE_OPFER %%P2%%;\
 		/set RE_SCHADEN 2%%;\
@@ -3461,7 +3461,7 @@
 		/set RE_SCHADEN 3%%;\
 		/re_tan_kasaiout%;\
 	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
-		erfasst (.+)\\\\.$$' re_tan_kasai_s5 = \
+		erfasst (.+)\\\\.$$' re_tan_kasai_s10 = \
 		/set RE_OPFER %%P2%;\
 		/set RE_SCHADEN 5%%;\
 		/re_tan_kasaiout%;\
