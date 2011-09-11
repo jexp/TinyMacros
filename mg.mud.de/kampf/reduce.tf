@@ -528,7 +528,7 @@
 		/set RE_TAN_TMP=%;\
 	/endif%;\
 	/if ((time() - RE_TAN_KASAI_ZEIT) > 9 & RE_TAN_TMP !~'') \
-	     	/purge -mglob re_tan_kasai_s*%;\
+		/purge -mglob re_tan_kasai_s*%;\
 		/set RE_TAN_TMP=%;\
 	/endif
 
@@ -769,13 +769,13 @@
 		/set RE_AFR @{%RE_FARBE_RINGE}%{RE_AFR}@{%RE_FARBE_35}%;\
 	/endif%;\
 	/if (RE_KARATE) \
-        	/set RE_KARATE_ABWEHR $[strcat(RE_KARATE_ABWEHR, '@{', \
+		/set RE_KARATE_ABWEHR $[strcat(RE_KARATE_ABWEHR, '@{', \
 			RE_FARBE_35, '}', strrep('*', 5-strlen(\
 			RE_KARATE_ABWEHR)))]%;\
 		/if (RE_KARATE == 4) \
 			/set RE_ABWEHR $[strcat(RE_ABWEHR, '@{', RE_FARBE_23, \
 				'}', RE_KARATE_ABWEHR, RE_TSCH, RE_AFR)]%;\
-        	/elseif (RE_KARATE == 3) \
+		/elseif (RE_KARATE == 3) \
 			/set RE_ABWEHR $[strcat(RE_ABWEHR, '@{', RE_FARBE_25, \
 				'}', RE_KARATE_ABWEHR, RE_TSCH, RE_AFR)]%;\
 		/elseif (RE_KARATE == 2) \
@@ -3445,12 +3445,12 @@
 			/set RE_SCHADEN 1%%;\
 		/endif%%;\
 		/re_tan_kasaiout%;\
-	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuerstbrunst \
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
 		bringt (.+) etwas zum Schwitzen\\\\.$$' re_tan_kasai_s2 = \
 		/set RE_OPFER %%P2%%;\
 		/set RE_SCHADEN 1%%;\
 		/re_tan_kasaiout%;\
-	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuerstbrunst \
+	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
 		bringt (.+) zum Schwitzen\\\\.$$' re_tan_kasai_s3 = \
 		/set RE_OPFER %%P2%%;\
 		/set RE_SCHADEN 2%%;\
@@ -3461,12 +3461,12 @@
 		/set RE_SCHADEN 3%%;\
 		/re_tan_kasaiout%;\
 	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
-		erfasst (.+)\\\\.$$' re_tan_kasai_s5 = \
+		erfasst (.+)\\\\.$$' re_tan_kasai_s10 = \
 		/set RE_OPFER %%P2%;\
 		/set RE_SCHADEN 5%%;\
 		/re_tan_kasaiout%;\
 	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
-		erfasst (.+) voll\\\\.$$' re_tan_kasai_s6 = \
+		erfasst (.+) voll\\\\.$$' re_tan_kasai_s6 = \
 		/set RE_OPFER %%P2%%;\
 		/set RE_SCHADEN 6%%;\
 		/re_tan_kasaiout%;\
