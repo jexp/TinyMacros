@@ -143,6 +143,10 @@
 /endif
 
 /ifdef CFG_ALL_LOADING_INFO user_echo_file_info = \
+   /if (file_info(fi_filename,"version") =~ "$Id$") \
+       /let tmp=%;\
+       /test %{fi_filename}_version:=file_name%;\
+   /endif%;\
 ; Ausgabe CVS Informatione (Filename, Version, Autor)
 	/ifecho file_info(fi_filename,"version")!~"" \
 	-aCgreen $[remove_cvs(file_info(fi_filename,"version"))] ($[file_info(fi_filename,"author")])%;\
@@ -309,7 +313,7 @@ Wenn ein Makro dateiname_tf_init definiert ist, wird dieses nach dem Laden ausge
 	   /break%;\
 	/endif%;\
         /eval_hook pre_load %mload_file %fullparam%;\
-	/echo /load %load_dir%mload_base_file.cfg%;\
+;	/echo /load %load_dir%mload_base_file.cfg%;\
 	/load %load_dir%mload_base_file.cfg%;\
 	/load %load_dir%mload_base_file.def%;\
 	/try_load %{load_dir-.} %mload_file %file_suffixes%;\
