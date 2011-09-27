@@ -1,4 +1,4 @@
-;Raum-Untersuche-Hilfe V1.09 vom 2010-04-20
+;Raum-Untersuche-Hilfe V1.10 vom 2010-05-22
 ;Author: Khidar
 ;Dieses Makro wird sowohl unter der GPLv2 als auch unter
 ; der CCPL 3.0 (diese kann unter
@@ -173,7 +173,7 @@
   /set x_tempexpr=%{*}%;\
 ;  /if (!x_containedexpr+0) \
     /if /test $[(x_tempexpr =/ "!*")]%;/then \
-      /test regmatch('!(.*)', tempexpr)%;\
+      /test regmatch('!(.*)', x_tempexpr)%;\
       /send %{P1}%;\
       /else \
       /set x_tempcheckline=1%;\
