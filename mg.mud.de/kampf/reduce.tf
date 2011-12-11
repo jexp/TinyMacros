@@ -3450,49 +3450,28 @@
 		/set RE_OPFER %%P2%%;\
 		/set RE_SCHADEN 1%%;\
 		/re_tan_kasaiout%;\
-	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \ bringt (.+) zum Schwitzen\\\\.$$' re_tan_kasai_s3 = \
+	/def -p2 -q -w -aCyellow -mregexp -t'^  (.+) Feuersbrunst \
+		bringt (.+) zum Schwitzen\\\\.$$' re_tan_kasai_s3 = \
 		/set RE_OPFER %%P2%%;\
 		/set RE_SCHADEN 2%%;\
 		/re_tan_kasaiout%;\
-	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
+	/def -p2 -q -w -aCyellow -mregexp -t'^  (.+) Feuersbrunst \
 		verschmort (.+) die Haare\\\\.$$' re_tan_kasai_s4 = \
 		/set RE_OPFER %%P2%%;\
 		/set RE_SCHADEN 3%%;\
 		/re_tan_kasaiout%;\
+;; Dummerweise wird der Name noch falsch dargestellt <gegner voll>
+;; ist nicht so richtig schoen
 	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
-		(erfasst .+)\\\\.$$' re_tan_kasai_s5 = \
-		/if ({P2} =/ 'erfasst * voll') = \
-		/set RE_SCHADEN 6%%;\
-		/else \
-			/set RE_SCHADEN 5%%;\
-		/endif%%;\
-;	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
-;		(erfasst .+)\\\\.$$' re_tan_kasai_s5 = \
-;		/if ({P2} =/ 'erfasst * voll') = \
-;			/set RE_SCHADEN 6%%;\
-;		/else \
-;			/set RE_SCHADEN 5%%;\
-;		/endif%%;\
-;                /if (RE_OPFER =~ '???' | RE_OPFER =~ '') \
-;                        /let RE_OPFERTMP %%P2%%;\
-;                        /if (regmatch('erfasst (.+) voll', RE_OPFERTMP)) \
-;                                /set RE_OPFER %%P1%%;\
-;                        /elseif (regmatch('(erfasst (.+)', \
-;                            RE_OPFERTMP)) \
-;                                /set RE_OPFER %%P1%%;\
-;                        /endif%%;\
-;                /endif%%;\
+		erfasst (.+)\\\\.$$' re_tan_kasai_s5 = \
+		/set RE_OPFER %%P2%%;\
+		/set RE_SCHADEN 5%%;\
 		/re_tan_kasaiout%;\
-;	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
-;		erfasst (.*)\\\\.$$' re_tan_kasai_s5 = \
-;		/set RE_OPFER %%P2%;\
-;		/set RE_SCHADEN 5%%;\
-;		/re_tan_kasaiout%;\
-;	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
-;		erfasst (.+) voll\\\\.$$' re_tan_kasai_s6 = \
-;		/set RE_OPFER %%P2%%;\
-;		/set RE_SCHADEN 6%%;\
-;		/re_tan_kasaiout%;\
+	/def -p3 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
+		erfasst (.+) voll\\\\.$$' re_tan_kasai_s6 = \
+		/set RE_OPFER %%P2%%;\
+		/set RE_SCHADEN 6%%;\
+		/re_tan_kasaiout%;\
 	/def -p2 -q -w -agCblue -mregexp -t'^  (.+) Feuersbrunst \
 		verbrennt (.+) die Haut\\\\.$$' re_tan_kasai_s7 = \
 		/set RE_OPFER %%P2%%;\
