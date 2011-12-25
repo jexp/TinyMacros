@@ -181,4 +181,3 @@
 
 /hydra_check_presence
 /hydra_ruestung
-/add_to_hook hydra_kopf_killed brenne stumpf aus
