@@ -77,7 +77,7 @@
 	bei Kopfstoss heute: $[++fs_kopfst_z]
 
 /def -p2 -q -msimple -ag -t'Der Kopfstoss geht so daneben, dass Du stolperst \
-	und nur den' FehlschlagZaehler1 = \
+	und nur den' FehlschlagZaehler1a = \
 	/if /!ismacro FehlschlagZaehler1b%; /then \
 	/def -1 -p50 -q -msimple -ag -t'Boden triffst.' FehlschlagZaehler1b = \
 		/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
