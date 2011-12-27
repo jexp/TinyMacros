@@ -77,11 +77,9 @@
 	bei Kopfstoss heute: $[++fs_kopfst_z]
 
 /def -p2 -q -msimple -ag -t'Der Kopfstoss geht so daneben, dass Du stolperst \
-	und nur den' FehlschlagZaehler1a = \
-	/if /!ismacro FehlschlagZaehler1b%; /then \
-	/def -1 -p50 -q -msimple -ag -t'Boden triffst.' FehlschlagZaehler1b = \
-		/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
-			Fehlschlaege bei Kopfstoss heute: $$[++fs_kopfst_z] \
+	und nur den Boden triffst.' FehlschlagZaehler1b = \
+	/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR Fehlschlaege \
+	bei Kopfstoss heute: $$[++fs_kopfst_z] \
 			(LP-Abzug!)%;\
 	/endif
 
@@ -266,9 +264,9 @@
 ;;; Patzer
 
 /def -p2 -q -msimple -ag -t'Du schlaegst Dir mit dem Ellbogen den Schaedel \
-	ein!  Wie immer dies auch' FehlschlagZaehler32 = \
+	ein!  Wie immer dies auch gehen' FehlschlagZaehler32 = \
 	/if /!ismacro FehlschlagZaehler32b%; /then \
-		/def -1 -p50 -q -msimple -ag -t'gehen soll :)' \
+		/def -1 -p50 -q -msimple -ag -t'soll :)' \
 			FehlschlagZaehler32b = \
 			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
 				Fehlschlaege bei Ellbogenschlag heute: \
