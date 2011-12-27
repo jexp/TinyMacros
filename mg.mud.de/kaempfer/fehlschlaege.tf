@@ -67,6 +67,7 @@
 /set fs_spar_z 0
 /set fs_sna_z 0
 /set fs_fo_z 0
+/set fs_abl_z 0
 /set fs_pat_z 0
 
 
@@ -259,6 +260,69 @@
 	FehlschlagZaehler31 = \
 	/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR Fehlschlaege \
 		bei Fokus heute: $[++fs_fo_z]
+
+
+;;; Ablenken der Sumpfamazonen:
+;; Bei einem an sich gelungenen Ablenken, das an dem Widerstand des Gegners
+;; scheitert, kommt erst eine Erfolgsmeldung mit einer anschliessenden zweiten
+;; Meldung. Alles andere sind gewoehnliche Fehlschlaege.
+
+/def -p2 -q -msimple -ag -t'Das hat diesmal nicht wirklich funktioniert, aber \
+	gluecklicherweise bemerkt es' FehlschlagZaehler31a = \
+	/if /!ismacro FehlschlagZaehler31b%; /then \
+		/def -1 -p50 -q -mglob -ag -t'* nicht.' FehlschlagZaehler31b = \
+			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
+				Fehlschlaege bei Ablenken heute: \
+				$$[++fs_abl_z]%;\
+	/endif
+
+/def -p2 -q -mglob -ag -t'Trotz aller Bemuehungen Deinerseits kaempft *' \
+	FehlschlagZaehler31c = \
+	/if /!ismacro FehlschlagZaehler31d%; /then \
+		/def -1 -p50 -q -mglob -ag -t'*weiter.' FehlschlagZaehler31d = %;\
+	/endif%; \
+	/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR Fehlschlaege \
+		bei Ablenken heute: $[++fs_abl_z]%;\
+
+/def -p2 -q -msimple -ag -t'Du lenkst die Blicke Deines Opfers auf Dich, \
+	erzielst aber keine' FehlschlagZaehler31e = \
+	/if /!ismacro FehlschlagZaehler31f%; /then \
+		/def -1 -p50 -q -msimple -ag -t'Aufmerksamkeit.' \
+			FehlschlagZaehler31f = \
+			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
+				Fehlschlaege bei Ablenken heute: \
+				$$[++fs_abl_z]%;\
+	/endif
+
+/def -p2 -q -mglob -ag -t'*fuehlt sich von Deinen Anstrengungen' \
+	FehlschlagZaehler31g = \
+	/if /!ismacro FehlschlagZaehler31h%; /then \
+		/def -1 -p50 -q -mglob -ag -t'*doller zu!' \
+			FehlschlagZaehler31h = \
+			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
+				Fehlschlaege bei Ablenken heute: \
+				$$[++fs_abl_z] (Patzer! Mehr Schaden!)%;\
+	/endif
+
+/def -p2 -q -msimple -ag -t'Dein Ablenkungsversuch ging voellig daneben.' \
+	FehlschlagZaehler31i = \
+	/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR Fehlschlaege \
+		bei Ablenken heute: $[++fs_abl_z]%;\
+
+/def -p2 -q -mglob -ag -t'* schaut wohl gerade in eine andere Richtung,*' \
+	FehlschlagZaehler31j = \
+	/if /!ismacro FehlschlagZaehler31k%; /then \
+		/def -1 -p50 -q -mglob -ag -t'*Reaktion.' \
+			FehlschlagZaehler31k = \
+			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
+				Fehlschlaege bei Ablenken heute: \
+				$$[++fs_abl_z]%;\
+	/endif
+
+/def -p2 -q -mglob -ag -t'Deine Blicke haben anscheinend keine Wirkung auf *' \
+	FehlschlagZaehler31l = \
+	/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR Fehlschlaege \
+		bei Ablenken heute: $[++fs_abl_z]%;\
 
 
 ;;; Patzer
@@ -823,6 +887,8 @@
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Fehlschlaege bei Taktik heute..........: %fs_tak_z%;\
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Fehlschlaege bei Beschimpfen heute.....: %fs_bs_z%;\
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Fehlschlaege bei Raserei heute.........: %fs_ras_z%;\
+;; TODO: diese Zeile evtl. nur fuer Sumpfamazonen aktivieren:
+/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Fehlschlaege bei Ablenken heute........: %fs_abl_z%;\
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Fehlschlaege bei Schnellkampf heute....: %fs_sk_z%;\
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Fehlschlaege bei Unterlaufen heute.....: %fs_un_z%;\
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Fehlschlaege bei Schildkroete heute....: %fs_sch_z%;\
@@ -841,4 +907,4 @@
 /echo %;\
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Nicht zugeordnete Patzer...............: %fs_pat_z%;\
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR ========================================================%;\
-/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Gesamtzahl Fehlschlaege heute: $[fs_kopfst_z+fs_wt_z+fs_ellbogen_z+fs_wb_z+fs_rd_z+fs_ko_z+fs_bl_z+fs_stz_z+fs_dra_z+fs_ww_z+fs_kniest_z+fs_fi_z+fs_ts_z+fs_ras_z+fs_ws_z+fs_kw_z+fs_kt_z+fs_un_z+fs_was_z+fs_bs_z+fs_schst_z+fs_sch_z+fs_ident_z+fs_tak_z+fs_ksp_z+fs_schm_z+fs_sk_z+fs_par_z+fs_spar_z+fs_sna_z+fs_fo_z+fs_pat_z]
+/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Gesamtzahl Fehlschlaege heute: $[fs_kopfst_z+fs_wt_z+fs_ellbogen_z+fs_wb_z+fs_rd_z+fs_ko_z+fs_bl_z+fs_stz_z+fs_dra_z+fs_ww_z+fs_kniest_z+fs_fi_z+fs_ts_z+fs_ras_z+fs_abl_z+fs_ws_z+fs_kw_z+fs_kt_z+fs_un_z+fs_was_z+fs_bs_z+fs_schst_z+fs_sch_z+fs_ident_z+fs_tak_z+fs_ksp_z+fs_schm_z+fs_sk_z+fs_par_z+fs_spar_z+fs_sna_z+fs_fo_z+fs_pat_z]
