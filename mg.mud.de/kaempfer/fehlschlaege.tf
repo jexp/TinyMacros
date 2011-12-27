@@ -619,10 +619,14 @@
 				$$[++fs_pat_z] davon! (Langsameres Kaempfen!)%;\
 	/endif
 
-/def -p1 -q -msimple -ag -t'Du stolperst! Die Landung ging voll daneben! \
-	Du fliegst tierisch auf die Fresse.' FehlschlagZaehler71 = \
-	/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR Fehlschlaege \
-		bei Kampfsprung heute: $[++fs_ksp_z]
+/def -p2 -q -msimple -ag -t'Du stolperst! Die Landung ging voll daneben! \
+	Du fliegst tierisch auf die' FehlschlagZaehler71 = \
+	/if /!ismacro FehlschlagZaehler71b%; /then \
+		/def -1 -p50 -q -msimple -ag -t'Fresse.' \
+			FehlschlagZaehler71b = \
+			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
+			Fehlschlaege bei Kampfsprung heute: $$[++fs_ksp_z]%;\
+	/endif
 
 /def -p2 -q -msimple -ag -t'Hilfe! Du rutschst aus und machst einen sauberen \
 	Spagat! Das zieht ganz' FehlschlagZaehler72 = \
