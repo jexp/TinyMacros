@@ -223,8 +223,8 @@
 /def -p2 -q -mglob -ag -t'Du stolperst! Die Landung klappt nicht so richtig, \
 	aber*' FehlschlagZaehler25 = \
 	/if /!ismacro FehlschlagZaehler25b%; /then \
-		/def -1 -p50 -q -mglob -ag -t'*faellst Du wenigstens nicht \
-			hin!' FehlschlagZaehler25b = \
+		/def -1 -p50 -q -mglob -ag -t'*wenigstens nicht hin!' \
+			FehlschlagZaehler25b = \
 			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
 				Fehlschlaege bei Kampfsprung heute: \
 				$$[++fs_ksp_z]%;\
