@@ -328,7 +328,7 @@
 ;;; Patzer
 
 /def -p2 -q -msimple -ag -t'Du schlaegst Dir mit dem Ellbogen den Schaedel \
-	ein!  Wie immer dies auch gehen' FehlschlagZaehler32 = \
+	ein! Wie immer dies auch gehen' FehlschlagZaehler32 = \
 	/if /!ismacro FehlschlagZaehler32b%; /then \
 		/def -1 -p50 -q -msimple -ag -t'soll :)' \
 			FehlschlagZaehler32b = \
