@@ -476,10 +476,10 @@
 	/endif
 
 /def -p2 -q -msimple -ag -t'Du stellst Dich beim Versuch, die Kampftechnik zu \
-	wechseln, so' FehlschlagZaehler49 = \
+	wechseln, so ungeschickt an,' FehlschlagZaehler49 = \
 	/if /!ismacro FehlschlagZaehler49b%; /then \
-		/def -1 -p50 -q -msimple -ag -t'ungeschickt an, dass Du Dir \
-			Dein Knie in den Magen rammst.' FehlschlagZaehler49b = \
+		/def -1 -p50 -q -msimple -ag -t'dass Du Dir Dein Knie in den \
+			Magen rammst.' FehlschlagZaehler49b = \
 			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
 				Patzer ohne Zuordnung! Heute schon: \
 				$$[++fs_pat_z] davon!%;\
