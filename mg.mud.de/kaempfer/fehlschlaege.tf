@@ -673,7 +673,7 @@
 				$$[++fs_pat_z] davon! (Paralyse!)%;\
 	/endif
 
-/def -p2 -q -msimple -ag -t'Du verdrehst Dir ungeschickter Weise Dein \
+/def -p2 -q -msimple -ag -t'Du verdrehst Dir ungeschickterweise Dein \
 	Handgelenk und kannst nur noch' FehlschlagZaehler70 = \
 	/if /!ismacro FehlschlagZaehler70b%; /then \
 		/def -1 -p50 -q -msimple -ag -t'langsamer kaempfen.' \
