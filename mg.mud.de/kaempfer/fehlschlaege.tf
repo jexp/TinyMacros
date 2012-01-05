@@ -338,9 +338,9 @@
 	/endif
 
 /def -p2 -q -msimple -ag -t'Du versuchst schneller zu kaempfen, haust Dir \
-	dabei aber nur die' FehlschlagZaehler34 = \
+	dabei aber nur die Waffe gegen' FehlschlagZaehler34 = \
 	/if /!ismacro FehlschlagZaehler34b%; /then \
-		/def -1 -p50 -q -msimple -ag -t'Waffe gegen das Bein!' \
+		/def -1 -p50 -q -msimple -ag -t'das Bein!' \
 			FehlschlagZaehler34b = \
 			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
 				Fehlschlaege bei Schnellkampf heute: \
