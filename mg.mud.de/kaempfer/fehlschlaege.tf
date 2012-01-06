@@ -67,6 +67,7 @@
 /set fs_spar_z 0
 /set fs_sna_z 0
 /set fs_fo_z 0
+/set fs_abl_z 0
 /set fs_pat_z 0
 
 
@@ -77,11 +78,9 @@
 	bei Kopfstoss heute: $[++fs_kopfst_z]
 
 /def -p2 -q -msimple -ag -t'Der Kopfstoss geht so daneben, dass Du stolperst \
-	und nur den' FehlschlagZaehler1 = \
-	/if /!ismacro FehlschlagZaehler1b%; /then \
-	/def -1 -p50 -q -msimple -ag -t'Boden triffst.' FehlschlagZaehler1b = \
-		/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
-			Fehlschlaege bei Kopfstoss heute: $$[++fs_kopfst_z] \
+	und nur den Boden triffst.' FehlschlagZaehler1b = \
+	/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR Fehlschlaege \
+	bei Kopfstoss heute: $$[++fs_kopfst_z] \
 			(LP-Abzug!)%;\
 	/endif
 
@@ -225,8 +224,8 @@
 /def -p2 -q -mglob -ag -t'Du stolperst! Die Landung klappt nicht so richtig, \
 	aber*' FehlschlagZaehler25 = \
 	/if /!ismacro FehlschlagZaehler25b%; /then \
-		/def -1 -p50 -q -mglob -ag -t'*faellst Du wenigstens nicht \
-			hin!' FehlschlagZaehler25b = \
+		/def -1 -p50 -q -mglob -ag -t'*wenigstens nicht hin!' \
+			FehlschlagZaehler25b = \
 			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
 				Fehlschlaege bei Kampfsprung heute: \
 				$$[++fs_ksp_z]%;\
@@ -263,12 +262,75 @@
 		bei Fokus heute: $[++fs_fo_z]
 
 
+;;; Ablenken der Sumpfamazonen:
+;; Bei einem an sich gelungenen Ablenken, das an dem Widerstand des Gegners
+;; scheitert, kommt erst eine Erfolgsmeldung mit einer anschliessenden zweiten
+;; Meldung. Alles andere sind gewoehnliche Fehlschlaege.
+
+/def -p2 -q -msimple -ag -t'Das hat diesmal nicht wirklich funktioniert, aber \
+	gluecklicherweise bemerkt es' FehlschlagZaehler31a = \
+	/if /!ismacro FehlschlagZaehler31b%; /then \
+		/def -1 -p50 -q -mglob -ag -t'* nicht.' FehlschlagZaehler31b = \
+			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
+				Fehlschlaege bei Ablenken heute: \
+				$$[++fs_abl_z]%;\
+	/endif
+
+/def -p2 -q -mglob -ag -t'Trotz aller Bemuehungen Deinerseits kaempft *' \
+	FehlschlagZaehler31c = \
+	/if /!ismacro FehlschlagZaehler31d%; /then \
+		/def -1 -p50 -q -mglob -ag -t'*weiter.' FehlschlagZaehler31d = %;\
+	/endif%; \
+	/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR Fehlschlaege \
+		bei Ablenken heute: $[++fs_abl_z]%;\
+
+/def -p2 -q -msimple -ag -t'Du lenkst die Blicke Deines Opfers auf Dich, \
+	erzielst aber keine' FehlschlagZaehler31e = \
+	/if /!ismacro FehlschlagZaehler31f%; /then \
+		/def -1 -p50 -q -msimple -ag -t'Aufmerksamkeit.' \
+			FehlschlagZaehler31f = \
+			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
+				Fehlschlaege bei Ablenken heute: \
+				$$[++fs_abl_z]%;\
+	/endif
+
+/def -p2 -q -mglob -ag -t'*fuehlt sich von Deinen Anstrengungen' \
+	FehlschlagZaehler31g = \
+	/if /!ismacro FehlschlagZaehler31h%; /then \
+		/def -1 -p50 -q -mglob -ag -t'*doller zu!' \
+			FehlschlagZaehler31h = \
+			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
+				Fehlschlaege bei Ablenken heute: \
+				$$[++fs_abl_z] (Patzer! Mehr Schaden!)%;\
+	/endif
+
+/def -p2 -q -msimple -ag -t'Dein Ablenkungsversuch ging voellig daneben.' \
+	FehlschlagZaehler31i = \
+	/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR Fehlschlaege \
+		bei Ablenken heute: $[++fs_abl_z]%;\
+
+/def -p2 -q -mglob -ag -t'* schaut wohl gerade in eine andere Richtung,*' \
+	FehlschlagZaehler31j = \
+	/if /!ismacro FehlschlagZaehler31k%; /then \
+		/def -1 -p50 -q -mglob -ag -t'*Reaktion.' \
+			FehlschlagZaehler31k = \
+			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
+				Fehlschlaege bei Ablenken heute: \
+				$$[++fs_abl_z]%;\
+	/endif
+
+/def -p2 -q -mglob -ag -t'Deine Blicke haben anscheinend keine Wirkung auf *' \
+	FehlschlagZaehler31l = \
+	/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR Fehlschlaege \
+		bei Ablenken heute: $[++fs_abl_z]%;\
+
+
 ;;; Patzer
 
 /def -p2 -q -msimple -ag -t'Du schlaegst Dir mit dem Ellbogen den Schaedel \
-	ein!  Wie immer dies auch' FehlschlagZaehler32 = \
+	ein! Wie immer dies auch gehen' FehlschlagZaehler32 = \
 	/if /!ismacro FehlschlagZaehler32b%; /then \
-		/def -1 -p50 -q -msimple -ag -t'gehen soll :)' \
+		/def -1 -p50 -q -msimple -ag -t'soll :)' \
 			FehlschlagZaehler32b = \
 			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
 				Fehlschlaege bei Ellbogenschlag heute: \
@@ -276,9 +338,9 @@
 	/endif
 
 /def -p2 -q -msimple -ag -t'Du versuchst schneller zu kaempfen, haust Dir \
-	dabei aber nur die' FehlschlagZaehler34 = \
+	dabei aber nur die Waffe gegen' FehlschlagZaehler34 = \
 	/if /!ismacro FehlschlagZaehler34b%; /then \
-		/def -1 -p50 -q -msimple -ag -t'Waffe gegen das Bein!' \
+		/def -1 -p50 -q -msimple -ag -t'das Bein!' \
 			FehlschlagZaehler34b = \
 			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
 				Fehlschlaege bei Schnellkampf heute: \
@@ -414,10 +476,10 @@
 	/endif
 
 /def -p2 -q -msimple -ag -t'Du stellst Dich beim Versuch, die Kampftechnik zu \
-	wechseln, so' FehlschlagZaehler49 = \
+	wechseln, so ungeschickt an,' FehlschlagZaehler49 = \
 	/if /!ismacro FehlschlagZaehler49b%; /then \
-		/def -1 -p50 -q -msimple -ag -t'ungeschickt an, dass Du Dir \
-			Dein Knie in den Magen rammst.' FehlschlagZaehler49b = \
+		/def -1 -p50 -q -msimple -ag -t'dass Du Dir Dein Knie in den \
+			Magen rammst.' FehlschlagZaehler49b = \
 			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
 				Patzer ohne Zuordnung! Heute schon: \
 				$$[++fs_pat_z] davon!%;\
@@ -611,7 +673,7 @@
 				$$[++fs_pat_z] davon! (Paralyse!)%;\
 	/endif
 
-/def -p2 -q -msimple -ag -t'Du verdrehst Dir ungeschickter Weise Dein \
+/def -p2 -q -msimple -ag -t'Du verdrehst Dir ungeschickterweise Dein \
 	Handgelenk und kannst nur noch' FehlschlagZaehler70 = \
 	/if /!ismacro FehlschlagZaehler70b%; /then \
 		/def -1 -p50 -q -msimple -ag -t'langsamer kaempfen.' \
@@ -621,10 +683,14 @@
 				$$[++fs_pat_z] davon! (Langsameres Kaempfen!)%;\
 	/endif
 
-/def -p1 -q -msimple -ag -t'Du stolperst! Die Landung ging voll daneben! \
-	Du fliegst tierisch auf die Fresse.' FehlschlagZaehler71 = \
-	/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR Fehlschlaege \
-		bei Kampfsprung heute: $[++fs_ksp_z]
+/def -p2 -q -msimple -ag -t'Du stolperst! Die Landung ging voll daneben! \
+	Du fliegst tierisch auf die' FehlschlagZaehler71 = \
+	/if /!ismacro FehlschlagZaehler71b%; /then \
+		/def -1 -p50 -q -msimple -ag -t'Fresse.' \
+			FehlschlagZaehler71b = \
+			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
+			Fehlschlaege bei Kampfsprung heute: $$[++fs_ksp_z]%;\
+	/endif
 
 /def -p2 -q -msimple -ag -t'Hilfe! Du rutschst aus und machst einen sauberen \
 	Spagat! Das zieht ganz' FehlschlagZaehler72 = \
@@ -821,6 +887,8 @@
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Fehlschlaege bei Taktik heute..........: %fs_tak_z%;\
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Fehlschlaege bei Beschimpfen heute.....: %fs_bs_z%;\
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Fehlschlaege bei Raserei heute.........: %fs_ras_z%;\
+;; TODO: diese Zeile evtl. nur fuer Sumpfamazonen aktivieren:
+/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Fehlschlaege bei Ablenken heute........: %fs_abl_z%;\
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Fehlschlaege bei Schnellkampf heute....: %fs_sk_z%;\
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Fehlschlaege bei Unterlaufen heute.....: %fs_un_z%;\
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Fehlschlaege bei Schildkroete heute....: %fs_sch_z%;\
@@ -839,4 +907,4 @@
 /echo %;\
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Nicht zugeordnete Patzer...............: %fs_pat_z%;\
 /echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR ========================================================%;\
-/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Gesamtzahl Fehlschlaege heute: $[fs_kopfst_z+fs_wt_z+fs_ellbogen_z+fs_wb_z+fs_rd_z+fs_ko_z+fs_bl_z+fs_stz_z+fs_dra_z+fs_ww_z+fs_kniest_z+fs_fi_z+fs_ts_z+fs_ras_z+fs_ws_z+fs_kw_z+fs_kt_z+fs_un_z+fs_was_z+fs_bs_z+fs_schst_z+fs_sch_z+fs_ident_z+fs_tak_z+fs_ksp_z+fs_schm_z+fs_sk_z+fs_par_z+fs_spar_z+fs_sna_z+fs_fo_z+fs_pat_z]
+/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_STATUS_ATTR Gesamtzahl Fehlschlaege heute: $[fs_kopfst_z+fs_wt_z+fs_ellbogen_z+fs_wb_z+fs_rd_z+fs_ko_z+fs_bl_z+fs_stz_z+fs_dra_z+fs_ww_z+fs_kniest_z+fs_fi_z+fs_ts_z+fs_ras_z+fs_abl_z+fs_ws_z+fs_kw_z+fs_kt_z+fs_un_z+fs_was_z+fs_bs_z+fs_schst_z+fs_sch_z+fs_ident_z+fs_tak_z+fs_ksp_z+fs_schm_z+fs_sk_z+fs_par_z+fs_spar_z+fs_sna_z+fs_fo_z+fs_pat_z]

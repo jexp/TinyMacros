@@ -86,6 +86,14 @@
 	/set hydra_time $[time()]%;\
 	/send !\\alias hy_date_and_time sag $[time()]
 
+/def -E(hydra_present) -Fp1 -msimple -q -t'Da Du nur eine Hydraruestung \
+	haben sollst, loest sich Deine alte' hydra_got_rue1 = \
+	/def -1 -agCblue -mregexp -p1000 -F -q -t'Neues Alias\\\\: \
+		hy_date_and_time += sag [0-9]+' hydra_killed_gag = \
+		/echo -aCbggreen Hydrakill registriert!%;\
+	/set hydra_time $[time()]%;\
+	/send !\\alias hy_date_and_time sag $[time()]
+
 /def hydra_check_presence = \
 	/repeat -5 1 /purge -mregexp hydra_check_trig[1-3]%;\
 	/purge -mregexp hydra_check_trig[1-3]%;\
