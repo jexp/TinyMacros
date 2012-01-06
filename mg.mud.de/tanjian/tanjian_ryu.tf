@@ -74,4 +74,7 @@
 		einaeschern?' tanjian_kasai_unset = \
 		/if (TANJIAN_BUSY=~'kasai')%; \
 			/set TANJIAN_BUSY=%;\
-		/endif%;
+		/endif%;\
+		/weapon_draw%;
+
+/def -msimple -aCgreen -t'Uii ist das heiss!' tanjian_kasai_erfolg
