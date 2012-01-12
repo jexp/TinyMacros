@@ -162,9 +162,9 @@
 		bei Waffenschlag heute: $[++fs_ws_z]
 
 /def -p2 -q -msimple -ag -t'Du versuchst krampfhaft, gegen Deine \
-	Kampfbeeintraechtigung anzukaempfen,' FehlschlagZaehler16 = \
+	Kampfbeeintraechtigung anzukaempfen, doch' FehlschlagZaehler16 = \
 	/if /!ismacro FehlschlagZaehler16b%; /then \
-		/def -1 -p50 -q -msimple -ag -t'doch dies gelingt Dir leider \
+		/def -1 -p50 -q -msimple -ag -t'dies gelingt Dir leider \
 			nicht.' FehlschlagZaehler16b = \
 			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
 				Fehlschlaege bei Kampfwille heute: \
