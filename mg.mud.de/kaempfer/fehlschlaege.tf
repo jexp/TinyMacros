@@ -641,7 +641,7 @@
 /def -p2 -q -mglob -ag -t'Du stolperst, als Du den Todesstoss gegen *' \
 	FehlschlagZaehler66 = \
 	/if /!ismacro FehlschlagZaehler66b%; /then \
-		/def -1 -p50 -q -mglob -ag -t'*haust Dich selber!' \
+		/def -1 -p50 -q -mglob -ag -t'*selber!' \
 			FehlschlagZaehler66b = \
 			/echo -a%CFG_MG_KAEMPFER_FEHLSCHLAEGE_FEHLSCHLAG_ATTR \
 				Fehlschlaege bei Todesstoss heute: \
