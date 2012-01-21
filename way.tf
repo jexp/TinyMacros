@@ -219,7 +219,7 @@ long   mesi Haus Mesirii (Ebene)@{N}\
 geb    mesi (Ebene)@{N}\
 info   mesi Haus Mesirii
 /addh default long
-/addh alitype var 
+/addh alitype var
 
 /cfg_info way ALI_TYPE Knotenformat:alitype
 
@@ -241,7 +241,7 @@ Trennzeichen fuer das /walk == ?speedwalk
 
 /set askway=0
 
-/set verify=0 
+/set verify=0
 
 /set online=1
 
@@ -514,9 +514,9 @@ Initialisiert die Listen fuer das Wegberechnen.
 ; froml_k, tol_k schon getestete Knoten
 ; ~len: lgesamtlaenge in der Richtung
 ; no~ auf 1 gesetzt, wenn keine Wege mehr in ~l_w sind
-; 
+;
 ; ~maxlen
-; 
+;
 /def initfind = \
         /createlist %2l_w%;\
         /createlist %2l_k%;\
@@ -562,7 +562,7 @@ Initialisiert die Listen fuer das Wegberechnen.
 
 /addh info \
 Enthaelt die Hauptschleife fuer das Wegesuchsystem, d.h. von den zwei Endpunkten aus werden sternfoermig die kuerzesten Wege gesucht, und bei Ueberschneidungen der beiden Netze wird der gefundene Gesamtweg benutzt.
-/addh var portals, gmaxlen, break, 
+/addh var portals, gmaxlen, break,
 /addh list l_k, temp_fromidx, temp_toidx
 /addh mak initfind, getshortestway, find6
 /addh find5 mak
@@ -861,7 +861,7 @@ Loescht die Wege, die laenger als die angegebene Variable (from|to)maxlen sind a
 
 /addh info \
 Liefert den kuerzesten Weg aus der Liste (from|to)l_w.
-/addh var len, maxlen, (~ = from|to) ~templ_w, ~len, ~maxlen, ~l_w 
+/addh var len, maxlen, (~ = from|to) ~templ_w, ~len, ~maxlen, ~l_w
 /addh return value=kuerzester Weg oder -1, wenn keine Wege mehr vorhanden sind oder sie eine Laenge >1000 haben.
 /addh getshortestway mak
 /def new_test_getshortestway = \
@@ -1234,10 +1234,10 @@ diese Wege werden dann auch entsprechend beruecksichtigt.
 
 /def same_dimension = \
      /return dimension({1})==-1 | dimension()==dimension({1})
-  
+
 /addh info \
 Schaltet die aktuelle Dimension auf Parawelt um.
-/addh see dimensionen, nopara, ways, editway, portale 
+/addh see dimensionen, nopara, ways, editway, portale
 /addh var dimension
 /addh wpara comm
 /defh wpara = \
@@ -1259,7 +1259,7 @@ Schaltet die aktuelle Dimension auf Parawelt um.
 
 /addh info \
 Schaltet die aktuelle Dimension auf Normalwelt um.
-/addh see dimensionen, para, ways, editway, portale 
+/addh see dimensionen, para, ways, editway, portale
 /addh var dimension
 /addh nopara comm
 
@@ -1278,7 +1278,7 @@ Fuehrt die Berechnung genauso wie /go aus und zeigt den Ergebnisweg komplett an.
 	/_go %*%;
 
 /addh info \
-Erstellt aus der Abfolge der Knoten den eigentlichen Weg, testet ggf. ueber 'askway', ob man den Weg gehen will, geht zum letzten bekannten Knotenpunkt und startet von dort aus das Ablaufen des Weges. Vorher wird noch der Ultrakurzmodus  mittels ?mud_shortest_output eingeschaltet und vor dem letzten Befehl im Weg der Kurzmodus (?mud_short_output) eingeschaltet. 
+Erstellt aus der Abfolge der Knoten den eigentlichen Weg, testet ggf. ueber 'askway', ob man den Weg gehen will, geht zum letzten bekannten Knotenpunkt und startet von dort aus das Ablaufen des Weges. Vorher wird noch der Ultrakurzmodus  mittels ?mud_shortest_output eingeschaltet und vor dem letzten Befehl im Weg der Kurzmodus (?mud_short_output) eingeschaltet.
 /addh var askway, min_way, real_way, temp_way, min_steps, fulldetail, verify
 /addh mak go_way3, gobk
 /addh go_way mak
@@ -1321,7 +1321,7 @@ Erstellt aus der Abfolge der Knoten den eigentlichen Weg, testet ggf. ueber 'ask
 /addh info \
 Nach einer Unterbrechung fuehrt /continue oder kurz /c den Weg entweder \
 weiter oder geht zum letzten Knoten zurueck. Es wird vorher wieder mit 'mud_shortest_output' in den Ultrakurzmodus geschaltet.
-/addh see wegeingabe 
+/addh see wegeingabe
 /addh continue comm
 /defh c = /continue%;
 /defh continue = /set go=1%; /if (verify==0) %mud_shortest_output%; /set show_grabbed=0%; /endif%;/cont_way %;
@@ -1339,7 +1339,7 @@ Loescht die Prompts der letzten Befehle an das Mud, so dass ein aktueller \
 Einlesetrigger, der die Ausgaben des Muds liest, nur noch die des letzten \
 Befehls bekommt (ueber ?mud_recognize_command).
 /addh see wegeingabe, mud_recognize_command
-/addh var mud_recognize_command 
+/addh var mud_recognize_command
 /addh syn /klp naechstes Makro mit Parametern
 /addh klp mak
 /def klp = /killlastprompts %* %;
@@ -1377,7 +1377,7 @@ In den Wegen koennen ja beliebige Makros enthalten sein. Ein paar nuetzliche sin
 /addh wegmakros see
 
 /addh info \
-Wartet, bis der richtige Raum errreicht ist, und macht dann /wo. 
+Wartet, bis der richtige Raum errreicht ist, und macht dann /wo.
 /addh see wegeingabe
 /addh lwo mak
 /def lwo = /klp /wo %;
@@ -1385,8 +1385,8 @@ Wartet, bis der richtige Raum errreicht ist, und macht dann /wo.
 /addh info \
 Testet, ob ein NPC im Weg steht. Wenn ja, haelt es an. Mit /continue geht es \
 dann weiter. Da es 'verify' einschaltet, muss nach dem kritischen Befehl das \
-verify mit /voff wieder ausgeschaltet werden. 
-/addh see wegeingabe, von, voff 
+verify mit /voff wieder ausgeschaltet werden.
+/addh see wegeingabe, von, voff
 /addh var verify
 /addh mak klp
 /addh npc mak
@@ -1411,8 +1411,8 @@ Schaltet 'verify' ein, d.h. bis /voff kommt wird, jeder Befehl auf Erfolg \
 getestet. Wenn einer nicht erfolgreich ist, wird das mit der \
 entsprechenden Fehlermeldung angezeigt. Mit dem Parameter 2 reagiert es \
 so wie /npc. Nach dem kritischem Abschnitt muss verify mit /voff wieder \
-ausgeschaltet werden. 
-/addh see wegeingabe, von, voff 
+ausgeschaltet werden.
+/addh see wegeingabe, von, voff
 /addh mak klp, cont_way
 /addh var verify
 /addh syn /von [2]
@@ -1497,7 +1497,7 @@ Setzt den mit /cond_go gesetzten Befehl zurueck.
 /def no_cond_go = /set cond_go=%;/cont_way%;
 
 ; Forderung: Makros muss Wegebefehl selbst ausfuehren und am Ende des aufgerufenen Makros !/cont_way /set go=0, fuer Komplettabbruch des Weges.
- 
+
 /addh info \
 Haelt den Weg an. Er kann dann mit /continue fortgesetzt werden. Es wird der Kurzmodus (?mud_short_output) eingestellt und eine Meldung ausgegeben.
 /addh stop mak
@@ -1657,9 +1657,9 @@ Fuehrt den angegebenen Weg aus. Dabei werden die integrierten Sonderbefehle bzw.
 	/set after_go=%;\
 
 /addh info \
-Definiert einen Regexp-Trigger, der den Weg fortsetzt, wenn er triggert. 
+Definiert einen Regexp-Trigger, der den Weg fortsetzt, wenn er triggert.
 /addh syn /tri regexp
-/addh ex /tri (Ein Schiff kommt an\\.) 
+/addh ex /tri (Ein Schiff kommt an\\.)
 /addh see wegeingabe, utri, regexp, do_tri, break_tri
 /addh mak cont_way
 /addh tri mak
@@ -1697,7 +1697,7 @@ Fuehrt den vor der '(' uebergebenen Befehl aus und fuehrt den Weg fort, wenn der
     /let param=%*%;\
     /let off=$[strstr(param,"(")]%;\
     /if (off>-1) \
-;       /msend -w 
+;       /msend -w
 	$[substr(param,0,off)]%;\
        /let param=$[substr(param,off)]%;\
     /endif%;\
@@ -1724,9 +1724,9 @@ Da nicht alle Befehle, die ans Mud geschickt werden, einen Prompt generieren, di
 /def next_prompt = /h_action_prompt%;/cont_way%;
 
 /addh info \
-Definiert einen Regexp-Trigger, der den Weg fortsetzt, wenn er triggert. Dieser Trigger macht zuerst ein %mud_look_command, um ggf. schon im Raum befindliche Dinge festzustellen. Daher ist es am besten, den Trigger mit einer zweiteiligen rexexp zu versehen. 
+Definiert einen Regexp-Trigger, der den Weg fortsetzt, wenn er triggert. Dieser Trigger macht zuerst ein %mud_look_command, um ggf. schon im Raum befindliche Dinge festzustellen. Daher ist es am besten, den Trigger mit einer zweiteiligen rexexp zu versehen.
 /addh syn /utri regexp
-/addh ex /utri (Ein Schiff\\.|Ein Schiff kommt an\\.) 
+/addh ex /utri (Ein Schiff\\.|Ein Schiff kommt an\\.)
 /addh see wegeingabe, tri, regxexp
 /addh utri mak
 /def utri = \
@@ -1863,7 +1863,7 @@ Der dazugehoerige Befehl testet, ob die angegebenen Wegstuecken gesperrt sind.
 
 /addh info \
 Damit werden Wegstuecke temporaer gesperrt.
-/addh syn /disable Anfangsknoten Endknoten 
+/addh syn /disable Anfangsknoten Endknoten
 /addh see enable, go, disabled, sperren
 /addh list disabled
 /addh disable comm
@@ -1950,11 +1950,11 @@ Entfernt alle Wege aus dem Cache, die den angegebenen Knoten oder Teilweg enthal
 ;	/timer stop%; /echo Zeit %? s.%;
 
 /def remove_from_cache = \
-     /clear_cache	
+     /clear_cache
 
 /addh info \
 Damit werden temporaer gesperrte Wegstuecke wieder freigegeben.
-/addh syn /enable Anfangsknoten Endknoten 
+/addh syn /enable Anfangsknoten Endknoten
 /addh see disable, go, disabled, sperren
 /addh list disabled
 /addh enable comm
@@ -1969,7 +1969,7 @@ Damit werden temporaer gesperrte Wegstuecke wieder freigegeben.
 
 /addh info \
 Zeigt alle Wege von und zum angegebenen Knoten, oder, wenn keiner angegeben wurde, des aktuellen Knotens an.
-/addh see showwway
+/addh see showway
 /addh showways comm
 
 /defh showways = \
@@ -2244,13 +2244,13 @@ Testet, ob die aktuellen Properties erlauben, diesen Weg zu gehen.
 ; (variable portals)
 ; Mit /wpara und /nopara wird die Dimension gesetzt (Variable dimension).
 
-; Mit '/enable from to' und '/disable from to' koennen Wegstuecke temporaer 
+; Mit '/enable from to' und '/disable from to' koennen Wegstuecke temporaer
 ; (fuer eine Sitzung) gesperrt werden.
 
 ; Wenn im Weg ein Wegstueck vorhanden ist, das schrittweise auf Erfolg getestet
 ; wird, dann bricht die Ausfuehrung an der Stelle ab, an der es nicht
 ; weitergeht.
-; Es kann entweder das Wegstueck temporaer gesperrt werden und mit /continue 
+; Es kann entweder das Wegstueck temporaer gesperrt werden und mit /continue
 ; zum letzten besuchten Wegpunkt gegangen werden, oder das Wegstueck nicht
 ; gesperrt werden und das Hindernis beseitigt werden und dann mit /continue
 ; weitergegangen werden.
@@ -2406,7 +2406,7 @@ Speichert ab dem Einschalten @{B}alle@{n} Kommandos im Hin- und (sofern erahnbar
 /addh mak vorwaerts
 /addh var weg, wegeingabe
 /addh hook SEND
-/addh see wege, 
+/addh see wege,
 /addh weg comm
 /defh weg = \
 	/toggle weg%;\
@@ -2541,7 +2541,7 @@ Wenn ein '+' vor dem Befehl steht, wird versucht, ihn und auch den Rueckbefehl z
 ;      /if (regmatch("^/u?tri ",to)==1) /set last_comm=$(/replace . \\\\. %to)%;\
 ;      /endif %;\
       /vorwaerts2 %;\
-   /endif %;	
+   /endif %;
 
 /def vorwaerts2 = \
    /let to=$[strcat(last_comm)] %;\
@@ -2865,7 +2865,7 @@ Fuegt fuer alle Knoten des Wegesystems eine Erkennung hinzug (mit Abfrage).
        /endif %;\
        /deletekeyandvalue temp_list3 %key %;\
        /getfirstkey temp_list3 %;\
-     /done %;    
+     /done %;
 
 /createlist temp_points
 /def addpointgo = \
@@ -3042,7 +3042,7 @@ Wandelt den uebergebenen Weg aus dem Format 'o%;w%;w%;gehe nach oben%;s%;s%;s%;'
      /if (to!/"/*" & (value=~error | value=/"1 *")) \
        /let to=%{to}%;\
      /endif%;\
-     /set saved_waybk=$[strcat(to,"%;",saved_waybk)] 
+     /set saved_waybk=$[strcat(to,"%;",saved_waybk)]
 
 /def rueck = /rueckwaerts %*
 /def norm = /set rec=1%;
@@ -3051,8 +3051,8 @@ Wandelt den uebergebenen Weg aus dem Format 'o%;w%;w%;gehe nach oben%;s%;s%;s%;'
 /def dorec = /norm %;
 /def norec = /set rec=0 %;
 /def setvar = /set var=%{1} %;
-/def initbk = /set %{var}bk= %; 
-/def initto = /set %{var}to= %; 
+/def initbk = /set %{var}bk= %;
+/def initto = /set %{var}to= %;
 /def wayinit = /initbk %;/initto %;/set name= %;
 /setvar saved_way
 /wayinit
@@ -3176,10 +3176,10 @@ Wenn temporaere Ausfluege fuer den aktuellen oder Zielknoten eingetragen sind, d
 Beendet die Wegeingabe. Wenn der aktuelle Raum als Knoten erkannt wird, wird er sofort als Endknoten benutzt, ansonsten muss einer eingeben werden. Dann speichert es den Weg ab. Dabei wird gefragt, ob das mit Defaultwerten (s)chnell, mit vorherigem (e)ditieren oder (n)icht geschehen soll. (Nach Aenderunen in tf geht das direkte Editieren nicht mehr, der Weg muss erst mit (s)chnell gespeichert werden und dann mit /editway editiert werden.)@{N}\
 Fuer das Editieren bitte dort nachsehen.@{N}\
 Die Wege werden @{B}sofort@{N} auf die Platte gespeichert.@{N}\
-Falls der Knoten neu ist, wird seine Beschreibung auch erfasst. Dabei wird die ggf. angegebene Zeilenzahl fuer die Speicherung benutzt, ansonsten die Variable ?addlines 
+Falls der Knoten neu ist, wird seine Beschreibung auch erfasst. Dabei wird die ggf. angegebene Zeilenzahl fuer die Speicherung benutzt, ansonsten die Variable ?addlines
 /addh see wege editieren, einschraenkungen
 /addh list ways, fromidx, toidx
-/addh syn /end [endknoten [zeilenzahl]] 
+/addh syn /end [endknoten [zeilenzahl]]
 /addh end comm
 /defh end = \
 	/if (weg==1) \
@@ -3271,7 +3271,7 @@ Falls der Knoten neu ist, wird seine Beschreibung auch erfasst. Dabei wird die g
 	  /endif %;\
 	  /set value=$[strcat(bereich," ",allow," ",alen," ",sway)] %;\
 ;	/else /set value=-1%;\
-;	/endif %;	
+;	/endif %;
 
 /addh info \
 Kehrt den angegebenen Weg um und speichert ihn ab.
@@ -3349,7 +3349,7 @@ Kehrt den angegebenen Weg um und speichert ihn ab.
 /def do_save = \
 	/let temp_var=$[strcat(var,{3})] %;\
 	/eval /set value=\%%temp_var %;\
-	/do_save2 %* %; 
+	/do_save2 %* %;
 
 /def do_save2 = \
 	/let sway=%value %;\
@@ -3411,7 +3411,7 @@ Fuegt den als Parameter uebergebenen Weg mit Standardparametern (b all laenge) z
 	/addtolist add_way2 %*%;\
 	/addlisttolist ways %from %add_way2%;
 
-	
+
 /addh info \
 Laedt die Wegelisten neu, besonders vor Aenderungen wegen der Konsistenz zu empfehlen.
 /addh loadways mak
@@ -3624,7 +3624,7 @@ Editieren von Wegen (mit jeweiliger Abfrage).
 /defh editway = /set nextmakro=/_edit_way %;\
 	/forEachWay %* %;
 
-; /showway zeigt Wege an 
+; /showway zeigt Wege an
 ; Syntax /showway from to, einer der beiden Parameter kann ein * sein
 /addh info \
 Zeigt Wege an.
@@ -3806,7 +3806,7 @@ Benennt den angegebenen Knoten um.
 	  /savelist -q %ways_location often%;\
 	/endif%;
 
-;	
+;
 ;	/savelist %ways_location ways%;\
 ;	/savelist %ways_location lastpoints%;\
 ;	/savelist %ways_location fromidx%;\
@@ -3887,7 +3887,7 @@ Wenn man dem Mapper auf 'automapping' stellt, wird die Bewegung mitgezeichnet.
 	  /echo2 -p %fulldetail%;\
 	  /if (mapper==1) /send -wmapper %2%; /endif%;\
 	/endif%;
-	
+
 ;/loadlist %ways_location nodeinfo in customize.tf
 
 /addh info Loescht Zusatzinformationen ueber einen Knoten, wenn keiner angegeben wird, werden die Infos zum aktuellen Knoten geloescht
