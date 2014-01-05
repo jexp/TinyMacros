@@ -1,3 +1,0 @@
-export CVS_RSH=ssh 
-export CVSROOT=:ext:mh14@cvs.tf-macros.sourceforge.net:/cvsroot/tf-macros
-cvs -z3 $*
