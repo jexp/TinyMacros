@@ -144,7 +144,7 @@
 ;  Log eingefuegt
 ;
 
-/set mg_properties_tf_version $Id$
+/set mg_properties_tf_version $Id: mg_properties.tf,v 1.50 2003/09/13 08:48:45 thufhnik Exp $
 /set mg_properties_tf_author=Mesirii@mg.mud.de
 /set mg_properties_tf_requires=properties.tf(1.12) lists.tf util.tf util.hooks.tf util.trigger.tf util.sfunc.tf
 /set mg_properties_tf_desc Auslesen der Spielerproperties mittels catch-trigger und Liste
@@ -167,20 +167,12 @@
 /set_var CFG_MUD_HIT_POINTS_ECHO_ATTR B
 
 /addh info Steuert die Ausgabe der Hitpoints
-/addh update /add_hit_points_to_hook
 /addh CFG_MUD_DO_ECHO_HIT_POINTS cfg
 
 /cfg_info MUD PROPERTIES DO_ECHO_HIT_POINTS Hitpointausgabeflag:2
 /cfg_set MUD DO_ECHO_HIT_POINTS 1
 
-/def add_hit_points_to_hook = \
-  /if (CFG_MUD_DO_ECHO_HIT_POINTS) \
-	 /add_to_hook points /echo_hit_points%;\
-  /else /remove_from_hook points /echo_hit_points%;\
-  /endif
-
-/set CFG_MUD_DO_ECHO_HIT_POINTS
-/add_hit_points_to_hook
+/ifdo CFG_MUD_DO_ECHO_HIT_POINTS /add_to_hook points /echo_hit_points
 
 /add_to_hook property_update /mg_properties_check_level
 
@@ -188,9 +180,9 @@
 /set_var CFG_MUD_NEW_LEVEL_TEXT -aBCred Level!!
 
 /def mg_properties_check_level = \
-	/if (p_new_level>p_level) \
-	   /eval /echo -p %CFG_MUD_NEW_LEVEL_TEXT%;\
-	/endif%;
+  /if (p_new_level>p_level) \
+     /eval /echo -p %CFG_MUD_NEW_LEVEL_TEXT%;\
+  /endif%;
 
 /addsave p_lp
 /addsave p_mp
@@ -233,11 +225,11 @@ Taub oder nicht taub?
 /def -t"Der Elfenbeinblock ist doch geladen!" -aCgreen -msimple t_block_voll = /set p_block=1%;/self_update p_mp
 
 /def -t"Deine Magiepunkte muessen maximal sein, um den Elfenbeinblock \
-	aufladen zu" -aCyellow -msimple t_block_keine_kp = \
-	/set p_block=0%;\
-	/self_update p_mp%;\
-	/purge t_block_keine_kp_g%;\
-	/def -1 -aCyellow -msimple -aCyellow -t"koennen." t_block_keine_kp_g
+  aufladen zu" -aCyellow -msimple t_block_keine_kp = \
+  /set p_block=0%;\
+  /self_update p_mp%;\
+  /purge t_block_keine_kp_g%;\
+  /def -1 -aCyellow -msimple -aCyellow -t"koennen." t_block_keine_kp_g
 
 /def -t"Der Elfenbeinblock ist gar nicht geladen!" -aCred -msimple t_block_leer = /set p_block 0%;/self_update p_mp
 
@@ -245,9 +237,23 @@ Taub oder nicht taub?
 Faengt die LP/MP-Meldung ab, setzt die Properties p_lp und p_mp und die Differenz p_m_lp und p_m_mp und ruft dann den Hook points auf.
 /addh var p_mp, p_lp, p_m_lp, p_m_mp
 /addh t_lpmp trig
+/addh t_lpmp_2 trig
+/def -t"^(>* )?Du hast jetzt ([0-9]*) Lebenspunkte und ([0-9]*) Konzentrationspunkte\\.$" -mregexp -ag -Fp9999 t_lpmp = \
+  /eval_hook points %P2 %P3
+;/def -t"^LP:[ ]+([0-9]*), KP:[ ]+([0-9]*)|###, Gift: ([\(\)a-z]*)\\.$" -mregexp -ag -Fp9999 t_lpmp_2 = \
+;  /eval_hook points %P1 %P2
 
-/def -t"^(>* )?Du hast jetzt ([0-9]*) Lebenspunkte und ([0-9]*) Konzentrationspunkte\\.$" -mregexp -agCblue -Fp9999 t_lpmp = \
-	/eval_hook points %P2 %P3
+/def -t"^LP:([ ]*)([0-9]+), KP:([ ]*)([0-9#]+), Gift: (.*).$" -mregexp -ag -Fp9999 t_lpmp_new = \
+  /if ({P5}=~"keins" | {P5}=~"(nicht verfuegbar)") \
+    /set p_poison=%;\
+  /else \
+    /set p_poison=%{P5}%;\
+  /endif%;\
+  /if ({P4}=~"###") \
+    /eval_hook points %P2 0%;\
+  /else \
+    /eval_hook points %P2 %P4%;\
+  /endif%;
 
 ; fuer nicht statusreporttoolbesitzer:
 ; /check_punkte auf eine Taste binden, z.B. /setkey 1 5 /check_punkte LP/MP Info
@@ -258,24 +264,24 @@ Wenn _pf gesetzt ist und keine Kontrolle-Zaubern laeuft und keine Sperrzeit bis 
 /addh var p_mp, p_lp, p_m_lp, p_m_mp,
 /addh echo_hit_points mak
 /def echo_hit_points= \
-	/if ((kampf>0)|(max(abs(p_m_lp),abs(p_m_mp))>1)) \
-	  /cfg_echo MUD_HIT_POINTS%;\
-	/endif %;
+  /if ((kampf>0)|(max(abs(p_m_lp),abs(p_m_mp))>1)) \
+    /cfg_echo MUD_HIT_POINTS%;\
+  /endif %;
 
 ; ********************* END CONFIG **********************
 
 /def -t"Du hast eine leichte Vergiftung." -ag -msimple t_light_poison = \
-	/set p_poison=leicht%; /set p_poison_time=$[time()]%;
+  /set p_poison=leicht%; /set p_poison_time=$[time()]%;
 
 /def -t"Du hast eine schwere Vergiftung." -aCred -msimple t_heavy_poison = \
-	/set p_poison=schwer%; /set p_poison_time=$[time()]%;
+  /set p_poison=schwer%; /set p_poison_time=$[time()]%;
 
 /def -t"Du hast eine gefaehrliche Vergiftung." -aCred -msimple t_bad_poison = \
-	/set p_poison=gefaehrlich%; /set p_poison_time=$[time()]%;
+  /set p_poison=gefaehrlich%; /set p_poison_time=$[time()]%;
 
 /def check_poison = \
     /if (time()-p_poison_time>20) \
-	/set p_poison=%;\
+  /set p_poison=%;\
     /endif%;
 
 /beat 30
@@ -286,7 +292,7 @@ Wenn _pf gesetzt ist und keine Kontrolle-Zaubern laeuft und keine Sperrzeit bis 
 /addh check_props comm
 
 /def check_props = \
-	/check_info%;
+  /check_info%;
 
 /addh info Aktualisiert die Spielereigenschaften (punkte)
 /addh check_punkte comm
@@ -354,29 +360,29 @@ Wenn _pf gesetzt ist und keine Kontrolle-Zaubern laeuft und keine Sperrzeit bis 
 /addtolist props age Alter:  ([^.]+)[.]
 
 /def check_props2 = \
-	/list -s t_info_scoreamu%|\
-	/if ({?}>0) /undef t_info_scoreamu%; /endif%;\
-	/set fulldetail=$[replace("@{N}"," ",fulldetail)]%;\
-	/forEach props kv /check_props3%;\
-	/set fulldetail=%;\
-	/eval_hook property_update
+  /list -s t_info_scoreamu%|\
+  /if ({?}>0) /undef t_info_scoreamu%; /endif%;\
+  /set fulldetail=$[replace("@{N}"," ",fulldetail)]%;\
+  /forEach props kv /check_props3%;\
+  /set fulldetail=%;\
+  /eval_hook property_update
 
 /def check_props3 = \
         /let prop=%{1}%;\
-;	/echo -e %{prop} : regex %{-1}%;\
-	/if ({2}=/"[0-9]") /let check_props3=%{2}%; /shift%;\
+; /echo -e %{prop} : regex %{-1}%;\
+  /if ({2}=/"[0-9]") /let check_props3=%{2}%; /shift%;\
         /else /let check_props3=1%; /endif%;\
-	/if ({2}=/"keep_case") /let keep_case=1%; /shift%;\
-	/else /let keep_case=0%;/endif%;\
-	/if (regmatch({-1},fulldetail)) \
-;	   /echo %{prop} == %P1%;\
-	   /if (!keep_case) \
-	   /test check_props3:=tolower(\{P%{check_props3}\})%;\
-	   /else \
-	   /test check_props3:=\{P%{check_props3}\}%;\
-	   /endif%;\
-	   /setprop -n %{prop} %check_props3%;\
-	/endif%;
+  /if ({2}=/"keep_case") /let keep_case=1%; /shift%;\
+  /else /let keep_case=0%;/endif%;\
+  /if (regmatch({-1},fulldetail)==1) \
+;    /echo %{prop} == %P1%;\
+     /if (!keep_case) \
+     /test check_props3:=tolower(\{P%{check_props3}\})%;\
+     /else \
+     /test check_props3:=\{P%{check_props3}\}%;\
+     /endif%;\
+     /setprop -n %{prop} %check_props3%;\
+  /endif%;
 
 ;Mesirii ist anwesend,
 ;und zwar von: Daemonendimension (ueber T-Online).
@@ -422,10 +428,10 @@ Wenn _pf gesetzt ist und keine Kontrolle-Zaubern laeuft und keine Sperrzeit bis 
 /addtolist finger_props project keep_case Projekt: ([^#]+)#
 
 /def check_finger2 = \
-	/set fulldetail=$[replace("@{N}","#",fulldetail)]%;\
-	/forEach finger_props kv /check_props3%;\
-	/set fulldetail=%;\
-	/eval_hook property_update
+  /set fulldetail=$[replace("@{N}","#",fulldetail)]%;\
+  /forEach finger_props kv /check_props3%;\
+  /set fulldetail=%;\
+  /eval_hook property_update
 
 /addh info \
 Aktualisiert die Spielerinformationen aus dem 'info'-Befehl. Das ist notwendig, um die Einschraenkungen bei den Wegen umzusetzen und um das spielerabhaengige und gildenabhaengige Makrofile zu laden. Bitte ausfuehren, wenn sich an den Properties was aendert.@{N}\
@@ -433,44 +439,44 @@ Der letzte Trigger muss dann updatePlayer2 aufrufen.
 /addh see properties, einschraenkungen, dateisystem
 /addh updatePlayer comm
 /def updatePlayer = \
-	/createlist ${world_character}%; \
-	/setprop -n name ${world_character}%; \
-	/setprop -n state spieler%;\
-	/check_finger%;\
-	/check_info%; \
-;	/get_subguild%;
+  /createlist ${world_character}%; \
+  /setprop -n name ${world_character}%; \
+  /setprop -n state spieler%;\
+  /check_finger%;\
+  /check_info%; \
+; /get_subguild%;
 
 /def updatePlayer2 = \
 ;/echo -aCred updateplayer2%;\
-	/getprop base_int%;\
-	/let p1=%value %;\
-	/getprop mod_int%;\
-	/setprop -n int $[p1+value] %;\
-	/getprop base_str%;\
-	/let p1=%value %;\
-	/getprop mod_str%;\
-	/setprop -n str $[p1+value] %;\
-	/getprop base_dex%;\
-	/let p1=%value %;\
-	/getprop mod_dex%;\
-	/setprop -n dex $[p1+value] %;\
-	/getprop base_const%;\
-	/let p1=%value %;\
-	/getprop mod_const%;\
-	/setprop -n const $[p1+value] %;\
-;	/getprop escape%;\
-;	/setprop -n state $[(value!~error)?"seher":"spieler"]%; \
-	/getprop state%;\
-	/let temp_state=%?%;\
-	/test temp_state:=tolower(temp_state)%;\
-	/if (temp_state=/"*in") /test temp_state:=substr(temp_state,0,-2)%; /endif%;\
-	/setprop -n state %temp_state%;\
-	/getprop whimpie%;\
-	/if (value=~"mutig") /setprop -n whimpie 0%; /endif%;\
-	/getprop ep%;\
-	/let p1=%value%;\
-	/getprop old_ep%;\
-	/setprop -n diff_ep $[p1-value]%;\
+  /getprop base_int%;\
+  /let p1=%value %;\
+  /getprop mod_int%;\
+  /setprop -n int $[p1+value] %;\
+  /getprop base_str%;\
+  /let p1=%value %;\
+  /getprop mod_str%;\
+  /setprop -n str $[p1+value] %;\
+  /getprop base_dex%;\
+  /let p1=%value %;\
+  /getprop mod_dex%;\
+  /setprop -n dex $[p1+value] %;\
+  /getprop base_const%;\
+  /let p1=%value %;\
+  /getprop mod_const%;\
+  /setprop -n const $[p1+value] %;\
+; /getprop escape%;\
+; /setprop -n state $[(value!~error)?"seher":"spieler"]%; \
+  /getprop state%;\
+  /let temp_state=%?%;\
+  /test temp_state:=tolower(temp_state)%;\
+  /if (temp_state=/"*in") /test temp_state:=substr(temp_state,0,-2)%; /endif%;\
+  /setprop -n state %temp_state%;\
+  /getprop whimpie%;\
+  /if (value=~"mutig") /setprop -n whimpie 0%; /endif%;\
+  /getprop ep%;\
+  /let p1=%value%;\
+  /getprop old_ep%;\
+  /setprop -n diff_ep $[p1-value]%;\
 
 ;/echo Done Property Update
 
@@ -483,11 +489,11 @@ Der letzte Trigger muss dann updatePlayer2 aufrufen.
 
 /def set_points = \
         /set p_update_time=$[time()]%;\
-	/set p_lp=%{1}%;/set p_mp=%{2}%;\
-	/set p_m_lp=$[+{1}-p_last_lp]%;\
-	/set p_m_mp=$[+{2}-p_last_mp]%;\
-	/set p_last_lp=%p_lp%;\
-	/set p_last_mp=%p_mp%;\
+  /set p_lp=%{1}%;/set p_mp=%{2}%;\
+  /set p_m_lp=$[+{1}-p_last_lp]%;\
+  /set p_m_mp=$[+{2}-p_last_mp]%;\
+  /set p_last_lp=%p_lp%;\
+  /set p_last_mp=%p_mp%;\
 
 /add_to_hook_begin points /set_points %1 %2
 
@@ -499,13 +505,13 @@ MorgenGrauen zu kkwer. Das Ergebnis wird in die Liste kkwer geschrieben.
 /addh ex /kkwer bei olli
 /addh kkwer mak
 /defh kkwer = \
-	/createlist kkwer%;\
-	/if (mud_short_who=~"") \
-		/let cmd=kkwer %*%;\
-	/else \
-		/let cmd=%mud_short_who %*%;\
-	/endif%;\
-	/trig_grab -p30 -F0 -y"r#^([A-Z][A-Za-z]+[A-Za-z0-9], ?)+\$" -e"r#^([A-Z][A-Za-z]+[A-Za-z0-9], )*([A-Z][A-Za-z]+[A-Za-z0-9][.])\$" -d" " -cye -M/kkwer_auswerten -C"!\\\\%{cmd}" -F0 -ag%;
+  /createlist kkwer%;\
+  /if (mud_short_who=~"") \
+    /let cmd=kkwer %*%;\
+  /else \
+    /let cmd=%mud_short_who %*%;\
+  /endif%;\
+  /trig_grab -p30 -F0 -y"r#^([A-Z][A-Za-z]+[A-Za-z0-9], ?)+\$" -e"r#^([A-Z][A-Za-z]+[A-Za-z0-9], )*([A-Z][A-Za-z]+[A-Za-z0-9][.])\$" -d" " -cye -M/kkwer_auswerten -C"!\\\\%{cmd}" -F0 -ag%;
 
 /def kkwer_auswerten = \
     /set fulldetail=$[tolower(substr(fulldetail,0,strlen(fulldetail)-2))]%;\
@@ -517,8 +523,8 @@ MorgenGrauen zu kkwer. Das Ergebnis wird in die Liste kkwer geschrieben.
             /addtolist kkwer %kkwer_res%;\
     /done%;\
     /if (after_kkwer!~"") \
-	/eval -s0 %after_kkwer%;\
-	/set after_kkwer=%;\
+  /eval -s0 %after_kkwer%;\
+  /set after_kkwer=%;\
     /endif
 
 /def fwer = \
