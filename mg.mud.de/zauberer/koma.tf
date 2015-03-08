@@ -336,7 +336,7 @@ normalen Komponente zurueckgeliefert, und die Variable ?koma_ewig wird auf \
 
 /addh info INTERN.
 /addh getCount mak
-/def getCount = /result ({*}=/"[0-9]*")?{*}:1
+/def getCount = /result ({*}=/"[0-9]*")?{*}:({*}="+++"?"999":1)
 
 /addh info \
 INTERN. Definiert den Trigger fuer den Guertelinhalt, und weist den jeweil\
@@ -404,7 +404,7 @@ igen IDs die Anzahlen zu.
             /unset koma_inv_%i%;\
             /let i=$[i+1]%;\
     /done%;\
-    /def -mregexp -ag -p9999 -t"([0-9]+) ([^0-9]+)(([0-9]+) ([^0-9]+))?" t_koma_02 = \
+    /def -mregexp -ag -p9999 -t"([+]+|[0-9]+) ([^+0-9]+)(([+]+|[0-9]+) ([^0-9]+))?" t_koma_02 = \
         /let id=$$[isZKompo({P2})]%%;\
         /let old=%%;\
         /if (id!~error) \
@@ -442,7 +442,7 @@ igen IDs die Anzahlen zu.
 	/def -1 -msimple -ag -p9999 -t'--- ewig: --------------------------------------------------------------------' t_koma_03 = \
 		/undef t_koma_02%%;\
 		/koma_getlines_ginhalt_ewig%;\
-; Sollte auf funktionieren wenn keine ewigen kompos im guertel sind (z.B. kein Hammer)
+; Sollte auch funktionieren, wenn keine ewigen kompos im guertel sind (z.B. kein Hammer)
 	/def -1 -msimple -ag -p9999 -t'------------------------------------------------------------------------------' t_koma_04 = \
 		/undef t_koma_02%%;\
 		/purge t_koma_03%%;\
@@ -623,7 +623,7 @@ Es wird immer der Wert genommen, der bei der letzten Aktualisierung per \
 /koma festgestellt wurde.
 /addh syn /koma_echo formatstring
 /addh ex /koma_echo Feuerwasser: &fw&
-/addh ex /koma_echo Eiswaasser:  &eis:3&
+/addh ex /koma_echo Eiswasser:  &eis:3&
 /addh koma_echo mak
 /def koma_echo = \
     /let ke_out=%;\
