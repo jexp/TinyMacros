@@ -11,8 +11,8 @@ bzw.
 ```
 git clone https://github.com/chrib/TinyMacros.git
 ```
-clonen. Damit wird das Verzeichnis TinyMacros erstellt
-Die .tfrc daraus ins home-Verzeichnis  kopieren.
+clonen. Damit wird das Verzeichnis TinyMacros erstellt.  
+Die .tfrc daraus ins home-Verzeichnis  kopieren.  
 Wenn das Verzeichnis irgendwoanders hin kopiert wurde, bitte
 den Pfad in der .tfrc anpassen.
 
@@ -34,11 +34,11 @@ ist bitte einen Link auf das Hostname Verzeichnis machen.
 
 ### Verzeichnisstruktur:
 
-TinyMacros/* 			Basisfiles
-TinyMacros/mg.mud.de/* 		Mudspezifsche Files (world_host)
-TinyMacros/mg.mud.de/mesirii	Spielerspezifische Files (world_character)
-TinyMacros/mg.mud.de/zauberer   Gildenspezifische Files (p_guild)
-TinyMacros/de/*			Sprachspezifische Files 
+TinyMacros/* 			Basisfiles  
+TinyMacros/mg.mud.de/* 		Mudspezifsche Files (world_host)  
+TinyMacros/mg.mud.de/mesirii	Spielerspezifische Files (world_character)  
+TinyMacros/mg.mud.de/zauberer   Gildenspezifische Files (p_guild)  
+TinyMacros/de/*			Sprachspezifische Files   
 
 (mg.mud.de, mesirii und zauberer sind nur Beispiele)
 
@@ -55,10 +55,10 @@ Paketauswahl stellt die zu ladenden Files ein, meist ist zur Zeit noch ein Neust
 
 Fuer die etwas Erfahreneren:
 
-Standardkonfiguration steht am Anfang der *.tf Dateien, oder in der gleichbenannten *.def. Diese sollten nicht modifiziert werden, da sie bei einem Update ueberschrieben werden.
-In den *.cfg koennen eigene Einstellungen reingeschrieben werden. (Kopieren aus *.tf bzw. *.def und modifizieren).
-Wenn noch keine *.cfg existiert kann sie einfach erzeugt werden, sie wird dann automatisch mit geladen.
-Zum Teil gibt es auch mudspezifische Configdateien (dann stehen die zusaetzlich in (TinyMacros/world_host/*.def,*.cfg)
+Standardkonfiguration steht am Anfang der *.tf Dateien, oder in der gleichbenannten .def. Diese sollten nicht modifiziert werden, da sie bei einem Update ueberschrieben werden.
+In den .cfg koennen eigene Einstellungen reingeschrieben werden. (Kopieren aus .tf bzw. .def und modifizieren).
+Wenn noch keine .cfg existiert kann sie einfach erzeugt werden, sie wird dann automatisch mit geladen.
+Zum Teil gibt es auch mudspezifische Configdateien (dann stehen die zusaetzlich in (TinyMacros/world_host/.def,.cfg)
 
 -------------------------------------------------------
 
@@ -70,9 +70,10 @@ wenn also eine neue VS oder eine neue FR eingestellt werden sollen, muessen die
 von tf verwendeten Variablen mit umgesetzt werden. Dies kann zB. mit
 einem TFAlias gemacht werden:
 
+```
 /alias vs /v %*
 /alias fl /fl %*
-
+```
 -------------------------------------------------------
 
 ### way.tf (Wegesystem)
@@ -115,30 +116,36 @@ druck, macht das folgende ueberfluessig.
 
 
 in world_host/keys.def, keys.cfg gibt es Beispiele für Tastenbelegungen
+```
 /setdesc <modus> <Bezeichner>%;\
 /setdesc 1 Kampf%;\
 
 /setkey <modus> <F-Taste> <mudbefehl,makro>&<Kurzbeschreibung>%;\
 /setkey 1 2 feuerball %gegner&Feuerball%;\
-
+```
 Die Keycodes fuer Funktionstasten, Ebenen und Keypad werden in einer Liste
 gehalten, die per /configure editiert werden kann. 
 
 -------------------------------------------------------
 
 ### crypt.tf (verschluesselte Kommunikation)
-
+```
 /set_key <partner> <key>
 /set_key vardion 329847927mj34hk2j34k32j4nk
-
+```
 Schluessel fuer Partnerzweities
+```
 /set_key <zweitie> !<erstie>!
 /set_key zweitie !vardion!
 
 /tm <partner> Text
-
+```
 Besser:
+```
 /alias tm /tm %*
-usage: tm vardion ctm funzt super
+```
+usage: tm vardion ctm funzt super  
 oder pro Partner
+```
 /alias tmv /tm vardion %*
+```
