@@ -1,6 +1,6 @@
 Kurze Einfuehrung:
 
-Install:
+### Install:
 
 Das Repo mittels 
 
@@ -29,9 +29,10 @@ aus der Weltdefinition holen, sollte diese auch definiert werden.
 Mud-Host und Spieler sind die Verzeichnisse unter 
 TinyMacros/Host/Spieler. Daher aufpassen wenn der Host als IP gesetzt
 ist bitte einen Link auf das Hostname Verzeichnis machen.
+
 --------------------------------------------------------
 
-Verzeichnisstruktur:
+### Verzeichnisstruktur:
 
 TinyMacros/* 			Basisfiles
 TinyMacros/mg.mud.de/* 		Mudspezifsche Files (world_host)
@@ -43,7 +44,7 @@ TinyMacros/de/*			Sprachspezifische Files
 
 -------------------------------------------------------
 
-Konfiguration:
+### Konfiguration:
 
 Die meisten Sachen kann man mittlerweile mit dem Befehl
 /configure
@@ -61,7 +62,7 @@ Zum Teil gibt es auch mudspezifische Configdateien (dann stehen die zusaetzlich 
 
 -------------------------------------------------------
 
-vorsicht.tf (Fluchtsystem)
+### vorsicht.tf (Fluchtsystem)
 
 Das Paket vorsicht.tf sichert Vorsicht und Fluchtrichtung, wenn es er-
 kennt, dass daran manipuliert wurde, setzt es beides automatisch wieder um,
@@ -74,7 +75,7 @@ einem TFAlias gemacht werden:
 
 -------------------------------------------------------
 
-way.tf (Wegesystem)
+### way.tf (Wegesystem)
 
 An einem ersten Startknoten /addnode knotenname
 (Gebiet, Info eingeben!)
@@ -89,9 +90,10 @@ Gebiet und Info muessen nur bei neu erzeugten Knoten eingegeben werden.
 /showways [knotenname] zeigt Wege des Knotens an
 /shownode [knotenname|*] zeigt Knoten an, zu denen Wege fuehren
 /add_portal name nummer fuegt Portale hinzu
+
 -------------------------------------------------------
 
-untroom.tf (Untersuchehilfe)
+### untroom.tf (Untersuchehilfe)
 
 /untroom startet das Untersuchen eines Raumes. Es wird immer das naechste zu untersuchende Detail markiert und in die Eingabezeile gelegt
 /unt <detail> untersucht das jeweilige Detail im Raum und analysiert desssen Beschreibung.
@@ -101,7 +103,7 @@ Zum Untersuchen von Objekten und zum Ausfragen von NPCs stehen die Makros /untit
 
 -------------------------------------------------------
 
-keys.tf (Mehrere Funktionstastenbelegungen)
+### keys.tf (Mehrere Funktionstastenbelegungen)
 
 ESC-0 Zeigt aktuelle Belegung und andere vorhandene Modi an
 ESC-1..9 Schaltet Modi um
@@ -124,7 +126,7 @@ gehalten, die per /configure editiert werden kann.
 
 -------------------------------------------------------
 
-crypt.tf (verschluesselte Kommunikation)
+### crypt.tf (verschluesselte Kommunikation)
 
 /set_key <partner> <key>
 /set_key vardion 329847927mj34hk2j34k32j4nk
