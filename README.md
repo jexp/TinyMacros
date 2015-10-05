@@ -148,10 +148,13 @@ Zum Untersuchen von Objekten und zum Ausfragen von NPCs stehen die Makros
 ## keys.tf (Mehrere Funktionstastenbelegungen)
 
 `ESC-0` Zeigt aktuelle Belegung und andere vorhandene Modi an.
+
 `ESC-1..9` Schaltet Modi um.
+
 `F1-F12` Ausfuehren der Belegung.
 
 `Alt-D` Displaymodus, zeigt Belegung bei Tastendruck an.
+
 `Alt-E` Editiermodus, direkte Eingabe von Befehl und Beschreibung bei
 Tastendruck, macht das folgende ueberfluessig.
 
