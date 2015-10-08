@@ -30,7 +30,9 @@ Welten koennen nach dem Starten von TF mit dem `/addplayer` Kommando
 definiert werden.
 
 Damit Welten immer zur Verfuegung stehen, legt man eine
-entsprechende Definition unter `~/TinyMacros/world.tf` ab.
+entsprechende Definition unter `~/TinyMacros/world.tf` ab. Alterantiv kann
+auch die von TF erzeugte `tiny.world` genutzt werden, wenn man mittels
+`/addplayer` die Welt erzeugt hat.
 
     /test addworld("welt1", "lp.lpp", "mud", "port", "char", "password");
 
