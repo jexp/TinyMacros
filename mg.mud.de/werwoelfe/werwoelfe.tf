@@ -77,3 +77,5 @@
 	/re_def_status ist... wie wuerde Mondheuler sagen? Bald faellig... 30%;\
 	/re_def_status sieht nach baldigem Umkippen aus. 10%;\
 /endif
+
+/mload -c config/gilden/werwoelfe.tf

@@ -47,7 +47,7 @@
 /set_var CFG_MG_WERWOELFE_FORM_3_ECHO_ATTR Cgreen
 /set_var CFG_MG_WERWOELFE_FORM_3_ECHO_TEXT Wolfsform: @{%CFG_STATUS_COLOR_WERWOELFE_FORM_3}Horpas@{n}
 /set_var CFG_MG_WERWOELFE_FORM_4_ECHO_ATTR Cgreen
-/set_var CFG_MG_WERWOELFE_FORM_4_ECHO_TEXT Wolfsform: @{%CFG_STATUS_COLOR_WERWOELFE_FORM_4}Galbarg@{n}
+/set_var CFG_MG_WERWOELFE_FORM_4_ECHO_TEXT Wolfsform: @{%CFG_STATUS_COLOR_WERWOELFE_FORM_4}Galbrag@{n}
 /set_var CFG_MG_WERWOELFE_FORM_AUS_ECHO_ATTR Cred
 /set_var CFG_MG_WERWOELFE_FORM_AUS_ECHO_TEXT Verwandlung beendet
 /set_var CFG_MG_WERWOELFE_FORM_SPERRE_ECHO_ATTR Cyellow
@@ -78,6 +78,17 @@
 /set_var CFG_MG_WERWOELFE_RAGE_AUS_ECHO_ATTR Cred
 /set_var CFG_MG_WERWOELFE_RAGE_AUS_ECHO_TEXT Rage aus
 
+; Fellwuchs
+
+/set_var CFG_STATUS_TEXT_WERWOELFE_FELLWUCHS_1 F
+/set_var CFG_STATUS_COLOR_WERWOELFE_FELLWUCHS_1 Cyellow
+/set_var CFG_MG_WERWOELFE_FELLWUCHS_AN_ECHO_ATTR Cgreen
+/set_var CFG_MG_WERWOELFE_FELLWUCHS_AN_ECHO_TEXT Fellwuchs
+/set_var CFG_MG_WERWOELFE_FELLWUCHS_AUS_ECHO_ATTR Cred
+/set_var CFG_MG_WERWOELFE_FELLWUCHS_AUS_ECHO_TEXT Fellwuchs aus
+/set_var CFG_MG_WERWOELFE_FELLWUCHS_ALR_ECHO_ATTR Cyellow
+/set_var CFG_MG_WERWOELFE_FELLWUCHS_ALR_ECHO_TEXT Fellwuchs schon an
+
 ; Werwolfrufe
 
 /set_var CFG_MG_WERWOELFE_WERRUF_ECHO_ATTR Cyellow
@@ -88,6 +99,7 @@
 /set werwoelfe_form 0
 /set werwoelfe_leuchten 0
 /set werwoelfe_rage 0
+/set werwoelfe_fellwuchs 0
 
 
 ;;; Statuszeilenmodule
@@ -104,6 +116,9 @@
 /def sl_werwoelfe_rage = \
 	/set_status_var_flag werwoelfe_rage werwoelfe_rage 1
 
+/set sl_werwoelfe_fellwuchs_doc=Leuchten ($[status_doc_attr("WERWOELFE_FELLWUCHS_1")])
+/def sl_werwoelfe_fellwuchs = \
+	/set_status_var_flag werwoelfe_fellwuchs werwoelfe_fellwuchs 1
 
 ;;; Trigger
 
@@ -148,8 +163,8 @@
 		/endif%%;\
 		/cfg_echo $$[strcat("MG_WERWOELFE_FORM_",werwoelfe_form)] %%*
 
-/def -Fp20 -msimple -agCblue -t'Du bemerkst, wie Du Dich wieder in einen \
-	Menschen verwandelst.' werwoelfe_transform_out = \
+/def -Fp20 -msimple -agCblue -t'Du bemerkst, wie Du Dich wieder in Deine \
+	urspruengliche Form verwandelst.' werwoelfe_transform_out = \
 	/set werwoelfe_form 0%;\
 	/cfg_echo MG_WERWOELFE_FORM_AUS %*
 
@@ -206,6 +221,25 @@
 /def werwoelfe_rage_timer = \
 	/repeat_once %CFG_STATUS_TIME_WERWOELFE_RAGE /werwoelfe_rage_aus%;\
 	/if ({?}) /set werwoelfe_rage_timer=%?%;/endif
+
+; Fellwuchs
+
+/def -Fp20 -agCblue -msimple -t'Du konzentrierst Dich auf Dein Fell.' \
+ werwoelfe_fellwuchs = \
+ /def -1 -ag -t'Dein Fell waechst.' werwoelfe_fellwuchs2 = \
+ 	/cfg_echo MG_WERWOELFE_FELLWUCHS_AN %*%%;\
+	/set werwoelfe_fellwuchs 1
+
+/def -Fp20 -agCblue -msimple -t'Du hast doch schon ein Fell!' \
+	werwoelfe_fellwuchs_alr = \
+	/cfg_echo MG_WERWOELFE_FELLWUCHS_ALR %*%;\
+	/set werwoelfe_fellwuchs 1
+
+/def -Fp20 -agCblue -msimple -t'Dein Fell zieht sich zurueck.' \
+	werwoelfe_fellwuchs_aus = \
+	/cfg_echo MG_WERWOELFE_FELLWUCHS_AUS %*%;\
+	/set werwoelfe_fellwuchs 0
+
 
 ; Werwolfrufe
 
