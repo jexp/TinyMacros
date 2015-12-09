@@ -305,7 +305,7 @@
 ; erste Version
 ;
 
-/set comm_tf_version=$Id$
+/set comm_tf_version=$Id: comm.tf,v 1.93 2003/08/25 13:03:28 nieten Exp $
 /set comm_tf_author=Dotz@mg.mud.de
 /set comm_tf_requires=!help.tf !config.tf util.tf(1.18) util.sfunc.tf(1.8) util.trigger.tf(1.11) util.windows.tf lists.tf loading.tf(1.33) util.completion.def, util.echo.tf(1.13)
 /set comm_tf_desc=Einfaerbung und Formatierung der Kommunikation, Logging und einfache History
@@ -810,7 +810,7 @@ Behandelt auch special tm's d.h. Trenner ungleich ":".@{N}\
 /addh comm_t_teilemit2 trig
 
 /def -p5 -E(!comm_mpa_mail) -ag -mregexp \
-    -t"^Du teilst( [Dd]einen)? ([A-Za-z0-9 ]+(@[A-Za-z0-9'._:@& -]+)?) \
+    -t"^Du teilst( [Dd]einen)? ([A-Za-z ]+(@[A-Za-z0-9'._:@& -]+)?) \
     mit([:;]) " comm_t_teilemit2 = \
     /let comm_name=%P2%;\
     /let comm_special=$[{P4}!~":"]%;\
@@ -1087,7 +1087,7 @@ Wird nicht ausgefuehrt, falls das Wegesystem den aktuellen Standort herausfinden
     /endif%;\
 ; mehrzeiliges emote?
     /if (strchr({*},"]") == -1) \
-        /def -p10 -agCblue -mglob -t" *" comm_t_ebene_help = \
+        /def -p10 -agCblue -mglob -t"*" comm_t_ebene_help = \
 	    /let comm_ebene=%comm_ebene%%;\
 	    /let comm_tmp=%%;\
 ; /test wegen Leerzeichen
@@ -1277,7 +1277,7 @@ Damit das %mud_short_who Kommando nicht stoert, waehrend man sich im Editor befi
     /if (trig_is_active(comm_trig_number)) \
 	/return%;\
     /endif%;\
-    /trig_grab -y"r#^([A-Z][A-Za-z]+[A-Za-z0-9], ?)+\$" -e"r#^([A-Z][A-Za-z]+[A-Za-z0-9](, | und ))*([A-Z][A-Za-z]+[A-Za-z0-9][.])\$" -d" " -cye -M/comm_update_living2 -C%{mud_short_who-!\\kkwer} -F0 -ag%;\
+    /trig_grab -y"r#^([A-Z][A-Za-z]+[A-Za-z0-9], ?)+\$" -e"r#^([A-Z][A-Za-z]+[A-Za-z0-9](, |.)?)\$" -d" " -cye -M/comm_update_living2 -C%{mud_short_who-!\\kkwer} -F0 -ag%;\
     /set comm_trig_number=%?%;\
 ;/list -i trig_grab_*_%comm_trig_number
 
