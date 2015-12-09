@@ -50,7 +50,7 @@ die onlineFarbe verwendet)
 /loadlist -q -c -p erwarte_color1
 /loadlist -q -c -p erwarte_color2
 
-/def -mregexp -t'^([a-zA-Z0-9]+)   I S T   J E T Z T   D A !!!$' -ag -p2000 t_erwarte = \
+/def -mregexp -t'^([a-zA-Z0-9]+) (  I S T   J E T Z T   D A|IST JETZT DA) !!!$' -ag -p2000 t_erwarte = \
 	/getvalueof erwarte_color1 $[tolower({P1})]%;\
 	/if (value=~error) \
 		/let ecn=%erwarte_color_online_name%;\
@@ -74,7 +74,7 @@ die onlineFarbe verwendet)
 	    /endif%;\
 	/endif%;
 
-/def -mregexp -t'^([a-zA-Z0-9]+)   I S T   J E T Z T   N I C H T   M E H R   D A !!!$' -ag -p2000 t_erwarte2 = \
+/def -mregexp -t'^([a-zA-Z0-9]+) (  I S T   J E T Z T   N I C H T   M E H R   D A|IST JETZT NICHT MEHR DA) !!!$' -ag -p2000 t_erwarte2 = \
 	/getvalueof erwarte_color2 $[tolower({P1})]%;\
 	/if (value=~error) \
 		/getvalueof erwarte_color1 $[tolower({P1})]%;\
