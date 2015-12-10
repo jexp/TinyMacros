@@ -82,6 +82,12 @@
 
 /cfg_set MUD WEAPON2 AUTO_INPUT 0
 
+/cfg_info MUD FIGHT SHIELD2 AUTO_INPUT unbekannte_Waffe_eingeben:2
+/addh info Unbekannte Schilde werden beim Zuecken in der Eingabezeile angeboten
+/addh CFG_MUD_SHIELD2_AUTO_INPUT cfg
+
+/cfg_set MUD SHIELD2 AUTO_INPUT 0
+
 /cfg_info MUD FIGHT WEAPON2 NO_CONTAINER Waffen_nicht_in_Container:2
 /addh info Welche Waffen sollen/können nicht in den Container gesteckt werden, Liste der Kürzel durch Leerzeichen getrennt
 /addh CFG_MUD_WEAPON2_NO_CONTAINER cfg
@@ -534,7 +540,7 @@
 	/else \
 		/set shield_quiet 0%;\
 	/endif%;\
-	/if ({P6} =~ "n") \
+	/if (CFG_MUD_WEAPON2_AUTO_INPUT & {P6} =~ "n") \
 		/let shield_tmp %P3%;\
 		/if (shield_find(shield_tmp) =~ "") \
 			/input /shield_add_new %shield_tmp%;\
