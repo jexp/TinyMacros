@@ -112,6 +112,8 @@
 /mload -U"Waffenfunktionen" -c -dkampf weapon.tf
 /mload -U"Team-Makros" -c -dkampf team.tf
 /mload -U"TF-basierter Focus" -c -dkampf focus.tf
+/mload -U"Autofolge" -c afolge.tf
+/mload -U"Behandlung von P_NO_ASCII" -c noascii.tf
 ; -------------- Gilden -----------------------------------
 /cfg_info USE MG_MUD_DE CHAOS_CHAOS Chaotenzeugs
 
