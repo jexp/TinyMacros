@@ -172,7 +172,11 @@
 /cfg_info MUD PROPERTIES DO_ECHO_HIT_POINTS Hitpointausgabeflag:2
 /cfg_set MUD DO_ECHO_HIT_POINTS 1
 
-/ifdo CFG_MUD_DO_ECHO_HIT_POINTS /add_to_hook points /echo_hit_points
+/if (CFG_MUD_DO_ECHO_HIT_POINTS) \
+  /add_to_hook points /echo_hit_points%;\
+/else \
+  /remove_from_hook points /echo_hit_points%;\
+/endif
 
 /add_to_hook property_update /mg_properties_check_level
 
