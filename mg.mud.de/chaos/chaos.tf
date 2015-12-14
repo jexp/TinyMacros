@@ -20,11 +20,13 @@
 /set chaos_tf_requires lists.tf 
 /set chaos_tf_desc=Diverse Hilfsmakros fuer die Chaosgilde
 
-/add_to_hook first_connect reportart chaos
+/set chaos_use_demon_slave=1
 
-/remove_from_hook points /set_points %1 %2
+/ifdo chaos_use_demon_slave \
+  /add_to_hook first_connect reportart chaos \
+  /remove_from_hook points /set_points %1 %2
 
-/def -agCblue -mregexp -t"^Du verfuegst ueber ([0-9]+)/([0-9]+) LP \\(\\+?([0-9-]+)\\) und ([0-9]+)/([0-9]+) KP \\(\\+?([0-9-]+)\\)\\.$" t_chaos_report = \
+/ifdef chaos_use_demon_slave -agCblue -mregexp -t"^Du verfuegst ueber ([0-9]+)/([0-9]+) LP \\(\\+?([0-9-]+)\\) und ([0-9]+)/([0-9]+) KP \\(\\+?([0-9-]+)\\)\\.$" t_chaos_report = \
      /set p_update_time=$[time()]%;\
      /set p_last_lp=%p_lp%; /set p_last_mp=%p_mp%;\
      /set p_maxlp=%P2%; /set p_maxmp=%P5%;\
