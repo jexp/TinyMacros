@@ -1745,6 +1745,21 @@
 		/endif%;\
 	/endif
 
+;;; Chaoswolke
+
+/def -Fp1 -q -agCblue -mregexp -t'^Eine Chaoswolke loest sich aus (.+) (Haut|Chaoshaut) und schiesst (.+)' \
+	re_chaos_cw=\
+  /if (substr({P2},strlen({P2})-3,3)!~"zu.") \
+    /def -Fp1 -1 -q -agCblue -mglob -t'*zu.' re_chaos_cw2%;\
+  /endif%;\
+  /if ({P1}=~"Deiner") \
+    /set RE_ANGREIFER Du%;\
+  /else \
+    /set RE_ANGREIFER %{P1}%;\
+  /endif%;\
+  /set RE_WAFFE Chaoswolke%;\
+  /set RE_ART %RE_PT5@{%RE_FARBE_21}Chaos@{%RE_FARBE_35}
+
 ;;; Verbanne
 
 /def -p1 -q -agCblue -mglob -t'* {hebt|hebst} die Arme empor und \
@@ -4025,6 +4040,89 @@
 	hinwegzuspuelen.' re_wwolf_wasserstrahl_2 = \
 	/set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Wasserstrahl
+
+;;; URUKHAI
+
+;;; Beisse
+
+/def -p1 -q -agCblue -msimple -t'Du stuerzt Dich mit aufgerissenem Maul auf Deinen Gegner.' re_uruk_beisse = \
+	/purge -mglob re_uruk_beisse_*%;\
+	/def -1 -p1 -q -agCblue -mregexp -t'Du beisst .* kraeftig.' re_uruk_beisse_1 = \
+		/set RE_ANGREIFER Du%%;\
+		/set RE_WAFFE Beisse%%;\
+		/set RE_ART %R_PT3@{%RE_FARBE_15}Urukhai@{%RE_FARBE_35}
+
+/def -p1 -q -agCblue -mregexp -t'(.+) beisst (.+) kraeftig.$' re_uruk_beisse1 = \
+	/set RE_ANGREIFER $(/re_genitiv_loeschen %P1)%;\
+	/set RE_WAFFE Beisse%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Urukhai@{%RE_FARBE_35}
+
+;;; Hammerfaust
+/def -p1 -q -agCblue -msimple -t'Du holst zu einem gewaltigen Schlag aus.' re_uruk_hammerfaust = \
+	/purge -mglob re_uruk_hammerfaust_*%;\
+	/def -1 -p1 -q -agCblue -mregexp -t'Du schlaegst .* Deine Faust ins Gesicht.' re_uruk_hammerfaust_1 = \
+		/set RE_ANGREIFER Du%%;\
+		/set RE_WAFFE Hammerfaust%%;\
+		/set RE_ART %RE_PT3@{%RE_FARBE_15}Urukhai@{%RE_FARBE_35}
+
+/def -p1 -q -agCblue -mregexp -t'(.+) schlaegt (.+) die Faust ins Gesicht.' re_uruk_hammerfaust1 = \
+	/set RE_ANGREIFER $(/re_genitiv_loeschen %P1)%;\
+	/set RE_WAFFE Hammerfaust%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Urukhai@{%RE_FARBE_35}
+
+;;; Ruelpse
+
+/def -p1 -q -agCblue -msimple -t'Du oeffnest Deinen Mund und spannst die Bauchmuskeln an.' re_uruk_ruelpse = \
+	/purge -mglob re_uruk_ruelpse_*%;\
+	/def -1 -p1 -q -agCblue -mregexp -t'Du ruelpst .* an.' re_uruk_ruelpse_1 = \
+		/set RE_ANGREIFER Du%%;\
+		/set RE_WAFFE Ruelpse%%;\
+		/set RE_ART %RE_PT3@{%RE_FARBE_15}Urukhai@{%RE_FARBE_35}
+
+/def -p1 -q -agCblue -mregexp -t'(.+) ruelpst (.+) an.' re_uruk_ruelpse1 = \
+	/set RE_ANGREIFER $(/re_genitiv_loeschen %P1)%;\
+	/set RE_WAFFE Ruelpse%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Urukhai@{%RE_FARBE_35}
+
+;;; Spucke
+
+/def -p1 -q -agCblue -msimple -t'Du sammelst etwas Spucke in Deinem Mund.' re_uruk_spucke = \
+	/purge -mglob re_uruk_spucke_*%;\
+	/def -1 -p1 -q -agCblue -mregexp -t'Du spuckst .* an.' re_uruk_spucke_1 = \
+		/set RE_ANGREIFER Du%%;\
+		/set RE_WAFFE Spucke%%;\
+		/set RE_ART %RE_PT3@{%RE_FARBE_15}Urukhai@{%RE_FARBE_35}
+
+/def -p1 -q -agCblue -mregexp -t'(.+) spuckt (.+) an.' re_uruk_spucke1 = \
+	/set RE_ANGREIFER $(/re_genitiv_loeschen %P1)%;\
+	/set RE_WAFFE Spucke%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Urukhai@{%RE_FARBE_35}
+
+;;; Furcht
+
+/def -q -p1 -agCblue -msimple -t"Du faengst an furchteinfloessend zu bruellen." re_uruk_furcht = \
+	/set RE_FLAECHE_WAFFE Furcht%;\
+	/set RE_WAFFE Furcht%;\
+	/set RE_FLAECHE_ART %RE_PT3@{%RE_FARBE_15}Urukhai@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Urukhai@{%RE_FARBE_35}%;\
+	/set RE_FLAECHE_ANGREIFER Du%;\
+	/set RE_FLAECHE_ZEIT $[time()]
+
+/def -q -p1 -agCblue -mglob -t"* bruellt furchteinfloessend." re_uruk_furcht1 = \
+	/set RE_FLAECHE_WAFFE Furcht%;\
+	/set RE_WAFFE Furcht%;\
+	/set RE_FLAECHE_ART %RE_PT3@{%RE_FARBE_15}Urukhai@{%RE_FARBE_35}%;\
+	/set RE_ART %RE_PT3@{%RE_FARBE_15}Urukhai@{%RE_FARBE_35}%;\
+  /set RE_FLAECHE_ANGREIFER $(/re_namekuerzen 13 \
+    $(/re_genitiv_loeschen $(/re_artikelkuerzen %P1)))%;\
+	/set RE_FLAECHE_ZEIT $[time()]
+
+/def -q -p1 -msimple -t"Du bekommst es selbst mit der Angst zu tun." \
+  re_uruk_furcht2 = \
+  /if (RE_FLAECHE_WAFFE=~"Furcht") \
+    /unset RE_FLAECHE_WAFFE%; \
+  /endif
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 			die kleinen Abwehr-Helferchen
