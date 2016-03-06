@@ -68,7 +68,6 @@
 
 ; Rage
 
-/set_var CFG_STATUS_TIME_WERWOELFE_RAGE 60
 /set_var CFG_STATUS_TEXT_WERWOELFE_RAGE_1 R
 /set_var CFG_STATUS_COLOR_WERWOELFE_RAGE_1 Cmagenta
 /set_var CFG_MG_WERWOELFE_RAGE_AN_ECHO_ATTR Cgreen
@@ -202,25 +201,15 @@
 	/def -1 -Fp20 -agCblue -msimple -t'Du verfaellst in Rage.' \
 		werwoelfe_rage_2 = \
 		/cfg_echo MG_WERWOELFE_RAGE_AN %%*%%;\
-		/if (werwoelfe_rage_timer) \
-			/kill %%werwoelfe_rage_timer%%;\
-			/set werwoelfe_rage_timer 0%%;\
-		/endif%%;\
-		/werwoelfe_rage_timer%%;\
 		/set werwoelfe_rage 1
 
 /def -Fp20 -agCblue -msimple -t'Du bist noch in Rage.' werwoelfe_rage_alr = \
 	/cfg_echo MG_WERWOELFE_RAGE_ALR %*%;\
-	/werwoelfe_rage_timer%;\
 	/set werwoelfe_rage 1
 
-/def werwoelfe_rage_aus = \
-	/set werwoelfe_rage 0%;\
-	/set werwoelfe_rage_timer 0
-
-/def werwoelfe_rage_timer = \
-	/repeat_once %CFG_STATUS_TIME_WERWOELFE_RAGE /werwoelfe_rage_aus%;\
-	/if ({?}) /set werwoelfe_rage_timer=%?%;/endif
+/def -Fp20 -msimple -agCblue -t"Deine Wut verraucht." werwoelfe_rage_aus = \
+  /cfg_echo MG_WERWOELFE_RAGE_AUS %%*%%;\
+  /set werwoelfe_rage 0%;\
 
 ; Fellwuchs
 
