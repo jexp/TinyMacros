@@ -42,6 +42,7 @@
 
 /set_var plakette_list_name kills 
 /set_var plakette_list_location -c -p
+/set_var plakette_auto_direct 1
 
 ; Makros und Trigger
 
@@ -52,8 +53,10 @@
 		/def plakette_doit = \
 			/if (plakette) \
 				/unset plakette%%;\
-				/send !\\\\richte plakette auf %%1%%;\
-			/endif%%;\
+        /if (plakette_auto_direct) \
+          /send !\\\\richte plakette auf %%1%%;\
+        /endif%%;\
+      /endif%%;\
 			/undef plakette_doit%;\
 		/set plakette 1%;\
 		/plakette_check%;\
