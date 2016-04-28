@@ -922,7 +922,7 @@
 
 
 /def re_ausgabe=\
-	/if (!re_ausgabe_vorbereiten()) \
+  /if (!re_ausgabe_vorbereiten()) \
 		/re_loeschen%;\
 		/return 0%;\
 	/endif%;\
@@ -1050,7 +1050,7 @@
 	/elseif (RE_WAFFE =/ '*vorsichtig *') \
 		/set RE_WAFFE $[substr(RE_WAFFE, \
 			strstr(RE_WAFFE, 'vorsichtig ')+11)]%;\
-		/set RE_ART .@{%RE_FARBE_19}SchKroete@{%RE_FARBE_35}%;\
+		/set RE_ART %RE_PT1@{%RE_FARBE_19}SchKroete@{%RE_FARBE_35}%;\
 	/elseif (RE_WAFFE =/ '*schlangengleich *') \
 		/set RE_WAFFE $[substr(RE_WAFFE, \
 			strstr(RE_WAFFE, 'schlangengleich ')+16)]%;\
@@ -3990,6 +3990,180 @@
 
 ;;; WERWOELFE
 
+;;; Biss
+
+/def -p1 -agCblue -mglob -t'Du beisst *.' re_wwolf_biss_1 = \
+    /set RE_TRIG_WWOLF_BISS=1
+
+/def -p1 -agCblue -mglob -t'* beisst * kraeftig und mit Biss.' re_wwolf_biss_ext_1 = \
+    /set RE_TRIG_WWOLF_BISS=1
+
+/def -p1 -agCblue -mglob -t'* beisst * kraeftig. Richtig kraeftig sogar.' re_wwolf_biss_ext_2 = \
+    /set RE_TRIG_WWOLF_BISS=1
+
+/def -p1 -agCblue -mglob -t'* beisst * einigermassen heftig.' re_wwolf_biss_ext_3 = \
+    /set RE_TRIG_WWOLF_BISS=1
+
+/def -p1 -agCblue -mglob -t'* beisst * mit richtig viel Biss.*' re_wwolf_biss_ext_4 = \
+    /set RE_TRIG_WWOLF_BISS=1
+
+/def -p1 -E(RE_TRIG_WWOLF_BISS) -agCblue -mregexp -t'  (.*) beisst (.*) in den Arm' re_wwolf_biss_2 = \
+    /set RE_ANGREIFER %P1%;\
+    /set RE_OPFER %P2%;\
+    /shift 2%;\
+    /set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+    /set RE_WAFFE Biss%;\
+    /if ({L1}!~"weh." & {L1}!~"anzurichten.") \
+        /def -p1 -1 -agCblue -mregexp -t'(weh|anzurichten)\.' re_wwolf_biss_2_tmp = \
+            /let tmp_params=%{*}%%;\
+            /let tmp_params=$$[strcat({tmp_params}, " ", {*})]%%;\
+            /if (strstr({tmp_params}, "gar nicht") == -1 & strstr({tmp_params}, "ohne Schaden") == -1) \
+                /set RE_SCHADEN 2%%;\
+            /else \
+                /set RE_SCHADEN 1%%;\
+            /endif%%;\
+            /re_ausgabe%%;\
+        %;\
+    /else \
+        /if (strstr({*}, "gar nicht") == -1 & strstr({*}, "ohne Schaden") == -1) \
+            /set RE_SCHADEN 2%;\
+        /else \
+            /set RE_SCHADEN 1%;\
+        /endif%;\
+        /re_ausgabe%;\
+    /endif%;\
+    /set RE_TRIG_WWOLF_BISS=0%;
+
+/def -p1 -E(RE_TRIG_WWOLF_BISS) -agCblue -mregexp -t'  (.*) beisst (.*) in die Schulter, rutschs?t .*' re_wwolf_biss_4 = \
+    /if ({L1}!~"Kratzspuren.") \
+        /def -p1 -1 -agCblue -mglob -t'*Kratzspuren.' re_wwolf_biss_4_tmp%;\
+    /endif%;\
+    /set RE_ANGREIFER %P1%;\
+    /set RE_OPFER %P2%;\
+    /shift 2%;\
+    /set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+    /set RE_WAFFE Biss%;\
+    /set RE_SCHADEN 3%;\
+    /set RE_TRIG_WWOLF_BISS=0%;\
+    /re_ausgabe%;
+
+/def -p1 -E(RE_TRIG_WWOLF_BISS) -agCblue -mregexp -t'  (.*) beisst (.*) in die Hand. Das ' re_wwolf_biss_5 = \
+    /if ({L1}!~"Treffer.") \
+        /def -p1 -1 -agCblue -mglob -t'*Treffer.' re_wwolf_biss_5_tmp%;\
+    /endif%;\
+    /set RE_ANGREIFER %P1%;\
+    /set RE_OPFER %P2)%;\
+    /shift 2%;\
+    /set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+    /set RE_WAFFE Biss%;\
+    /set RE_SCHADEN 4%;\
+    /set RE_TRIG_WWOLF_BISS=0%;\
+    /re_ausgabe%;
+
+/def -p1 -E(RE_TRIG_WWOLF_BISS) -agCblue -mregexp -t'  (.*) beisst (.*) in den Daumen' re_wwolf_biss_6 = \
+    /if ({L1}!~"gewesen." & {L1}!~"waere.") \
+        /def -p1 -1 -agCblue -mregexp -t'(gewesen|waere).' re_wwolf_biss_6_tmp%;\
+    /endif%;\
+    /set RE_ANGREIFER %P1%;\
+    /set RE_OPFER %P2%;\
+    /shift 2%;\
+    /set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+    /set RE_WAFFE Biss%;\
+    /set RE_SCHADEN 5%;\
+    /set RE_TRIG_WWOLF_BISS=0%;\
+    /re_ausgabe%;
+
+/def -p1 -E(RE_TRIG_WWOLF_BISS) -agCblue -mregexp -t'  (.*) beisst (.*) in die Wade' re_wwolf_biss_7 = \
+    /if ({L1}!~"darueber.") \
+        /def -p1 -1 -agCblue -mglob -t'*darueber.' re_wwolf_biss_7_tmp%;\
+    /endif%;\
+    /set RE_ANGREIFER %P1)%;\
+    /set RE_OPFER %P2))%;\
+    /shift 2%;\
+    /set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+    /set RE_WAFFE Biss%;\
+    /set RE_TRIG_WWOLF_BISS=0%;\
+    /set RE_SCHADEN 5%;\
+    /re_ausgabe%;
+
+/def -p1 -E(RE_TRIG_WWOLF_BISS) -agCblue -mregexp -t'  (.*) beisst und beisst an (.*) herum, ' re_wwolf_biss_8 = \
+    /if ({L1}!~"dumm.") \
+        /def -p1 -1 -agCblue -mglob -t'*dumm.' re_wwolf_biss_8_tmp%;\
+    /endif%;\
+    /set RE_ANGREIFER %P1)%;\
+   /set RE_OPFER %P2%;\
+    /shift 5%;\
+    /set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+    /set RE_WAFFE Biss%;\
+    /set RE_SCHADEN 6%;\
+    /set RE_TRIG_WWOLF_BISS=0%;\
+    /re_ausgabe%;
+
+/def -p1 -E(RE_TRIG_WWOLF_BISS) -agCblue -mregexp -t'  (.*) beisst (.*) in den Fuss, ein wenig ' re_wwolf_biss_9 = \
+    /if ({L1}!~"ab." & {L1}!~"ab!") \
+        /def -p1 -1 -agCblue -mregexp -t'ab.*' re_wwolf_biss_9_tmp%;\
+    /endif%;\
+    /set RE_ANGREIFER %P1%;\
+    /set RE_OPFER %P2%;\
+    /shift 2%;\
+    /set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+    /set RE_WAFFE Biss%;\
+    /set RE_SCHADEN 6%;\
+    /set RE_TRIG_WWOLF_BISS=0%;\
+    /re_ausgabe%;
+
+/def -p1 -E(RE_TRIG_WWOLF_BISS) -agCblue -mregexp -t'  (.*) beisst (.*) in den Oberschenkel' re_wwolf_biss_10 = \
+    /if ({L1}!~"brechen.") \
+        /def -p1 -1 -agCblue -mglob -t'*brechen.' re_wwolf_biss_10_tmp%;\
+    /endif%;\
+    /set RE_ANGREIFER %P1%;\
+    /set RE_OPFER %P2%;\
+    /shift 2%;\
+    /set RE_ART %R_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+    /set RE_WAFFE Biss%;\
+    /set RE_SCHADEN 7%;\
+    /set RE_TRIG_WWOLF_BISS=0%;\
+    /re_ausgabe%;
+
+/def -p1 -E(RE_TRIG_WWOLF_BISS) -agCblue -mregexp -t'  (.*) beisst in (.*) Hals. * Hals' re_wwolf_biss_11 = \
+    /if ({L1}!~"Lecker.") \
+        /def -p1 -1 -agCblue -mglob -t'*Lecker.' re_wwolf_biss_11_tmp%;\
+    /endif%;\
+    /set RE_ANGREIFER %P1%;\
+    /set RE_OPFER %P2%;\
+    /shift 3%;\
+    /set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+    /set RE_WAFFE Biss%;\
+    /set RE_SCHADEN 8%;\
+    /set RE_TRIG_WWOLF_BISS=0%;\
+    /re_ausgabe%;
+
+/def -p1 -E(RE_TRIG_WWOLF_BISS) -agCblue -mregexp -t'  (.*) beisst in (.*) Oberarm, endlich' re_wwolf_biss_12 = \
+    /if ({L1}!~"ergattert!") \
+        /def -p1 -1 -agCblue -mglob -t'*ergattert!' re_wwolf_biss_12_tmp%;\
+    /endif%;\
+    /set RE_ANGREIFER %P1%;\
+    /set RE_OPFER %P2%;\
+    /shift 3%;\
+    /set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+    /set RE_WAFFE Biss%;\
+    /set RE_SCHADEN 8%;\
+    /set RE_TRIG_WWOLF_BISS=0%;\
+    /re_ausgabe%;
+
+/def -p1 -E(RE_TRIG_WWOLF_BISS) -agCblue -mregexp -t'  (.*) beisst in (.*) Kehle, aus' re_wwolf_biss_13 = \
+    /if ({L1}!~"Seele!") \
+        /def -p1 -1 -agCblue -mglob -t'*Seele!' re_wwolf_biss_13_tmp%;\
+    /endif%;\
+    /set RE_ANGREIFER %P1%;\
+    /set RE_OPFER $(/re_genitiv_loeschen %P2)%;\
+    /shift 3%;\
+    /set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+    /set RE_WAFFE Biss%;\
+    /set RE_SCHADEN 8%;\
+    /set RE_TRIG_WWOLF_BISS=0%;\
+    /re_ausgabe%;
+
 ;;; Kralle
 
 /def -p1 -agCblue -mglob -t'* schlaegt * mit einem maechtigen Krallenschlag.' \
@@ -4014,6 +4188,19 @@
 	/set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Fellgriff
 
+/def -p10 -agCblue -t"Du grinst fies, als Du eine gerade von Dir selbst erschaffene Schwachstelle an" werwoelfe_fellgriff_gag = \
+    /set RE_TMP_TRENNER=MK%;\
+    /def -1 -p10 -agCblue -mglob -t"*sehr fies ausnutzt." werwoelfe_fellgriff_gag2
+
+/def -p10 -agCblue -mregexp -t"haut besonders mies und gemein und fies" werwoelfe_fellgriff_gag3 = \
+    /set RE_TMP_TRENNER=MK%;\
+    /def -1 -p10 -agCblue -mglob -t"* geschaffene Wunde." werwoelfe_fellgriff_gag4
+
+/def -p10 -agCblue -mregexp -t"Du bruellst .* zu: LOS!.*" werwoelfe_fellgriff_gag5 = \
+    /set RE_TMP_TRENNER=MK%;\
+    /def -1 -p10 -agCblue -mglob -t"*REINGESCHLAGEN!" werwoelfe_fellgriff_gag6%;\
+    /def -1 -p10 -agCblue -mglob -t"Dabei deutest Du auf eine fiese Wunde*" werwoelfe_fellgriff_gag7
+
 ;;; Ansturm
 
 /def -p1 -agCblue -mglob -t'* schmeisst {sich|dich} auf *' \
@@ -4027,6 +4214,12 @@
 	re_wwolf_wuergekralle = \
 	/set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
 	/set RE_WAFFE Wuergekralle
+
+;;; Reissen
+
+/def -p1 -agCblue -mregexp -t' springs?t .+ (an.|zu und reisst .+ mit maechtigem Biss.)' re_wwolf_reissen = \
+	/set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
+	/set RE_WAFFE Reissen
 
 ;;; Wasserstrahl
 
@@ -4362,6 +4555,11 @@
 
 /def -p1 -q -agCmagenta -msimple -t'Die goldenen Faeden der Toga \
 	leuchten auf und heilen Dich etwas.' re_toga = /re_set_esp T
+
+/def -p1 -q -agCmagenta -msimple -t'Die goldenen Faeden der Toga leuchten auf und schicken Deinem Gegner einen' re_toga2 = \
+    /def -1 -p1 -q -agCmagenta -msimple -t'Blitz entgegen.' re_toga2a%;\
+	/set RE_WAFFE Blitz%;\
+	/set RE_WFUNC %RE_PT6@{%RE_FARBE_37}Toga@{%RE_FARBE_37}    
 
 ;;; Eisschamanenpanzer
 
@@ -4823,6 +5021,19 @@
 	/set RE_FLAECHE_WAFFE Voodoo-Nadel%;\
 	/set RE_FLAECHE_ART @{%RE_FARBE_22}Artillerie@{%RE_FARBE_35}%;\
 	/set RE_FLAECHE_ZEIT $[time()]
+
+;;; Padreics schwarz schimmernder Ring
+
+/def -p1 -q -agCmagenta -msimple -t'Die schwarz schimmernde Aura die Dich umgibt, leuchtet auf einmal hell.' \
+	re_ssring1 = /set RE_AFR R
+
+/def -p1 -q -agCmagenta -msimple -t'Die schwarz schimmernde Aura leuchtet ein letztes mal hell auf und erlischt.' \
+	re_ssring2 = /set RE_AFR E
+
+;;; Caldras Schlangenguertel
+
+/def -p1 -q -agCmagenta -msimple -t"Du weichst dem Angriff schlangengleich aus." re_schlangenguertel = \
+    /re_set_esp G
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
