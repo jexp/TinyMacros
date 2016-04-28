@@ -208,8 +208,8 @@
 	/set werwoelfe_rage 1
 
 /def -Fp20 -msimple -agCblue -t"Deine Wut verraucht." werwoelfe_rage_aus = \
-  /cfg_echo MG_WERWOELFE_RAGE_AUS %%*%%;\
-  /set werwoelfe_rage 0%;\
+  /cfg_echo MG_WERWOELFE_RAGE_AUS %*%;\
+  /set werwoelfe_rage 0
 
 ; Fellwuchs
 
