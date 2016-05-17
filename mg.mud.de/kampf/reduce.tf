@@ -1242,7 +1242,7 @@
 		/endif%%;\
 		/re_ausgabe%%;\
 		/purge -mglob re_blitz_s*%;\
-	/def -1 -p2 -agCblue -q -w -mregexp -t'^  [A-Z].+ Blitz \
+	/def -1 -p2 -agCblue -q -w -mregexp -t'^  [A-Z].+ \
 		(laesst|verschmort|verbrennt|braet|zerreisst|zerfetzt|\
 		atomisiert|vernichtet) (.+) (die Haare zu Berge stehen|\
 		Haut|Haut russig schwarz|durch|vollstaendig)\\\\.$$' \
@@ -4125,12 +4125,12 @@
     /set RE_TRIG_WWOLF_BISS=0%;\
     /re_ausgabe%;
 
-/def -p1 -E(RE_TRIG_WWOLF_BISS) -agCblue -mregexp -t'  (.*) beisst in (.*) Hals. * Hals' re_wwolf_biss_11 = \
+/def -p1 -E(RE_TRIG_WWOLF_BISS) -agCblue -mregexp -t'  (.*) beisst in (.*) Hals. (.*) Hals' re_wwolf_biss_11 = \
     /if ({L1}!~"Lecker.") \
         /def -p1 -1 -agCblue -mglob -t'*Lecker.' re_wwolf_biss_11_tmp%;\
     /endif%;\
     /set RE_ANGREIFER %P1%;\
-    /set RE_OPFER %P2%;\
+    /set RE_OPFER $(/re_genitiv_loeschen %P2)%;\
     /shift 3%;\
     /set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
     /set RE_WAFFE Biss%;\
@@ -4143,7 +4143,7 @@
         /def -p1 -1 -agCblue -mglob -t'*ergattert!' re_wwolf_biss_12_tmp%;\
     /endif%;\
     /set RE_ANGREIFER %P1%;\
-    /set RE_OPFER %P2%;\
+    /set RE_OPFER $(/re_genitiv_loeschen %P2)%;\
     /shift 3%;\
     /set RE_ART %RE_PT3@{%RE_FARBE_21}Werwolf@{%RE_FARBE_35}%;\
     /set RE_WAFFE Biss%;\
