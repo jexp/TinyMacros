@@ -103,7 +103,7 @@ Alt-D Displaymodus, zeigt Belegung bei Tastendruck an
 druck, macht das folgende ueberfluessig.
 
 
-in world_host/keys.def, keys.cfg gibt es Beispiele für Tastenbelegungen
+in world_host/keys.def, keys.cfg gibt es Beispiele fÃ¼r Tastenbelegungen
 /setdesc <modus> <Bezeichner>%;\
 /setdesc 1 Kampf%;\
 
