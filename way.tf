@@ -2685,6 +2685,10 @@ Begrenzt die Raumbeschreibung, die in %fulldetail steht, auf bis einschliesslich
      /if (regmatch("^(@{N})?[[][^]]+[]]",fulldetail)) \
         /set fulldetail=%PR%;\
      /endif%;\
+     /if (regmatch("^@{N}Du schielst durch die Brille und siehst:",fulldetail)) \
+        /set fulldetail=%PR%;\
+/endif%;\
+
      /if (regmatch(mud_exits_output,fulldetail)) \
 	/let off=$[strrchr({PL},"@")]%;\
 	/if (off>-1) \
@@ -4064,5 +4068,4 @@ Knotenkommandos: siehe auch ?knoten@{N}\
 "/setali" vergibt Aliase fuer Knotennamen (die etwas laenger sein koennen).@{N}
 
 /addh_fileinfo
-
 
