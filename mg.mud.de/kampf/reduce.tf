@@ -4834,9 +4834,9 @@
 ;;; Robins Pfeile
 
 /def -p1 -q -agCblue -mglob -t'* {legst|legt} einen Pfeil auf die Sehne * \
-	Bogens und {spannst|spannt} ihn.' re_rpfeil = \
+	Bogens und {spannst|spannt} ihn. *' re_rpfeil = \
 	/purge re_rpfeil_1%;\
-	/def -1 -p1 -q -agCblue -mglob -t'Als * die Sehne loslaesst, schnellt \
+	/def -1 -p1 -q -agCblue -mglob -t'*Sehne loslaesst, schnellt \
 		der Pfeil davon.' re_rpfeil_1 = \
 		/set RE_ART @{%%RE_FARBE_22}Artillerie@{%%RE_FARBE_35}%%;\
 		/set RE_WAFFE Robins Pfeil
