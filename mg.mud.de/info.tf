@@ -49,7 +49,7 @@
 /set_var CFG_INFO_LINE_4 Ausdauer: %p_base_const (%p_mod_const)  \
 	Intelligenz: %p_base_int (%p_mod_int)  Kraft: %p_base_str \
 	(%p_mod_str)  Geschick: %p_base_dex (%p_mod_dex)
-/set_var CFG_INFO_LINE_5 Todesfolgen: %INFO_Tode  Charakter: \
+/set_var CFG_INFO_LINE_5 Todesfolgen: %INFO_Tode  Gesinnung: \
 	%p_align  @{x%INFO_GFarbe}Gift: %p_poison@{x%CFG_INFO_COLOR_TEXT}  \
 	Ende moeglich: %INFO_Ende
 /set_var CFG_INFO_LINE_6 Vorsicht: %INFO_VS, Fluchtrichtung: %INFO_FR
@@ -129,7 +129,7 @@
 		/setprop guild $$[tolower({P1})]%%;\
 		/setprop guild_level %%P2%;\
 	/def -p20 -1 -q -ag -mregexp -t'^Erfahrung \\\\.\\\\.\\\\.\\\\.\\\\.\
-		\\\\.\\\\.\\\\. +([0-9]+) Punkte +Charakter \\\\.\\\\.\\\\.\
+		\\\\.\\\\.\\\\. +([0-9]+) Punkte +Charakter|Gesinnung \\\\.\\\\.\\\\.\
        		\\\\.\\\\.\\\\.\\\\.\\\\. ([a-z]+)$$' Info_6=\
 		/if (!INFO_EP_BASE) /set INFO_EP_BASE %%P1%%; /endif%%;\
 		/if (!p_ep) /setprop ep %%P1%%; /endif%%;\
