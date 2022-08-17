@@ -4316,6 +4316,98 @@
     /unset RE_FLAECHE_WAFFE%; \
   /endif
 
+;;; WIPFELLAEUFER
+
+;;; Aststoss
+
+/def -p1 -q -agCblue -mregexp -t'Du konzentrierst Dich darauf, (.*) mit einem Ast zu stossen.' \
+  re_wipfellaeufer_aststoss = \
+  /set RE_ANGREIFER Du%;\
+  /set RE_WAFFE Aststoss%;\
+  /set RE_ART %RE_PT1@{%RE_FARBE_21}Wipfellaeufer@{%RE_FARBE_35}
+
+/def -p1 -q -agCblue -mregexp -t'(.+) stoesst einen Ast gegen (.+).' \
+  re_wipfellaeufer_aststoss_1 = \
+  /set RE_ANGREIFER $(/re_genitiv_loeschen %P1)%;\
+  /set RE_WAFFE Aststoss%;\
+  /set RE_ART %RE_PT1@{%RE_FARBE_21}Wipfellaeufer@{%RE_FARBE_35}
+
+/def -p1 -q -agCblue -mregexp -t'(.+) piekst Dich mit einem Ast.' \
+  re_wipfellaeufer_aststoss_2 = \
+  /set RE_ANGREIFER $(/re_genitiv_loeschen %P1)%;\
+  /set RE_WAFFE aststoss%;\
+  /set RE_OPFER Dich%; \
+  /set RE_ART %RE_PT1@{%RE_FARBE_21}Wipfellaeufer@{%RE_FARBE_35}
+
+;;; Regenguss
+
+/def -p1 -q -agCblue -mregexp -t'Du laesst einen Regenguss auf (.+) herabregnen.' \
+  re_wipfellaeufer_regenguss = \
+  /set RE_ANGREIFER Du%;\
+  /set RE_WAFFE Regenguss%;\
+  /set RE_ART %RE_PT1@{%RE_FARBE_21}Wipfellaeufer@{%RE_FARBE_35}
+
+/def -p1 -q -agCblue -mregexp -t'(.+) begiesst (.+) mit Regen.' \
+  re_wipfellaeufer_regenuss_1 = \
+  /set RE_ANGREIFER $(/re_genitiv_loeschen %P1)%;\
+  /set RE_WAFFE Regenguss%;\
+ 	/set RE_ART %RE_PT1@{%RE_FARBE_21}Wipfellaeufer@{%RE_FARBE_35}
+
+/def -p1 -q -agCblue -mregexp -t'(.+) uebergiesst Dich mit Regen.' \
+  re_wipfellaeufer_regenguss_2 = \
+  /set RE_ANGREIFER $(/re_genitiv_loeschen %P1)%;\
+  /set RE_WAFFE Regenguss%;\
+  /set RE_OPFER Dich%; \
+  /set RE_ART %RE_PT1@{%RE_FARBE_21}Wipfellaeufer@{%RE_FARBE_35}
+
+;;; Hagelschlag
+
+/def -p1 -q -agCblue -msimple -t'Du konzentrierst Dich auf die kuehle Lichtung.' \
+  re_wipfellaeufer_hagelschlag = \
+  /purge re_wipfellaeufer_hagelschlag_1%; \
+  /def -1 -p1 -q -agCblue -mregexp -t'Du laesst einen Hagelschlag ueber (.+) herabregnen.' \
+    re_wipfellaeufer_hagelschlag_1 = \
+    /set RE_ANGREIFER Du%%;\
+    /set RE_WAFFE Hagelschlag%%;\
+    /set RE_ART %RE_PT1@{%RE_FARBE_21}Wipfellaeufer@{%RE_FARBE_35}
+
+/def -p1 -q -agCblue -mregexp -t'(.+) laesst einen Hagelschlag auf (.+) herabregnen.' \
+  re_wipfellaeufer_hagelschlag_2 = \
+  /set RE_ANGREIFER $(/re_genitiv_loeschen %P1)%;\
+  /set RE_WAFFE Hagelschlag%;\
+  /set RE_ART %RE_PT1@{%RE_FARBE_21}Wipfellaeufer@{%RE_FARBE_35}
+
+/def -p1 -q -agCblue -mregexp -t'(.+) erzeugt einen Hagelschlag ueber Dir.' \
+  re_wipfellaeufer_hagelschlag_3 = \
+  /set RE_ANGREIFER $(/re_genitiv_loeschen %P1)%;\
+  /set RE_WAFFE Hagelschlag%;\
+  /set RE_OPFER Dich%; \
+  /set RE_ART %RE_PT1@{%RE_FARBE_21}Wipfellaeufer@{%RE_FARBE_35}
+
+;;; Blitz
+
+/def -p1 -q -agCblue -mregexp -t'Du erzeugst ein kleines Gewitter und daraus einen Blitz auf (.+).' \
+  re_wipfellaeufer_blitz = \
+  /set RE_ANGREIFER Du%;\
+  /set RE_WAFFE Blitz%;\
+  /set RE_ART %RE_PT1@{%RE_FARBE_21}Wipfellaeufer@{%RE_FARBE_35}
+
+/def -p1 -q -agCblue -mregexp -t'(.+) erzeugt ein kleines Gewitter ueber (.+) Kopf, aus dem ein Blitz' \
+  re_wipfellaeufer_blitz_1 = \
+  /def -1 -p1 -q -agCblue -msimple -t'hervorschiesst! ' \
+    re_wipfellaeufer_blitz_2%; \
+  /set RE_ANGREIFER $(/re_genitiv_loeschen %P1)%;\
+  /set RE_WAFFE Blitz%;\
+ 	/set RE_ART %RE_PT1@{%RE_FARBE_21}Wipfellaeufer@{%RE_FARBE_35}
+
+/def -p1 -q -agCblue -mregexp -t'(.+) erzeugt ein kleines Gewitter und schlaegt Dich mit einem Blitz.' \
+  re_wipfellaeufer_blitz_3 = \
+  /set RE_ANGREIFER $(/re_genitiv_loeschen %P1)%;\
+  /set RE_WAFFE Blitz%;\
+  /set RE_OPFER Dich%; \
+  /set RE_ART %RE_PT1@{%RE_FARBE_21}Wipfellaeufer@{%RE_FARBE_35}
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 			die kleinen Abwehr-Helferchen
