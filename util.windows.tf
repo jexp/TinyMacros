@@ -143,7 +143,7 @@ Mit dieser Variable koennen zusaetzliche Parameter an xterm bzw. cmd uebergebene
 /def show_window_win = \
 	/def -1 -hRESUME -ag h_resume = /test 0%;\
 	/sh -q cmd %window_options \
-'	    /c "start tail -%2f $[make_dos_path(get_window_file({1}))]"
+	    /c "start tail -%2f $[make_dos_path(get_window_file({1}))]"
 
 /addh info \
 liefert den Dateinamen fuer das Logging dieses windows zurueck
