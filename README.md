@@ -8,11 +8,7 @@ ausgelegt auf das Mud [MorgenGrauen](http://mg.mud.de).
 
 Das Repo mittels
 
-    git clone https://git.benares.de/chrib/TinyMacros.git
-
-bzw.
-
-    git clone https://github.com/chrib/TinyMacros.git
+    git clone https://github.com/jexp/TinyMacros.git
 
 clonen. Damit wird das Verzeichnis TinyMacros erstellt.
 Die `.tfrc` daraus nach `$HOME` kopieren oder verlinken.
