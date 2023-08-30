@@ -77,6 +77,8 @@
         /send f%;\
      /else \
         /set more_prompt=1%;\
+        /def -q -1 -mglob -h"PROMPT *>*" -Fp1 t_more_done = \
+          /set more_prompt=0%; \
      /endif
 
 /def completion_object = \
