@@ -233,6 +233,7 @@ automatisch beim Laden des Pakets ausgefuehrt.
     /hxaddtolist koma_zkompo_long&Flaeschchen Parfum&68%;\
     /hxaddtolist koma_zkompo_long&Portion Lotusbluetenstaub&69%;\
     /hxaddtolist koma_zkompo_long&Portionen Lotusbluetenstaub&69%;\
+    /hxaddtolist koma_zkompo_long&ewige Oktarin&70%;\
 ;
     /createlist koma_zkompo_ewig%;\
     /addtolist koma_zkompo_ewig 5 24%;\
@@ -248,6 +249,7 @@ automatisch beim Laden des Pakets ausgefuehrt.
     /addtolist koma_zkompo_ewig 10 28%;\
     /addtolist koma_zkompo_ewig 15 57%;\
     /addtolist koma_zkompo_ewig 12 58%;\
+    /addtolist koma_zkompo_ewig 70 45%;\
     /createlist koma_zkompo_short%;\
 ;
     /addtolist koma_zkompo_short dblut 3%;\
