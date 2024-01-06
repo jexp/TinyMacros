@@ -40,9 +40,9 @@
 /set magier_tf_desc=Magierhilfsmittel vor allem Completion fuer Filenamen und Objekte
 
 ; ********************* BEGIN CONFIG ********************
-/set ls_cmd_dir={cd|dir|rmdir|mkdir}
-/set ls_cmd_other={ls|less|mv|cp|rm|cat|head|tail|more|ed|grep|upd|xmore|clone}
-/set ls_header_line="*files/directories*" 
+/set_var ls_cmd_dir={cd|dir|rmdir|mkdir}
+/set_var ls_cmd_other={ls|less|mv|cp|rm|cat|head|tail|more|ed|grep|upd|xmore|clone}
+/set_var ls_header_line="*files/directories*" 
 ; ********************* END CONFIG **********************
 
 /def xc = \
