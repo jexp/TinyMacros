@@ -42,6 +42,7 @@
 ; ********************* BEGIN CONFIG ********************
 /set ls_cmd_dir={cd|dir|rmdir|mkdir}
 /set ls_cmd_other={ls|less|mv|cp|rm|cat|head|tail|more|ed|grep|upd|xmore|clone}
+/set ls_header_line="*files/directories*" 
 ; ********************* END CONFIG **********************
 
 /def xc = \
@@ -124,7 +125,7 @@
 
 /def completion_ls = \
    /set ls_text=%;\
-   /def -1 -ag -p2 -t"*files/directories*" t_ls1 = /test 0%;\
+   /def -1 -ag -p2 -t%ls_header_line t_ls1 = /test 0%;\
    /def -1 -ag -p2 -t"*\{.+\}" t_ls2 = /test 0%;\
    /def -1 -ag -p2 -t"\[*\]" t_ls3 = /test 0%;\
    /def -t"*" -ag t_ls = /set ls_text=\%ls_text \%*%;\
