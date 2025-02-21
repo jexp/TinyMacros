@@ -103,7 +103,7 @@ die onlineFarbe verwendet)
 	    /endif%;\
 	/endif%;
 
-/def -mregexp -t'^([\\(a-zA-Z0-9\\)]+)   I S T   J E T Z T   D A !!!$' -ag -p2000 t_erwarte3 = \
+/def -mregexp -t'^([\\(a-zA-Z0-9\\)]+) (  I S T   J E T Z T   D A |IST JETZT DA)!!!$' -ag -p2000 t_erwarte3 = \
 	/getvalueof erwarte_color1 $[tolower({P1})]%;\
 	/if (value=~error) \
 		/let ecn=%erwarte_color_online_name%;\
@@ -127,7 +127,7 @@ die onlineFarbe verwendet)
 	    /endif%;\
 	/endif%;
 
-/def -mregexp -t'^([\\(a-zA-Z0-9\\)]+)   I S T   J E T Z T   N I C H T   M E H R   D A !!!' -ag -p2000 t_erwarte4 = \
+/def -mregexp -t'^([\\(a-zA-Z0-9\\)]+) (  I S T   J E T Z T   N I C H T   M E H R   D A |IST JETZT NICHT MEHR DA)!!!' -ag -p2000 t_erwarte4 = \
 	/getvalueof erwarte_color2 $[tolower({P1})]%;\
 	/if (value=~error) \
 		/getvalueof erwarte_color1 $[tolower({P1})]%;\
@@ -157,7 +157,7 @@ die onlineFarbe verwendet)
 	/endif%;
 
 
-/def -mregexp -t'([a-zA-Z0-9]+)   I S T   J E T Z T   S I C H T B A R !!!$' -ag -p2000 \
+/def -mregexp -t'([a-zA-Z0-9]+) (  I S T   J E T Z T   S I C H T B A R |IST JETZT SICHTBAR)!!!$' -ag -p2000 \
 	t_erwarte5 = \
 	/getvalueof erwarte_color1 $[tolower({P1})]%;\
 	/if (value=~error) \
