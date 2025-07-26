@@ -129,7 +129,7 @@
 		/setprop guild $$[tolower({P1})]%%;\
 		/setprop guild_level %%P2%;\
 	/def -p20 -1 -q -ag -mregexp -t'^Erfahrung \\\\.\\\\.\\\\.\\\\.\\\\.\
-		\\\\.\\\\.\\\\. +([0-9]+) Punkte +Charakter|Gesinnung \\\\.\\\\.\\\\.\
+		\\\\.\\\\.\\\\. +([0-9]+) Punkte +Gesinnung \\\\.\\\\.\\\\.\
        		\\\\.\\\\.\\\\.\\\\.\\\\. ([a-z]+)$$' Info_6=\
 		/if (!INFO_EP_BASE) /set INFO_EP_BASE %%P1%%; /endif%%;\
 		/if (!p_ep) /setprop ep %%P1%%; /endif%%;\
