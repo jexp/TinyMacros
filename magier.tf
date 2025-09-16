@@ -56,147 +56,147 @@
 /def qp = /xc %1 QueryProp(P_%2)
 
 /def b_completion = \
-     /if (moresize()>0) /dokey PAGE%; /return%; /endif%;\
-     /if (more_prompt) /toggle more_prompt%;/send f%; /return%; /endif%;\
-     /let kb_point=$[kbpoint()]%;\
-     /let kb_line=$[kbgoto(0),kbtail()]%;\
-     /test kbgoto(kb_point)%;\
-     /if (kb_line=~"") \
-	/echo -aCred No Completion for emtpy input! %;\
-        /return%;\
-     /endif%;\
-     /is_ls_completion %kb_line%;\
-     /if ({?}) \
-        /completion_ls%;\
-     /else \
-        /completion_object%;\
-     /endif%;
+  /if (moresize()>0) /dokey PAGE%; /return%; /endif%;\
+  /if (more_prompt) /toggle more_prompt%;/send f%; /return%; /endif%;\
+  /let kb_point=$[kbpoint()]%;\
+  /let kb_line=$[kbgoto(0),kbtail()]%;\
+  /test kbgoto(kb_point)%;\
+  /if (kb_line=~"") \
+    /echo -aCred No Completion for emtpy input! %;\
+    /return%;\
+  /endif%;\
+  /is_ls_completion %kb_line%;\
+  /if ({?}) \
+    /completion_ls%;\
+  /else \
+    /completion_object%;\
+  /endif%;
 
 /def -mglob -q -aCyellow -p10 -h"PROMPT --mehr--*(*)*" ls_more_prompt = \
-;     /echo ls_more_prompt ls: %trig_grab_active%;\
-     /if (trig_grab_active) \
-        /send f%;\
-     /else \
-        /set more_prompt=1%;\
-        /def -q -1 -mglob -h"PROMPT *>*" -Fp1 t_more_done = \
-          /set more_prompt=0%; \
-     /endif
+;  /echo ls_more_prompt ls: %trig_grab_active%;\
+  /if (trig_grab_active) \
+    /send f%;\
+  /else \
+    /set more_prompt=1%;\
+    /def -q -1 -mglob -h"PROMPT *>*" -Fp1 t_more_done = \
+      /set more_prompt=0%; \
+  /endif
 
 /def completion_object = \
-     /let wordpunct_save=%wordpunct%;\
-     /set wordpunct=%{wordpunct}#/.-^%;\
-     /let input=$[kbgoto(kbwordleft()),substr(kbtail(),0,kbwordright()-kbpoint())]%;\
-	/let reg=%;\
-	/test reg:=strcat('/(players|obj|d|room|std|sys)[^ #]*',recall_input,'[^/ #]*#[0-9]+')%;\
-;/let reg%;\
-	/if (recall_input=~"" | last_recalled=~"" | last_recalled!~input) \
-	   /set recall_input=%input%;\
-	   /test reg:=strcat('/(gilden|players|obj|d|room|std|sys)[^ #]*',recall_input,'[^/ #]*#[0-9]+')%;\
-;/let reg%;\
-           /set recalled=$(/recall -mregexp -w /30 %reg)%;\
-	   /let tmp_recalled=%;\
-	   /while (regmatch(reg,recalled)) \
-	      /if (tmp_recalled!/strcat("*{",{P0},"}*")) \
-	         /let tmp_recalled=%tmp_recalled %P0%;\
-	      /endif%;\
-	      /set recalled=%PR%;\
-	   /done%;\
-	   /set recalled=%tmp_recalled%;\
-	/endif%;\
-	/if (regmatch(reg,recalled)) \
-	   /set last_recalled=%P0%;\
-	   /set recalled=%PR%;\
-	   /test kbdel(kbwordright())%;\
-	   /input %last_recalled%;\
-	   /test kbgoto(kbwordright())%;\
-	/else /echo -aCred No other completions found!%;\
-	   /unset recalled%;\
-	   /unset last_recalled%;\
-	   /test kbdel(kbwordright())%;\
-	   /input %recall_input%;\
-	   /test kbgoto(kbwordright())%;\
-	   /unset recall_input%;\
-	/endif%;\
-     /set wordpunct=%{wordpunct_save}%;\
+  /let wordpunct_save=%wordpunct%;\
+  /set wordpunct=%{wordpunct}#/.-^%;\
+  /let input=$[kbgoto(kbwordleft()),substr(kbtail(),0,kbwordright()-kbpoint())]%;\
+  /let reg=%;\
+  /test reg:=strcat('/(players|obj|d|room|std|sys)[^ #]*',recall_input,'[^/ #]*#[0-9]+')%;\
+;  /let reg%;\
+  /if (recall_input=~"" | last_recalled=~"" | last_recalled!~input) \
+    /set recall_input=%input%;\
+    /test reg:=strcat('/(gilden|players|obj|d|room|std|sys)[^ #]*',recall_input,'[^/ #]*#[0-9]+')%;\
+;    /let reg%;\
+    /set recalled=$(/recall -mregexp -w /30 %reg)%;\
+    /let tmp_recalled=%;\
+    /while (regmatch(reg,recalled)) \
+      /if (tmp_recalled!/strcat("*{",{P0},"}*")) \
+        /let tmp_recalled=%tmp_recalled %P0%;\
+      /endif%;\
+      /set recalled=%PR%;\
+    /done%;\
+    /set recalled=%tmp_recalled%;\
+  /endif%;\
+  /if (regmatch(reg,recalled)) \
+    /set last_recalled=%P0%;\
+    /set recalled=%PR%;\
+    /test kbdel(kbwordright())%;\
+    /input %last_recalled%;\
+    /test kbgoto(kbwordright())%;\
+  /else /echo -aCred No other completions found!%;\
+    /unset recalled%;\
+    /unset last_recalled%;\
+    /test kbdel(kbwordright())%;\
+    /input %recall_input%;\
+    /test kbgoto(kbwordright())%;\
+    /unset recall_input%;\
+  /endif%;\
+  /set wordpunct=%{wordpunct_save}%;\
 
 
 /def is_ls_completion = \
-     /return {1}=/ ls_cmd_dir | {1}=/ ls_cmd_other
+  /return {1}=/ ls_cmd_dir | {1}=/ ls_cmd_other
 
 /def completion_ls = \
-   /set ls_text=%;\
-   /def -1 -ag -p2 -t%ls_header_line t_ls1 = /test 0%;\
-   /def -1 -ag -p2 -t"*\{.+\}" t_ls2 = /test 0%;\
-   /def -1 -ag -p2 -t"\[*\]" t_ls3 = /test 0%;\
-   /def -t"*" -ag t_ls = /set ls_text=\%ls_text \%*%;\
-   /def -q -1 -aCred -mglob -h"PROMPT *>*" -p1 t_ls_done = \
-;         /echo ls_done \%*\%;\
-	 /set trig_grab_active=0\%;\
-	 /purge t_ls*\%;\
-	 /ls_complete \%ls_text%;\
-   /test kbgoto(0)%;\
-   /set trig_grab_active=1%;\
-   /ls_input $[kbtail()]%;\
+  /set ls_text=%;\
+  /def -1 -ag -p2 -t%ls_header_line t_ls1 = /test 0%;\
+  /def -1 -ag -p2 -t"*\{.+\}" t_ls2 = /test 0%;\
+  /def -1 -ag -p2 -t"\[*\]" t_ls3 = /test 0%;\
+  /def -t"*" -ag t_ls = /set ls_text=\%ls_text \%*%;\
+  /def -q -1 -aCred -mglob -h"PROMPT *>*" -p1 t_ls_done = \
+;    /echo ls_done \%*\%;\
+    /set trig_grab_active=0\%;\
+    /purge t_ls*\%;\
+    /ls_complete \%ls_text%;\
+  /test kbgoto(0)%;\
+  /set trig_grab_active=1%;\
+  /ls_input $[kbtail()]%;\
 
 /def ls_input = \
-   /if ({#}>1) \
-      /set ls_param=%L%;\
-      /set ls_cmd=%-L%;\
-   /else \
-      /set ls_param=%;\
-      /set ls_cmd=%*%;\
-   /endif%;\
-   /dokey DLINE%;\
-   /input %ls_cmd%;\
-   /if (ls_cmd!~"") /test input(" ")%; /endif%;\
-   /let off=$[strrchr(ls_param,"/")]%;\
-   /set ls_basedir=%;\
-   /if (off>-1) \
-     /set ls_basedir=$[substr(ls_param,0,off+1)]%;\
-     /test input(substr(ls_param,0,off+1))%;\
-     /send \ls %ls_basedir%;\
-     /test ls_param:=substr(ls_param,off+1)%;\
-   /else \
-     /send \ls%;\
-   /endif%;\
-   /set ls_dir=$[(ls_cmd=/ls_cmd_dir)]%;\
+  /if ({#}>1) \
+    /set ls_param=%L%;\
+    /set ls_cmd=%-L%;\
+  /else \
+    /set ls_param=%;\
+    /set ls_cmd=%*%;\
+  /endif%;\
+  /dokey DLINE%;\
+  /input %ls_cmd%;\
+  /if (ls_cmd!~"") /test input(" ")%; /endif%;\
+  /let off=$[strrchr(ls_param,"/")]%;\
+  /set ls_basedir=%;\
+  /if (off>-1) \
+    /set ls_basedir=$[substr(ls_param,0,off+1)]%;\
+    /test input(substr(ls_param,0,off+1))%;\
+    /send \ls %ls_basedir%;\
+    /test ls_param:=substr(ls_param,off+1)%;\
+  /else \
+    /send \ls%;\
+  /endif%;\
+  /set ls_dir=$[(ls_cmd=/ls_cmd_dir)]%;\
 
 /def ls_complete = \
-     /let ls_list=%;\
-     /let ls_done=0%;\
-     /let ls_base=-1%;\
-     /while ({#}) \
-;        /if (strstr({1},ls_param)==0 & (!ls_dir | (ls_dir & strchr({1},".")==-1))) \
-        /if (strstr({1},ls_param)==0 & (!ls_dir | (ls_dir & {1}=/"*/"))) \
-	   /test ++ls_done%;\
-	   /let ls_list=%ls_list %1%;\
-	   /if (ls_base=~"-1") \
-	      /let ls_base=%1%;\
-	   /else \
-	     /let ls_max=$[strlen(ls_base)<strlen({1})? strlen({1}): strlen(ls_base)]%;\
-	     /let ls_idx=0%;\
-	     /while (ls_idx<=ls_max & \
-		    (substr(ls_base,ls_idx,1)=~"" | \
-		    substr(ls_base,ls_idx,1)=~substr({1},ls_idx,1)))%;\
-	     /test ++ls_idx%;\
-	     /done%;\
-	     /test ls_base:=substr(ls_base,0,ls_idx)%;\
-	   /endif%;\
-	   /endif%;\
-	/shift%;\
-     /done%;\
-     /if (ls_list=/" * *") \
-       /echo -aCblue [%ls_list ]%;\
-     /endif%;\
-     /if (ls_base=~"-1") \
-	/let ls_base=%1%;\
-     /endif%;\
-;    * oder ? am Ende abschneiden, dies sind Marker fuer geladene- und
-;    vc-Objekte und kein Teil des Dateinamens.
-     /if (ls_base=/"{*\*|*\?}") \
-       /test ls_base:=substr(ls_base, 0, -1)%; \
-     /endif%;\
-     /input %ls_base%;
+  /let ls_list=%;\
+  /let ls_done=0%;\
+  /let ls_base=-1%;\
+  /while ({#}) \
+;    /if (strstr({1},ls_param)==0 & (!ls_dir | (ls_dir & strchr({1},".")==-1))) \
+    /if (strstr({1},ls_param)==0 & (!ls_dir | (ls_dir & {1}=/"*/"))) \
+      /test ++ls_done%;\
+      /let ls_list=%ls_list %1%;\
+      /if (ls_base=~"-1") \
+        /let ls_base=%1%;\
+      /else \
+        /let ls_max=$[strlen(ls_base)<strlen({1})? strlen({1}): strlen(ls_base)]%;\
+        /let ls_idx=0%;\
+        /while (ls_idx<=ls_max & \
+               (substr(ls_base,ls_idx,1)=~"" | \
+               substr(ls_base,ls_idx,1)=~substr({1},ls_idx,1)))%;\
+          /test ++ls_idx%;\
+        /done%;\
+        /test ls_base:=substr(ls_base,0,ls_idx)%;\
+      /endif%;\
+    /endif%;\
+    /shift%;\
+  /done%;\
+  /if (ls_list=/" * *") \
+    /echo -aCblue [%ls_list ]%;\
+  /endif%;\
+  /if (ls_base=~"-1") \
+    /let ls_base=%1%;\
+  /endif%;\
+; * oder ? am Ende abschneiden, dies sind Marker fuer geladene- und
+; vc-Objekte und kein Teil des Dateinamens.
+  /if (ls_base=/"{*\*|*\?}") \
+    /test ls_base:=substr(ls_base, 0, -1)%; \
+  /endif%;\
+  /input %ls_base%;
 
 
 /eval /def $[substr(ver(),0,1)!="5" ? "-b^i" :""] key_tab = /b_completion%;
