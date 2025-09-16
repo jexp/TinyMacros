@@ -191,6 +191,11 @@
      /if (ls_base=~"-1") \
 	/let ls_base=%1%;\
      /endif%;\
+;    * oder ? am Ende abschneiden, dies sind Marker fuer geladene- und
+;    vc-Objekte und kein Teil des Dateinamens.
+     /if (ls_base=/"{*\*|*\?}") \
+       /test ls_base:=substr(ls_base, 0, -1)%; \
+     /endif%;\
      /input %ls_base%;
 
 
