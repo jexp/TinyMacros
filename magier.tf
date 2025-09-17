@@ -73,7 +73,7 @@
   /endif%;
 
 /def -mglob -q -aCyellow -p10 -h"PROMPT --mehr--*(*)*" ls_more_prompt = \
-  /if (trig_grab_active) \
+  /if (grab_ls) \
     /send f%;\
   /else \
     /set more_prompt=1%;\
@@ -127,11 +127,11 @@
   /def -1 -ag -p2 -t"\[*\]" t_ls3 = /test 0%;\
   /def -t"*" -ag t_ls = /set ls_text=\%ls_text \%*%;\
   /def -q -1 -aCred -mglob -h"PROMPT *>*" -p1 t_ls_done = \
-    /set trig_grab_active=0\%;\
+    /set grab_ls=0\%;\
     /purge t_ls*\%;\
     /ls_complete \%ls_text%;\
   /test kbgoto(0)%;\
-  /set trig_grab_active=1%;\
+  /set grab_ls=1%;\
   /ls_input $[kbtail()]%;\
 
 /def ls_input = \
