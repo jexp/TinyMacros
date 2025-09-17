@@ -1302,7 +1302,37 @@ Damit das %mud_short_who Kommando nicht stoert, waehrend man sich im Editor befi
 	/done%;\
     /endif
 
+/def comm_clean_lists = \
+  /echo Bereinige comm_living...%;\
+  /test oldlen:=count_entries(comm_living)%;\
+; Durch eine zeitweilige Aenderung an kkwer sind einige Eintraege ggf. mehrfach
+; vorhanden. Diese enthalten dann den key "und <spieler>".
+  /forEach comm_living kv /comm_clean_lists1%;\
+  /test newlen:=count_entries(comm_living)%;\
+  /echo $[oldlen-newlen] Eintraege entfernt.%;\
+  /echo Bereinige comm_non_living...%;\
+  /test oldlen:=count_entries(comm_non_living)%;\
+; Es koennen sich echte Spieler nach comm_non_living verirrt haben.
+  /forEach comm_living k /comm_clean_lists2%;\
+; Eintraege koennen mehrfach vorhanden sein.
+  /forEach comm_non_living k /comm_clean_lists3%;\
+  /test newlen:=count_entries(comm_non_living)%;\
+  /echo $[oldlen-newlen] Eintraege entfernt.%;\
+
+/def comm_clean_lists1 = \
+  /if (forEach_value!~"") \
+    /delallkeysandvalues comm_living %forEach_key%; \
+    /addtolist comm_living %forEach_key%; \
+  /endif
+
+/def comm_clean_lists2 = \
+  /delallkeysandvalues comm_non_living %forEach_key
  
+/def comm_clean_lists3 = \
+  /delallkeysandvalues comm_non_living %forEach_key%; \
+  /xaddtolist comm_non_living&%forEach_key
+
+
 /addh info \
 Damit bei laengeren Mitteilungen nicht fuer jede Zeile ein %mud_short_who ans Mud gesendet und die Ausgabe gegrabbt wird, steht in %comm_trig_number die Nummer des letzten Grab-Triggers. Damit kann getestet werden, ob das Grabben bereits beendet wurde oder nicht.
 /addh see /comm_update_living, /trig_is_active, /trig_grab
