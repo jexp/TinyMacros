@@ -73,7 +73,6 @@
   /endif%;
 
 /def -mglob -q -aCyellow -p10 -h"PROMPT --mehr--*(*)*" ls_more_prompt = \
-;  /echo ls_more_prompt ls: %trig_grab_active%;\
   /if (trig_grab_active) \
     /send f%;\
   /else \
@@ -88,11 +87,9 @@
   /let input=$[kbgoto(kbwordleft()),substr(kbtail(),0,kbwordright()-kbpoint())]%;\
   /let reg=%;\
   /test reg:=strcat('/(players|obj|d|room|std|sys)[^ #]*',recall_input,'[^/ #]*#[0-9]+')%;\
-;  /let reg%;\
   /if (recall_input=~"" | last_recalled=~"" | last_recalled!~input) \
     /set recall_input=%input%;\
     /test reg:=strcat('/(gilden|players|obj|d|room|std|sys)[^ #]*',recall_input,'[^/ #]*#[0-9]+')%;\
-;    /let reg%;\
     /set recalled=$(/recall -mregexp -w /30 %reg)%;\
     /let tmp_recalled=%;\
     /while (regmatch(reg,recalled)) \
@@ -130,7 +127,6 @@
   /def -1 -ag -p2 -t"\[*\]" t_ls3 = /test 0%;\
   /def -t"*" -ag t_ls = /set ls_text=\%ls_text \%*%;\
   /def -q -1 -aCred -mglob -h"PROMPT *>*" -p1 t_ls_done = \
-;    /echo ls_done \%*\%;\
     /set trig_grab_active=0\%;\
     /purge t_ls*\%;\
     /ls_complete \%ls_text%;\
@@ -166,7 +162,6 @@
   /let ls_done=0%;\
   /let ls_base=-1%;\
   /while ({#}) \
-;    /if (strstr({1},ls_param)==0 & (!ls_dir | (ls_dir & strchr({1},".")==-1))) \
     /if (strstr({1},ls_param)==0 & (!ls_dir | (ls_dir & {1}=/"*/"))) \
       /test ++ls_done%;\
       /let ls_list=%ls_list %1%;\
