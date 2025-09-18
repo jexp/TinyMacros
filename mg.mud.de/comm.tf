@@ -1277,7 +1277,7 @@ Damit das %mud_short_who Kommando nicht stoert, waehrend man sich im Editor befi
     /if (trig_is_active(comm_trig_number)) \
 	/return%;\
     /endif%;\
-    /trig_grab -y"r#^([A-Z][A-Za-z]+[A-Za-z0-9], ?)+\$" -e"r#^([A-Z][A-Za-z]+[A-Za-z0-9](, |.)?)\$" -d" " -cye -M/comm_update_living2 -C%{mud_short_who-!\\kkwer} -F0 -ag%;\
+    /trig_grab -y"r#^([A-Z][A-Za-z]+[A-Za-z0-9], ?)+\$" -e"r#^([A-Z][A-Za-z]+[A-Za-z0-9], )*([A-Z][A-Za-z]+[A-Za-z0-9][.])\$" -d" " -cye -M/comm_update_living2 -C%{mud_short_who-!\\kkwer} -F0 -ag%;\
     /set comm_trig_number=%?%;\
 ;/list -i trig_grab_*_%comm_trig_number
 
