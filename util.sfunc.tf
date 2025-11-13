@@ -111,7 +111,6 @@ Wenn der String weniger als 10 Zeichen beinhaltet, wird der Hashcode nach folgen
 /def hash1 = \
   /let param=%*%;\
   /let hash_len=$[strlen(param)]%;\
-  /let tmp=%;\
   /if (hash_len>10) \
     /let hash_hcount=$[mod(hash_len,1000)]%;\
     /let hash_pcount=$[mod(hash_hcount,100)]%;\
@@ -119,49 +118,37 @@ Wenn der String weniger als 10 Zeichen beinhaltet, wird der Hashcode nach folgen
     /let hash_pos2=$[hash_len-1-hash_pos]%;\
     /result replace(" ","0",pad(hash_hcount,3,ascii(substr(param,hash_pos,1)),3,ascii(substr(param,hash_pos2,1)),3))%;\
   /else \
+; TF verwendet intern auch in der 64bit-Version  32bit-Integer. Bei TF4 wurden
+; trotzdem auch Ergebnisse ueber MAX_INT als int zurueckgegeben und Werte ueber
+; MAX_INT als Eingabe akzeptiert. Bei TF5 werden Werte ueber MAX_INT als Float
+; zurueckgegeben, in den Variablen aber trotzdem als int oder vielleicht auch
+; string gespeichert, und Eingaben als Integer ueber MAX_INT loesen einen
+; Overflow aus.
+; Weiterhin wird das Ergebnis einer Berechnung mit Nachkommastellen == 0 in TF4
+; als f.0 zurueckgegeben. In TF5 dagegen als f. Wird dieser Wert wieder an ein
+; Rechnung uebergeben, wird der Punkt abgeschnitten und die Zahl als Integer
+; interpretiert, wodurch es ggf. zu einem Overflow kommt.
     /let hash_hcount=0%;\
+    /let tf_ver=$[substr(ver(), 0, 1)]%;\
+    /let overflow=0%;\
     /while (--hash_len>-1) \
-; problem overflow wird zu real zahl bei tf5
-      /let tmp=$[8*hash_hcount+ascii(param)]%;\
-      /if (tmp>MAX_INT) \
-        /test hash_hcount:=overmult(hash_hcount,8)+ascii(param)%;\
-      /else \
-        /test hash_hcount:=tmp%;\
+      /let hash_hcount=$[8*hash_hcount+ascii(param)]%;\
+      /if (hash_hcount>MAX_INT) \
+        /if (tf_ver==5) \
+          /test hash_hcount:=strcat(hash_hcount, "0")%;\
+        /elseif (!overflow) \
+          /test hash_hcount:=strcat(hash_hcount, ".0")%;\
+          /let overflow=1%;\
+        /endif%;\
       /endif%;\
       /let param=$[substr(param,1)]%;\
     /done%;\
     /if (hash_hcount<0) \
       /let hash_hcount=$[-hash_hcount]%; \
     /endif%;\
-    /result replace(".","",replace(" ","0",pad(hash_hcount,9)))%;\
+    /result replace(".0","",replace(" ","0",pad(hash_hcount,9)))%;\
   /endif%;
 
-
-/def overmult = \
-     /let number=%1%;\
-     /let mult=%2%;\
-     /let result=%number%;\
-     /let over=%;\
-     /while (--mult>0) \
-	 /if (result+number>MAX_INT) \
-	     /test over:=number-1-(MAX_INT-result)%;\
-;/echo -- %mult over %over = %number -1 - ( %MAX_INT - %result [$[MAX_INT-result]])%;\
-	     /test result:=-MAX_INT-1 + over %;\
-;/echo -- res %result = -%MAX_INT -1 + %over%;\
-	 /else \
-	     /test result:=result+number%;\
-         /endif%;\
-     /done%;\
-     /return result
-
-/def overflow = \
-     /if ({1}>MAX_INT) \
-	 /let overflow=%;\
-	  /test overflow:={1}-MAX_INT*trunc({1}/MAX_INT)%;\
-	  /test overflow:=-MAX_INT-1+overflow%;\
-	  /return overflow%;\
-     /endif%;\
-     /return {1}%;
 
 /if (have_ext("MD5")) \
   /def hash=/return md5({*})%;\
