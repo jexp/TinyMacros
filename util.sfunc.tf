@@ -108,7 +108,7 @@ Wenn der String weniger als 10 Zeichen beinhaltet, wird der Hashcode nach folgen
 /addh syn /hash1 string, Returnwert per /result
 /addh hash1 mak
 
-/def hash = \
+/def hash1 = \
   /let param=%*%;\
   /let hash_len=$[strlen(param)]%;\
   /let tmp=%;\
@@ -163,11 +163,11 @@ Wenn der String weniger als 10 Zeichen beinhaltet, wird der Hashcode nach folgen
      /endif%;\
      /return {1}%;
 
-;/if (have_ext("MD5")) \
-;   /def hash=/return md5({*})%;\
-;/else \
-;   /def hash=${hash1}%;\
-;/endif
+/if (have_ext("MD5")) \
+  /def hash=/return md5({*})%;\
+/else \
+  /def hash=/return hash1({*})%;\
+/endif
 
 
 /def list_idx =\
