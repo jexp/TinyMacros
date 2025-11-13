@@ -109,29 +109,32 @@ Wenn der String weniger als 10 Zeichen beinhaltet, wird der Hashcode nach folgen
 /addh hash1 mak
 
 /def hash = \
-	/let param=%*%;\
-	/let hash_len=$[strlen(param)]%;\
-	/let tmp=%;\
-	/if (hash_len>10) \
-	/let hash_hcount=$[mod(hash_len,1000)]%;\
-	/let hash_pcount=$[mod(hash_hcount,100)]%;\
-	/let hash_pos=$[(hash_len-1)*(hash_pcount)/100]%;\
-	/let hash_pos2=$[hash_len-1-hash_pos]%;\
-	/result replace(" ","0",pad(hash_hcount,3,ascii(substr(param,hash_pos,1)),3,ascii(substr(param,hash_pos2,1)),3))%;\
-	/else \
-	  /let hash_hcount=0%;\
-	  /while (--hash_len>-1) \
+  /let param=%*%;\
+  /let hash_len=$[strlen(param)]%;\
+  /let tmp=%;\
+  /if (hash_len>10) \
+    /let hash_hcount=$[mod(hash_len,1000)]%;\
+    /let hash_pcount=$[mod(hash_hcount,100)]%;\
+    /let hash_pos=$[(hash_len-1)*(hash_pcount)/100]%;\
+    /let hash_pos2=$[hash_len-1-hash_pos]%;\
+    /result replace(" ","0",pad(hash_hcount,3,ascii(substr(param,hash_pos,1)),3,ascii(substr(param,hash_pos2,1)),3))%;\
+  /else \
+    /let hash_hcount=0%;\
+    /while (--hash_len>-1) \
 ; problem overflow wird zu real zahl bei tf5
-	    /let tmp=$[8*hash_hcount+ascii(param)]%;\
-	    /if (tmp>MAX_INT) \
-		/test hash_hcount:=overmult(hash_hcount,8)+ascii(param)%;\
-	    /else /test hash_hcount:=tmp%;\
-	    /endif%;\
-	    /let param=$[substr(param,1)]%;\
-	  /done%;\
-	  /if (hash_hcount<0) /let hash_hcount=$[-hash_hcount]%; /endif%;\
-	  /result replace(".","",replace(" ","0",pad(hash_hcount,9)))%;\
-	/endif%;
+      /let tmp=$[8*hash_hcount+ascii(param)]%;\
+      /if (tmp>MAX_INT) \
+        /test hash_hcount:=overmult(hash_hcount,8)+ascii(param)%;\
+      /else \
+        /test hash_hcount:=tmp%;\
+      /endif%;\
+      /let param=$[substr(param,1)]%;\
+    /done%;\
+    /if (hash_hcount<0) \
+      /let hash_hcount=$[-hash_hcount]%; \
+    /endif%;\
+    /result replace(".","",replace(" ","0",pad(hash_hcount,9)))%;\
+  /endif%;
 
 
 /def overmult = \
